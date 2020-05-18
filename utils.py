@@ -98,6 +98,7 @@ def nice_name(name):
         'left_click': 'Spam Left Click',
         'port_a1': 'Port to A1',
         'lower_diff': 'Normalize Difficulty',
+        'armor_swap': 'Swap Armor Cain',
         'pause': 'Pause Eule.py',
     }
     return switcher.get(name, 'Key not found!')

@@ -162,6 +162,14 @@ def lower_diff(handle):
     send_key(handle, 'esc')
 
 
+def armor_swap(handle):
+    send_key(handle, 'c')
+    send_mouse(handle, 'RM', 1425, 610)
+    send_mouse(handle, 'RM', 1425, 710)
+    send_mouse(handle, 'RM', 1425, 810)
+    send_key(handle, 'c')
+
+
 class StopMacro(Exception):
     pass
 

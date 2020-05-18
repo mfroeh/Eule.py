@@ -68,6 +68,10 @@ class Listener:
                     self.listeners[k] = keyboard.add_hotkey(
                         v, lower_diff, args=(self.handle,)
                     )
+                elif k == 'armor_swap':
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v, armor_swap, args=(self.handle,)
+                    )
                 elif k == 'pause':
                     self.listeners[k] = keyboard.add_hotkey(
                         v, self.pause, args=(settings,)

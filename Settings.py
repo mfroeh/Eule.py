@@ -27,6 +27,7 @@ class Settings:
                     "port_a1": "",
                     "lower_diff": "",
                     "pause": "",
+                    "armor_swap": "",
                 },
                 "special": {"empowered": False, "fast_convert": False},
             }

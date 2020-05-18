@@ -11,7 +11,7 @@ class GUI:
     def __init__(self, settings, listener):
         self.root = tk.Tk()
         self.root.title('Eule.py')
-        self.root.iconbitmap('C:\\Users\\Arbeit\\Desktop\\Macro.py\\Compile\\owl.ico')
+        # self.root.iconbitmap('C:\\Users\\Arbeit\\Desktop\\Macro.py\\Compile\\owl.ico')
         self.root.style = ttk.Style()
         self.root.style.configure('TLabelFrame', font=30)
 

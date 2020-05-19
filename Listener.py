@@ -10,7 +10,7 @@ class Listener:
         self.paused = False
         self.set_listeners(settings)
 
-        self.thread = KThread(target=lambda: keyboard.wait('k+i+l+l'))
+        self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))
         self.thread.start()
 
     def set_listeners(self, settings):
@@ -83,7 +83,9 @@ class Listener:
                     )
                 elif k == 'armor_swap':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v, armor_swap, args=(self.handle,)
+                        v,
+                        armor_swap,
+                        args=(self.handle, settings.special['armor_swap']),
                     )
                 elif k == 'pool_tp':
                     self.listeners[k] = keyboard.add_hotkey(
@@ -101,16 +103,13 @@ class Listener:
         self.set_listeners(settings)
 
     def renew_handle(self, new_handle):
-        print(new_handle)
         self.handle = new_handle
 
     def pause(self, settings):
         if self.paused:
-            self.renew_listeners(settings)
             self.paused = False
-            print('continuing')
+            self.renew_listeners(settings)
         else:
+            self.paused = True
             keyboard.remove_all_hotkeys()
             keyboard.add_hotkey(settings.hotkeys['pause'], self.pause, args=(settings,))
-            self.paused = True
-            print('paused')

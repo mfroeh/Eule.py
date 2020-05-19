@@ -12,7 +12,7 @@ settings = Settings()
 listener = Listener(settings, handle)
 gui = GUI(settings, listener)
 
-handle_thread = KThread(target=lambda: watch_handle(listener, settings, gui.BV_DACTIVE))
+handle_thread = KThread(target=lambda: watch_handle(listener, settings, gui.DACTIVE))
 handle_thread.start()
 
 gui.mainloop()

@@ -5,12 +5,7 @@ class Settings:
     def __init__(self):
         try:
             with open('./settings.json') as f:
-                _json = json.load(f)
-                self.json = _json
-                self.paths = _json['paths']
-                self.hotkeys = _json['hotkeys']
-                self.poolspots = _json['poolspots']
-                self.special = _json['special']
+                self.json = json.load(f)
         except FileNotFoundError:
             self.json = {
                 "paths": {"Fiddler": "", "TurboHUD": "", "pHelper": ""},
@@ -49,15 +44,17 @@ class Settings:
                 ],
                 "special": {"empowered": False, "fast_convert": False},
             }
-            self.paths = self.json['paths']
-            self.hotkeys = self.json['hotkeys']
-            self.poolspots = self.json['poolspots']
-            self.special = self.json['special']
+        self.paths = self.json['paths']
+        self.hotkeys = self.json['hotkeys']
+        self.poolspots = self.json['poolspots']
+        self.special = self.json['special']
 
     def save(self):
         with open('./settings.json', 'w') as f:
-            self.json['paths'] = self.paths
-            self.json['hotkeys'] = self.hotkeys
-            self.json['poolspots'] = self.poolspots
-            self.json['special'] = self.special
-            json.dump(self.json, f)
+            d = {
+                'paths': self.paths,
+                'hotkeys': self.hotkeys,
+                'poolspots': self.poolspots,
+                'special': self.special,
+            }
+            json.dump(d, f)

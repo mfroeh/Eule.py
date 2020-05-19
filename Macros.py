@@ -196,6 +196,18 @@ def port_a1(handle):
     send_mouse(handle, 'LM', tristram[0], tristram[1])
 
 
+def pool_tp(handle, poolspotlist):
+    bw_map = transform_coordinates(handle, 895, 125)
+    poolspot = poolspotlist.next_spot()
+    act = transform_coordinates(handle, poolspot.act_coords[0], poolspot.act_coords[1])
+    wp = transform_coordinates(handle, poolspot.wp_coords[0], poolspot.wp_coords[1])
+
+    send_key(handle, 'm')
+    send_mouse(handle, 'LM', bw_map[0], bw_map[1])
+    send_mouse(handle, 'LM', act[0], act[1])
+    send_mouse(handle, 'LM', wp[0], wp[1])
+
+
 def lower_diff(handle):
     lower = transform_coordinates(handle, 1700, 400)
     send_key(handle, 'esc')

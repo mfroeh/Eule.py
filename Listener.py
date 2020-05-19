@@ -1,6 +1,7 @@
 import keyboard
 from Macros import *
 from kthread import KThread
+from PoolSpot import PoolSpotList
 
 
 class Listener:
@@ -71,6 +72,12 @@ class Listener:
                 elif k == 'armor_swap':
                     self.listeners[k] = keyboard.add_hotkey(
                         v, armor_swap, args=(self.handle,)
+                    )
+                elif k == 'pool_tp':
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v,
+                        pool_tp,
+                        args=(self.handle, PoolSpotList(settings.poolspots)),
                     )
                 elif k == 'pause':
                     self.listeners[k] = keyboard.add_hotkey(

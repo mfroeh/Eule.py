@@ -99,6 +99,7 @@ def nice_name(name):
         'port_a1': 'Port to A1',
         'lower_diff': 'Normalize Difficulty',
         'armor_swap': 'Swap Armor Cain',
+        'pool_tp': 'Teleport to next PoolSpot',
         'pause': 'Pause Eule.py',
     }
     return switcher.get(name, 'Key not found!')
@@ -122,3 +123,19 @@ def hotkey_delete_request(hotkey):
         return scan_codes[0] == 83
     except:
         return False
+
+
+def act_coords(wp):
+    switcher = {
+        **dict.fromkeys(['cemetry_of_the_forsaken', 'the_weeping_hollow'], (740, 620)),
+        2: (1090, 525),
+        3: (710, 400),
+        4: (1450, 370),
+        5: (590, 550),
+    }
+    return switcher.get(wp, (0, 0))
+
+
+def wp_coords(wp):
+    switcher = {'cemetry_of_the_forsaken': (630, 370), 'the_weeping_hollow': (690, 485)}
+    return switcher.get(wp, (0, 0))

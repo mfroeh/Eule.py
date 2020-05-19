@@ -9,6 +9,7 @@ class Settings:
                 self.json = _json
                 self.paths = _json['paths']
                 self.hotkeys = _json['hotkeys']
+                self.poolspots = _json['poolspots']
                 self.special = _json['special']
         except FileNotFoundError:
             self.json = {
@@ -28,16 +29,20 @@ class Settings:
                     "lower_diff": "",
                     "pause": "",
                     "armor_swap": "",
+                    "pool_tp": "",
                 },
+                "poolspots": ["cemetry_of_the_forsaken", "the_weeping_hollow"],
                 "special": {"empowered": False, "fast_convert": False},
             }
             self.paths = self.json['paths']
             self.hotkeys = self.json['hotkeys']
+            self.poolspots = self.json['poolspots']
             self.special = self.json['special']
 
     def save(self):
         with open('./settings.json', 'w') as f:
             self.json['paths'] = self.paths
             self.json['hotkeys'] = self.hotkeys
+            self.json['poolspots'] = self.poolspots
             self.json['special'] = self.special
             json.dump(self.json, f)

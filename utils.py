@@ -113,3 +113,12 @@ def transform_coordinates(handle, x, y):
     new_x = int((w / 1920) * x)
     new_y = int((h / 1080) * y)
     return (new_x, new_y)
+
+
+def hotkey_delete_request(hotkey):
+    try:
+        scan_codes = keyboard.key_to_scan_codes(hotkey)
+        print(scan_codes)
+        return scan_codes[0] == 83
+    except:
+        return False

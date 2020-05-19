@@ -4,7 +4,7 @@ from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import askokcancel
 import keyboard
 from threading import Thread
-from utils import start_thirdparty, nice_name
+from utils import start_thirdparty, nice_name, hotkey_delete_request
 
 
 class GUI:
@@ -114,7 +114,7 @@ class GUI:
     def set_hotkey(self, hotkey, settings, listener):
         keyboard.remove_all_hotkeys()
         input = keyboard.read_hotkey(suppress=False)
-        if input != 'esc':
+        if input != 'esc' and not hotkey_delete_request(input):
             if askokcancel(message=f'New Hotkey: {input}. Save?'):
                 print(input)
                 # if int(input):  # canonical repr von numpad ist jeweils nur die ziffer
@@ -126,6 +126,9 @@ class GUI:
                         self.SV_HKS[k].set('')
                 settings.hotkeys[hotkey] = input
                 self.SV_HKS[hotkey].set(input)
+        elif hotkey_delete_request(input):
+            settings.hotkeys[hotkey] = ''
+            self.SV_HKS[hotkey].set('')
         listener.renew_listeners(settings)
 
     def set_cb(self, cb, settings, listener):

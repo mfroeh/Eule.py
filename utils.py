@@ -102,3 +102,13 @@ def nice_name(name):
         'pause': 'Pause Eule.py',
     }
     return switcher.get(name, 'Key not found!')
+
+
+# Transforms from 1920x1080 Base
+def transform_coordinates(handle, x, y):
+    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    w = x2 - x1
+    h = y2 - y1
+    new_x = (w / 1920) * x
+    new_y = (h / 1080) * y
+    return new_x, new_y

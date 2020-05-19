@@ -96,7 +96,10 @@ def nice_name(name):
         'drop_inventory': 'Drop Inventory',
         'right_click': 'Spam Right Click',
         'left_click': 'Spam Left Click',
-        'port_a1': 'Port to A1',
+        'port_a1': 'Port to A1 Town',
+        'port_a2': 'Port to A2 Town',
+        'port_a3': 'Port to A3 / A4 Town',
+        'port_a5': 'Port to A5 Town',
         'lower_diff': 'Normalize Difficulty',
         'armor_swap': 'Swap Armor Cain',
         'pool_tp': 'Teleport to next PoolSpot',
@@ -116,6 +119,28 @@ def transform_coordinates(handle, x, y):
     return (new_x, new_y)
 
 
+def act_coords(act):
+    switcher = {
+        1: (740, 620),
+        2: (1090, 525),
+        3: (710, 400),
+        4: (1450, 370),
+        5: (590, 550),
+    }
+    return switcher.get(act, (0, 0))
+
+
+def town_wp_coords(act):
+    switcher = {
+        1: (1020, 490),
+        2: (1040, 780),
+        3: (510, 485),
+        4: (515, 745),
+        5: (1170, 625),
+    }
+    return switcher.get(act, (0, 0))
+
+
 def hotkey_delete_request(hotkey):
     try:
         scan_codes = keyboard.key_to_scan_codes(hotkey)
@@ -123,19 +148,3 @@ def hotkey_delete_request(hotkey):
         return scan_codes[0] == 83
     except:
         return False
-
-
-def act_coords(wp):
-    switcher = {
-        **dict.fromkeys(['cemetry_of_the_forsaken', 'the_weeping_hollow'], (740, 620)),
-        2: (1090, 525),
-        3: (710, 400),
-        4: (1450, 370),
-        5: (590, 550),
-    }
-    return switcher.get(wp, (0, 0))
-
-
-def wp_coords(wp):
-    switcher = {'cemetry_of_the_forsaken': (630, 370), 'the_weeping_hollow': (690, 485)}
-    return switcher.get(wp, (0, 0))

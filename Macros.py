@@ -3,7 +3,7 @@ from time import sleep
 from sends import send_mouse, send_key, send_mousemove
 import keyboard
 import time
-from utils import transform_coordinates
+from utils import transform_coordinates, act_coords, town_wp_coords
 
 
 def right_click(handle):
@@ -186,14 +186,18 @@ def leave_game(handle):
     send_mouse(handle, 'LM', leave[0], leave[1])
 
 
-def port_a1(handle):
+def port_town(handle, act):
+    a_coords = act_coords(act)
+    t_coords = town_wp_coords(act)
     bw_map = transform_coordinates(handle, 895, 125)
-    a1 = transform_coordinates(handle, 740, 620)
-    tristram = transform_coordinates(handle, 1020, 485)
+    act = transform_coordinates(handle, a_coords[0], a_coords[1])
+    town = transform_coordinates(handle, t_coords[0], t_coords[1])
+    print(act)
+    print(town)
     send_key(handle, 'm')
     send_mouse(handle, 'LM', bw_map[0], bw_map[1])
-    send_mouse(handle, 'LM', a1[0], a1[1])
-    send_mouse(handle, 'LM', tristram[0], tristram[1])
+    send_mouse(handle, 'LM', act[0], act[1])
+    send_mouse(handle, 'LM', town[0], town[1])
 
 
 def pool_tp(handle, poolspotlist):

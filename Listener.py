@@ -63,7 +63,19 @@ class Listener:
                     )
                 elif k == 'port_a1':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v, port_a1, args=(self.handle,)
+                        v, port_town, args=(self.handle, 1)
+                    )
+                elif k == 'port_a2':
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v, port_town, args=(self.handle, 2)
+                    )
+                elif k == 'port_a3':
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v, port_town, args=(self.handle, 3)
+                    )
+                elif k == 'port_a5':
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v, port_town, args=(self.handle, 5)
                     )
                 elif k == 'lower_diff':
                     self.listeners[k] = keyboard.add_hotkey(

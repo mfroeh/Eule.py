@@ -1,5 +1,6 @@
 # Eule.py
-Diablo III Macro Collection
+A Diablo III Macro Collection.\
+Working with all 16:9 Resolutions for now.
 
 ## Macros
 All Macros are sent directly to Diablo III without using your physical mouse or keyboard.\

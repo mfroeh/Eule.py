@@ -21,6 +21,7 @@ class GUI:
             'gr': LabelFrame(self.root, text='Greater Rift Hotkeys'),
             'town': LabelFrame(self.root, text='Town Hotkeys'),
             'general': LabelFrame(self.root, text='General Hotkeys'),
+            'ports': LabelFrame(self.root, text='Porting Hotkeys'),
             'info': LabelFrame(self.root, text='Info'),
         }
 
@@ -49,6 +50,8 @@ class GUI:
                 frame = self.frames['gr']
             elif 6 <= i <= 7:
                 frame = self.frames['town']
+            elif 8 <= i <= 12:
+                frame = self.frames['ports']
 
             Label(frame, text=nice_name(name)).grid(column=0, row=i)
             Button(
@@ -80,7 +83,7 @@ class GUI:
             variable=self.EMP,
             onvalue=True,
             offvalue=False,
-            command=lambda x='emp': self.checkbox_clicked(x, settings, listener),
+            command=lambda x='emp': self.box_clicked(x, settings, listener),
         ).grid()
 
         Checkbutton(
@@ -89,7 +92,7 @@ class GUI:
             variable=self.FASTCONV,
             onvalue=True,
             offvalue=False,
-            command=lambda x='conv': self.checkbox_clicked(x, settings, listener),
+            command=lambda x='conv': self.box_clicked(x, settings, listener),
         ).grid()
 
         Radiobutton(
@@ -97,7 +100,7 @@ class GUI:
             text='Cains',
             variable=self.ARMORSWAP,
             value=3,
-            command=lambda x='armor_swap': self.checkbox_clicked(x, settings, listener),
+            command=lambda x='armor_swap': self.box_clicked(x, settings, listener),
         ).grid()
 
         Radiobutton(
@@ -105,7 +108,7 @@ class GUI:
             text='Bounty DH',
             variable=self.ARMORSWAP,
             value=2,
-            command=lambda x='armor_swap': self.checkbox_clicked(x, settings, listener),
+            command=lambda x='armor_swap': self.box_clicked(x, settings, listener),
         ).grid()
 
         for i, v in enumerate(self.frames.values()):
@@ -146,7 +149,7 @@ class GUI:
             self.HKS[hotkey].set('')
         listener.renew_listeners(settings)
 
-    def checkbox_clicked(self, cb, settings, listener):
+    def box_clicked(self, cb, settings, listener):
         if cb == 'emp':
             settings.special['empowered'] = self.EMP.get()
             listener.renew_listeners(settings)
@@ -175,8 +178,8 @@ def nice_name(name):
         'port_a3': 'Port to A3 / A4 Town',
         'port_a5': 'Port to A5 Town',
         'lower_diff': 'Normalize Difficulty',
-        'armor_swap': 'Swap Armor Cain',
-        'pool_tp': 'Teleport to next PoolSpot',
+        'armor_swap': 'Swap Armor',
+        'pool_tp': 'Port to next Pool Spot',
         'pause': 'Pause Eule.py',
     }
     return switcher.get(name, 'Key not found!')

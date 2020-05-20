@@ -1,9 +1,10 @@
 import os
 import psutil
 from time import sleep
-from tkinter.messagebox import showwarning
+from tkinter.messagebox import showwarning, showinfo
 import win32gui
 import keyboard
+from admin import is_user_admin
 
 
 def process_active(name):
@@ -24,16 +25,22 @@ def kill_process(name):
 def start_thirdparty(paths):
     process_names = [p.name() for p in psutil.process_iter()]
     try:
-        if 'Diablo III64.exe' in process_names:
-            if paths['Fiddler'] and 'Fiddler.exe' not in process_names:
-                start_Fiddler(paths['Fiddler'])
-            if paths['TurboHUD'] and 'TurboHUD.exe' not in process_names:
-                start_TurboHUD(paths['TurboHUD'])
-            if paths['pHelper'] and 'pHelper.exe' not in process_names:
-                start_pHelper(paths['pHelper'])
+        if is_user_admin():
+            if 'Diablo III64.exe' in process_names:
+                if paths['Fiddler'] and 'Fiddler.exe' not in process_names:
+                    start_Fiddler(paths['Fiddler'])
+                if paths['TurboHUD'] and 'TurboHUD.exe' not in process_names:
+                    start_TurboHUD(paths['TurboHUD'])
+                if paths['pHelper'] and 'pHelper.exe' not in process_names:
+                    start_pHelper(paths['pHelper'])
+            else:
+                showwarning(
+                    'Diablo III not active', 'Please start Diablo III.',
+                )
         else:
-            showwarning(
-                'Diablo III not active', 'Please start Diablo III.',
+            showinfo(
+                'Administrator Privileges required.',
+                'Please start Eule.py with Administrator Privileges to use the Third Party Launcher.',
             )
     except OSError:
         print('User interrupted starting Programms')
@@ -48,7 +55,6 @@ def start_Fiddler(path):
 
 def start_TurboHUD(path):
     os.startfile(path)
-    sleep(2)
     thud_starting = win32gui.FindWindow(None, 'TurboHUD')
     while thud_starting:
         thud_starting = win32gui.FindWindow(None, 'TurboHUD')

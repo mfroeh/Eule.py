@@ -18,16 +18,16 @@ class Settings:
                     "leave_game": "",
                     "salvage": "",
                     "drop_inventory": "f+strg",
-                    "right_click": "",
-                    "left_click": "",
                     "port_a1": "",
                     "port_a2": "",
                     "port_a3": "",
                     "port_a5": "",
-                    "lower_diff": "",
-                    "pause": "",
-                    "armor_swap": "",
                     "pool_tp": "",
+                    "right_click": "",
+                    "left_click": "",
+                    "lower_diff": "",
+                    "armor_swap": "",
+                    "pause": "",
                 },
                 "poolspots": [
                     "cemetry_of_the_forsaken",
@@ -42,7 +42,7 @@ class Settings:
                     "tower_of_the_dammned_level_1",
                     "tower_of_the_cursed_level_1",
                 ],
-                "special": {"empowered": False, "fast_convert": False},
+                "special": {"empowered": False, "fast_convert": False, "armor_swap": 3},
             }
         self.paths = self.json['paths']
         self.hotkeys = self.json['hotkeys']

@@ -3,7 +3,6 @@ Diablo III Macro Collection
 
 ## Macros
 All Macros are sent directly to Diablo III without using your physical mouse or keyboard.
-
 This has numerous advantages, some of them beeing faster macro execution time, reliability and working without the Diablo III Window beeing in the Foreground.
 
 ## Setting Hotkeys
@@ -13,7 +12,6 @@ Setting Hotkeys is done by
 3. Accepting the new Combination
 
 You may cancel setting a Hotkey by pressing *Escape*.
-
 You may delete a Hotkey by clicking the Button and pressing *Delete*.
 
 ## Third Party Launcher

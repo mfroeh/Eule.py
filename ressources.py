@@ -114,3 +114,19 @@ def map_wp_coords_by_wp(wp):
         'tower_of_the_cursed_level_1': (1320, 610),
     }
     return switcher.get(wp, (0, 0))
+
+
+def pool_wps():
+    return [
+        'cemetry_of_the_forsaken',
+        'the_weeping_hollow',
+        'southern_highlands',
+        'leorics_manor_courtyard',
+        'howling_plateau',
+        'road_to_alcarnus',
+        'the_battlefields',
+        'bridge_of_korsikk',
+        'rakkis_crossing',
+        'tower_of_the_dammned_level_1',
+        'tower_of_the_cursed_level_1',
+    ]

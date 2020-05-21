@@ -7,7 +7,6 @@ from PoolSpot import PoolSpotList
 class Listener:
     def __init__(self, settings, handle):
         self.handle = handle
-        # self.paused = False
         self.set_listeners(settings)
 
         self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))

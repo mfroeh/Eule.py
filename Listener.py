@@ -7,7 +7,7 @@ from PoolSpot import PoolSpotList
 class Listener:
     def __init__(self, settings, handle):
         self.handle = handle
-        self.paused = False
+        # self.paused = False
         self.set_listeners(settings)
 
         self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))
@@ -106,10 +106,10 @@ class Listener:
         self.handle = new_handle
 
     def pause(self, settings):
-        if self.paused:
-            self.paused = False
+        if self.PAUSED.get():
+            self.PAUSED.set(False)
             self.renew_listeners(settings)
         else:
-            self.paused = True
+            self.PAUSED.set(True)
             keyboard.remove_all_hotkeys()
             keyboard.add_hotkey(settings.hotkeys['pause'], self.pause, args=(settings,))

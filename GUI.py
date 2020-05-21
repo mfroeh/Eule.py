@@ -29,6 +29,7 @@ class MainFrame(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
+        parent.listener.PAUSED = tk.BooleanVar(self, False)
         self.DACTIVE = tk.BooleanVar(self, True)
         self.HKS = {}
 
@@ -71,7 +72,16 @@ class MainFrame(tk.Frame):
             offvalue=False,
             variable=self.DACTIVE,
             state=tk.DISABLED,
-        ).grid(column=0, row=0)
+        ).grid()
+
+        Checkbutton(
+            frames['info'],
+            text='Eule paused',
+            onvalue=True,
+            offvalue=False,
+            variable=parent.listener.PAUSED,
+            state=tk.DISABLED,
+        ).grid()
 
         Checkbutton(
             frames['gr'],
@@ -113,7 +123,7 @@ class MainFrame(tk.Frame):
             command=lambda: Thread(
                 target=lambda: start_thirdparty(parent.settings.paths)
             ).start(),
-        ).grid(column=0, row=1)
+        ).grid()
 
         for i, v in enumerate(frames.values()):
             v.grid(
@@ -144,6 +154,7 @@ class MainFrame(tk.Frame):
             self.HKS[hotkey].set('')
         if win32gui.FindWindow('D3 Main Window Class', 'Diablo III'):
             listener.renew_listeners(settings)
+            listener.PAUSED.set(False)
         # else: wait until handle open, then set listeners
 
     def button_clicked(self, cb):
@@ -201,15 +212,16 @@ class PopupPoolspots(tk.Toplevel):
         self.elder = elder
 
         self.poolspots = []
-        for wp in pool_wps():
-            if wp in self.elder.settings.poolspots:
-                var = tk.StringVar(value=wp)
-            else:
-                var = tk.StringVar('')
-            self.poolspots.append(var)
-            Checkbutton(self, var=var, text=wp, onvalue=wp).grid(
-                sticky='NW', padx=5, ipadx=5
-            )
+        for act, wps in pool_wps().items():
+            frame = LabelFrame(self, text=f'Act {act}')
+            for wp in wps:
+                if wp in elder.settings.poolspots:
+                    var = tk.StringVar(value=wp)
+                else:
+                    var = tk.StringVar('')
+                self.poolspots.append(var)
+                Checkbutton(frame, var=var, text=wp, onvalue=wp).grid(sticky='W')
+            frame.grid(sticky='NW', padx=5, ipadx=5)
 
         Button(self, text="Save", command=lambda: self.update_poolspots()).grid()
         Button(self, text="Cancel", command=self.destroy).grid()

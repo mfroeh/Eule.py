@@ -1,22 +1,12 @@
-import tkinter as tk  # python 3
-from tkinter import font as tkfont  # python 3
-from tkinter.ttk import *
-import win32gui
-from Settings import Settings
-from Listener import Listener
-from utils import start_thirdparty
-import keyboard
 import tkinter as tk
 from tkinter.ttk import *
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import askokcancel
 import keyboard
+import win32gui
 from threading import Thread
 from utils import start_thirdparty
 from ressources import pool_wps
-
-# import Tkinter as tk     # python 2
-# import tkFont as tkfont  # python 2
 
 
 class App(tk.Tk):
@@ -152,7 +142,9 @@ class MainFrame(tk.Frame):
         elif hotkey_delete_request(input):
             settings.hotkeys[hotkey] = ''
             self.HKS[hotkey].set('')
-        listener.renew_listeners(settings)
+        if win32gui.FindWindow('D3 Main Window Class', 'Diablo III'):
+            listener.renew_listeners(settings)
+        # else: wait until handle open, then set listeners
 
     def button_clicked(self, cb):
         settings = self.parent.settings

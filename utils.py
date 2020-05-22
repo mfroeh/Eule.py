@@ -32,6 +32,7 @@ def start_thirdparty(paths):
                 if paths['TurboHUD'] and 'TurboHUD.exe' not in process_names:
                     start_TurboHUD(paths['TurboHUD'])
                 if paths['pHelper'] and 'pHelper.exe' not in process_names:
+                    sleep(1)
                     start_pHelper(paths['pHelper'])
             else:
                 showwarning(
@@ -55,6 +56,7 @@ def start_Fiddler(path):
 
 def start_TurboHUD(path):
     os.startfile(path)
+    sleep(2)
     thud_starting = win32gui.FindWindow(None, 'TurboHUD')
     while thud_starting:
         thud_starting = win32gui.FindWindow(None, 'TurboHUD')

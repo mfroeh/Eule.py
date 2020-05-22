@@ -268,7 +268,6 @@ def nice_name(name):
 
 if __name__ == "__main__":
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-    print(handle)
     settings = Settings()
     listener = Listener(settings, handle)
     app = App(settings, listener)

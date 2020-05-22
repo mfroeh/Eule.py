@@ -3,6 +3,7 @@
 test.py
 /Virtual Enviorement
 /Old
+my/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

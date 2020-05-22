@@ -67,19 +67,12 @@ def start_pHelper(path):
         sleep(0.5)
 
 
-def watch_handle(listener, settings, DACTIVE):
-    handle_lost = False
+def watch_handle(DACTIVE):
     while True:
-        handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-        if not handle and not handle_lost:
-            keyboard.remove_all_hotkeys()
-            DACTIVE.set(False)
-            handle_lost = True
-        elif handle and handle_lost:
-            listener.renew_handle(handle)
-            listener.renew_listeners(settings)
+        if win32gui.FindWindow('D3 Main Window Class', 'Diablo III'):
             DACTIVE.set(True)
-            handle_lost = False
+        else:
+            DACTIVE.set(False)
         sleep(1)
 
 

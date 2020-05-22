@@ -1,6 +1,7 @@
 # Mine
 *.json
 test.py
+/Virtual Enviorement
 /Old
 # Byte-compiled / optimized / DLL files
 __pycache__/

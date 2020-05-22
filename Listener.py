@@ -5,110 +5,73 @@ from PoolSpot import PoolSpotList
 
 
 class Listener:
-    def __init__(self, settings, handle):
-        self.handle = handle
-        self.set_listeners(settings)
+    def __init__(self, settings):
+        self.settings = settings
+        self.start()
 
         self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))
         self.thread.start()
 
-    def set_listeners(self, settings):
+    def start(self):
         self.listeners = {}
-        for k, v in settings.hotkeys.items():
+        for k, v in self.settings.hotkeys.items():
             if v:
                 if k == 'right_click':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, right_click, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, right_click)
                 elif k == 'left_click':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, left_click, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, left_click)
                 elif k == 'salvage':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, salvage, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, salvage)
                 elif k == 'drop_inventory':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, drop_inventory, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, drop_inventory)
                 elif k == 'gem_up':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v, gem_up, args=(self.handle, settings.special['empowered'])
+                        v, gem_up, args=(self.settings.special['empowered'],)
                     )
                 elif k == 'cube_conv_sm':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v,
-                        cube_conv_sm,
-                        args=(self.handle, settings.special['fast_convert']),
+                        v, cube_conv_sm, args=(self.settings.special['fast_convert'],),
                     )
                 elif k == 'cube_conv_lg':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v,
-                        cube_conv_lg,
-                        args=(self.handle, settings.special['fast_convert']),
+                        v, cube_conv_lg, args=(self.settings.special['fast_convert'],),
                     )
                 elif k == 'reforge':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, reforge, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, reforge)
                 elif k == 'open_gr':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, open_gr, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, open_gr)
                 elif k == 'leave_game':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, leave_game, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, leave_game)
                 elif k == 'port_a1':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, port_town, args=(self.handle, 1)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(1,))
                 elif k == 'port_a2':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, port_town, args=(self.handle, 2)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(2,))
                 elif k == 'port_a3':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, port_town, args=(self.handle, 3)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(3,))
                 elif k == 'port_a5':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, port_town, args=(self.handle, 5)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(5,))
                 elif k == 'lower_diff':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, lower_diff, args=(self.handle,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, lower_diff)
                 elif k == 'armor_swap':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v,
-                        armor_swap,
-                        args=(self.handle, settings.special['armor_swap']),
+                        v, armor_swap, args=(self.settings.special['armor_swap'],),
                     )
                 elif k == 'pool_tp':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v,
-                        pool_tp,
-                        args=(self.handle, PoolSpotList(settings.poolspots)),
+                        v, pool_tp, args=(PoolSpotList(self.settings.poolspots)),
                     )
                 elif k == 'pause':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, self.pause, args=(settings,)
-                    )
+                    self.listeners[k] = keyboard.add_hotkey(v, self.pause)
 
-    def renew_listeners(self, settings):
+    def stop(self):
         keyboard.remove_all_hotkeys()
-        self.set_listeners(settings)
 
-    def renew_handle(self, new_handle):
-        self.handle = new_handle
-
-    def pause(self, settings):
+    def pause(self):
         if self.PAUSED.get():
             self.PAUSED.set(False)
-            self.renew_listeners(settings)
+            keyboard.remove_all_hotkeys()
+            self.start()
         else:
             self.PAUSED.set(True)
-            keyboard.remove_all_hotkeys()
-            keyboard.add_hotkey(settings.hotkeys['pause'], self.pause, args=(settings,))
+            self.stop()
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)

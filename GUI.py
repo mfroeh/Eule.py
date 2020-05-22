@@ -139,7 +139,7 @@ class MainFrame(tk.Frame):
     def set_hotkey(self, hotkey):
         settings = self.parent.settings
         listener = self.parent.listener
-        keyboard.remove_all_hotkeys()
+        listener.stop()
         input = keyboard.read_hotkey(suppress=False)
         if input != 'esc' and not hotkey_delete_request(input):
             if askokcancel(message=f'New Hotkey: {input}. Save?'):
@@ -152,23 +152,21 @@ class MainFrame(tk.Frame):
         elif hotkey_delete_request(input):
             settings.hotkeys[hotkey] = ''
             self.HKS[hotkey].set('')
-        if win32gui.FindWindow('D3 Main Window Class', 'Diablo III'):
-            listener.renew_listeners(settings)
-            listener.PAUSED.set(False)
-        # else: wait until handle open, then set listeners
+        if not listener.PAUSED.get():
+            listener.start()
+        else:
+            keyboard.add_hotkey(settings.hotkeys['pause'], listener.pause)
 
     def button_clicked(self, cb):
         settings = self.parent.settings
-        listener = self.parent.listener
+        self.parent.listener.stop()
         if cb == 'emp':
             settings.special['empowered'] = self.EMP.get()
-            listener.renew_listeners(settings)
         elif cb == 'conv':
             settings.special['fast_convert'] = self.FASTCONV.get()
-            listener.renew_listeners(settings)
         elif cb == 'armor_swap':
             settings.special['armor_swap'] = self.ARMORSWAP.get()
-            listener.renew_listeners(settings)
+        self.parent.listener.start()
 
 
 class SettingsFrame(tk.Frame):
@@ -228,11 +226,11 @@ class PopupPoolspots(tk.Toplevel):
 
     def update_poolspots(self):
         settings = self.elder.settings
-        listener = self.elder.listener
+        self.elder.listener.stop()
         settings.poolspots = [
             p.get() for p in self.poolspots if p.get() not in ['', '0']
         ]
-        listener.renew_listeners(settings)
+        self.elder.listener.start()
         self.destroy()
 
 

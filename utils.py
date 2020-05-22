@@ -3,8 +3,7 @@ import psutil
 from time import sleep
 from tkinter.messagebox import showwarning, showinfo
 import win32gui
-import keyboard
-from admin import is_user_admin
+import ctypes
 
 
 def process_active(name):
@@ -87,3 +86,18 @@ def transform_coordinates(handle, x, y):
     new_x = int((w / 1920) * x)
     new_y = int((h / 1080) * y)
     return (new_x, new_y)
+
+
+class AdminStateUnknownError(Exception):
+    pass
+
+
+def is_user_admin():
+    try:
+        return os.getuid() == 0
+    except AttributeError:
+        pass
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin() == 1
+    except AttributeError:
+        raise AdminStateUnknownError

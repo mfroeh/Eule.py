@@ -42,7 +42,12 @@ class Settings:
                     "tower_of_the_dammned_level_1",
                     "tower_of_the_cursed_level_1",
                 ],
-                "special": {"empowered": False, "fast_convert": False, "armor_swap": 3},
+                "special": {
+                    "empowered": False,
+                    "fast_convert": False,
+                    "armor_swap": 3,
+                    "auto_start": False,
+                },
             }
         self.paths = self.json['paths']
         self.hotkeys = self.json['hotkeys']

@@ -1,5 +1,5 @@
 import keyboard
-from Macros import *
+from macros import *
 from kthread import KThread
 from PoolSpot import PoolSpotList
 

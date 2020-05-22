@@ -1,6 +1,6 @@
 from Settings import Settings
 from Listener import Listener
-from GUI import App
+from Gui import App
 from kthread import KThread
 from utils import watch_handle
 import sys

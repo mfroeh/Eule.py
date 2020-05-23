@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import (
     QListWidgetItem,
     QSpinBox,
     QComboBox,
+    QDesktopWidget,
 )
 import string
 import keyboard
@@ -38,9 +39,16 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Eule.py')
         self.table_widget = TableWidget(self)
         self.setCentralWidget(self.table_widget)
+        self.locate_to_center()
 
         self.status_thread = KThread(target=self.set_status)
         self.status_thread.start()
+
+    def locate_to_center(self):
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
 
     def set_status(self):
         while True:
@@ -605,10 +613,13 @@ if __name__ == '__main__':
 
     # for pyinstaller
     """
+    from PyQt5.QtGui import QIcon
     wd = sys._MEIPASS
     file_path = os.path.join(wd, './Style/frameless.qss')
     with open(file_path) as stylesheet:
         mw.setStyleSheet(stylesheet.read())
+    icon_path = os.path.join(wd, './owl.ico')
+    mw.setWindowIcon(QIcon(icon_path))
     """
     # Normal
     with open('./Style/frameless.qss') as stylesheet:

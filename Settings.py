@@ -46,6 +46,7 @@ class Settings:
                     "empowered": False,
                     "fast_convert": False,
                     "armor_swap": 3,
+                    "spare_columns": 1,
                     "auto_start": False,
                 },
             }

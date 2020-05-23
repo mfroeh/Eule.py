@@ -40,9 +40,11 @@ def cube_conv_sm(fast):
                 for i in range(6):
                     for j in range(10):
                         send_mouse(handle, 'RM', item[0] + j * step, item[1] + i * step)
+                        # macro_sleep(0.13)
                         macro_sleep(0.1)
                         send_mouse(handle, 'LM', fill[0], fill[1])  # Fill
                         send_mouse(handle, 'LM', trans[0], trans[1])  # Transmute
+                        # macro_sleep(0.13)
                         macro_sleep(0.1)
                         send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
                         send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
@@ -147,35 +149,35 @@ def gem_up(empowered):
             pass
 
 
-def salvage():
+def salvage(spare_columns):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         menu = transform_coordinates(handle, 517, 480)
         anvil = transform_coordinates(handle, 165, 295)
-        item = transform_coordinates(handle, 1475, 585)
+        item = transform_coordinates(handle, 1875, 585)
         step = transform_coordinates(handle, 50, 0)[0]
 
         send_mouse(handle, 'LM', menu[0], menu[1])  # Salvage Menu
         send_mouse(handle, 'LM', anvil[0], anvil[1])  # Click Salvage Button
         for i in range(6):
-            for j in range(9):
-                send_mouse(handle, 'LM', item[0] + j * step, item[1] + i * step)
+            for j in range(10 - spare_columns):
+                send_mouse(handle, 'LM', item[0] - j * step, item[1] + i * step)
                 send_key(handle, 'enter')
                 send_key(handle, 'enter')
         send_key(handle, 'esc')
 
 
-def drop_inventory():
+def drop_inventory(spare_columns):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        item = transform_coordinates(handle, 1475, 585)
+        item = transform_coordinates(handle, 1875, 585)
         step = transform_coordinates(handle, 50, 0)[0]
         x, y = win32api.GetCursorPos()
 
         send_key(handle, 'c')
         for i in range(6):
-            for j in range(9):
-                send_mouse(handle, 'LM', item[0] + j * step, item[1] + i * step)
+            for j in range(10 - spare_columns):
+                send_mouse(handle, 'LM', item[0] - j * step, item[1] + i * step)
                 send_mouse(handle, 'LM', x, y)
         send_key(handle, 'c')
 

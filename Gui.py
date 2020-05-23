@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QListWidget,
     QListWidgetItem,
+    QSpinBox,
 )
 import keyboard
 import sys
@@ -318,9 +319,20 @@ class HotkeyTab(QWidget):
         button.clicked.connect(lambda: self.set_hotkey('drop_inventory'))
         after_rift_layout.addWidget(button, 1, 1)
 
+        label = QLabel(after_rift)
+        label.setText('Spare Columns')
+        after_rift_layout.addWidget(label, 2, 0)
+
+        spinbox = QSpinBox(after_rift)
+        spinbox.setMinimum(0)
+        spinbox.setMaximum(10)
+        spinbox.setValue(self.settings.special['spare_columns'])
+        spinbox.valueChanged.connect(self.spinbox_changed)
+        after_rift_layout.addWidget(spinbox, 2, 1)
+
         cube_converter = QGroupBox(self)
         cube_converter_layout = QGridLayout(cube_converter)
-        cube_converter.setTitle('After Rift')
+        cube_converter.setTitle('Cube Converter')
         self.layout.addWidget(cube_converter, 2, 1)
 
         ######################
@@ -412,6 +424,16 @@ class HotkeyTab(QWidget):
             self.settings.special['armor_swap'] = 3
         elif value == 'bounty_dh':
             self.settings.special['armor_swap'] = 2
+
+        if not self.listener.paused:
+            self.listener.start()
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def spinbox_changed(self):
+        self.listener.stop()
+
+        self.settings.special['spare_columns'] = self.sender().value()
 
         if not self.listener.paused:
             self.listener.start()

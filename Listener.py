@@ -22,9 +22,15 @@ class Listener:
                 elif k == 'left_click':
                     self.listeners[k] = keyboard.add_hotkey(v, left_click)
                 elif k == 'salvage':
-                    self.listeners[k] = keyboard.add_hotkey(v, salvage)
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v, salvage, args=(self.settings.special['spare_columns'],)
+                    )
                 elif k == 'drop_inventory':
-                    self.listeners[k] = keyboard.add_hotkey(v, drop_inventory)
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v,
+                        drop_inventory,
+                        args=(self.settings.special['spare_columns'],),
+                    )
                 elif k == 'gem_up':
                     self.listeners[k] = keyboard.add_hotkey(
                         v, gem_up, args=(self.settings.special['empowered'],)

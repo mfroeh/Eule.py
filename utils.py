@@ -1,9 +1,10 @@
 import os
 import psutil
 from time import sleep
-from tkinter.messagebox import showwarning, showinfo
 import win32gui
 import ctypes
+from PyQt5.QtWidgets import QMessageBox
+import keyboard
 
 
 def process_active(name):
@@ -34,14 +35,22 @@ def start_thirdparty(paths):
                     sleep(1)
                     start_pHelper(paths['pHelper'])
             else:
-                showwarning(
-                    'Diablo III not active', 'Please start Diablo III.',
-                )
+                error_dialog = QMessageBox()
+                error_dialog.setIcon(QMessageBox.Warning)
+                error_dialog.setWindowTitle('Diablo III isnt running')
+                error_dialog.setText('Please start Diablo III.')
+                error_dialog.exec_()
         else:
-            showinfo(
-                'Administrator Privileges required.',
-                'Please start Eule.py with Administrator Privileges to use the Third Party Launcher.',
+            info_dialog = QMessageBox()
+            info_dialog.setIcon(QMessageBox.Information)
+            info_dialog.setWindowTitle('Administrator Privileges required')
+            info_dialog.setText(
+                'Please start Eule.py with Administrator Privileges to use the Third Party Launcher.'
             )
+            info_dialog.setInformativeText(
+                'This is required, so that pHelper is started once TurboHUD is properly loaded.'
+            )
+            info_dialog.exec_()
     except OSError:
         print('User interrupted starting Programms')
     print('Done')
@@ -68,13 +77,14 @@ def start_pHelper(path):
         sleep(0.5)
 
 
-def watch_handle(DACTIVE):
+def set_status(diablo_hooked, eule_paused, listener):
     while True:
-        if win32gui.FindWindow('D3 Main Window Class', 'Diablo III'):
-            DACTIVE.set(True)
-        else:
-            DACTIVE.set(False)
-        sleep(1)
+        diablo_hooked.setChecked(
+            win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+        )
+        print(listener.paused)
+        eule_paused.setChecked(listener.paused)
+        sleep(0.5)
 
 
 # Transforms from 1920x1080 Base
@@ -101,3 +111,11 @@ def is_user_admin():
         return ctypes.windll.shell32.IsUserAnAdmin() == 1
     except AttributeError:
         raise AdminStateUnknownError
+
+
+def hotkey_delete_request(hotkey):
+    try:
+        scan_codes = keyboard.key_to_scan_codes(hotkey)
+        return scan_codes[0] == 83
+    except:
+        return False

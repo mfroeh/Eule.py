@@ -22,7 +22,7 @@ class Settings:
                     "port_a2": "",
                     "port_a3": "",
                     "port_a5": "",
-                    "pool_tp": "",
+                    "port_pool": "",
                     "right_click": "",
                     "left_click": "",
                     "lower_diff": "",

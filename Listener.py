@@ -13,6 +13,7 @@ class Listener:
         self.thread.start()
 
     def start(self):
+        self.paused = False
         self.listeners = {}
         for k, v in self.settings.hotkeys.items():
             if v:
@@ -56,9 +57,9 @@ class Listener:
                     self.listeners[k] = keyboard.add_hotkey(
                         v, armor_swap, args=(self.settings.special['armor_swap'],),
                     )
-                elif k == 'pool_tp':
+                elif k == 'port_pool':
                     self.listeners[k] = keyboard.add_hotkey(
-                        v, pool_tp, args=(PoolSpotList(self.settings.poolspots)),
+                        v, port_pool, args=(PoolSpotList(self.settings.poolspots),),
                     )
                 elif k == 'pause':
                     self.listeners[k] = keyboard.add_hotkey(v, self.pause)
@@ -67,11 +68,10 @@ class Listener:
         keyboard.remove_all_hotkeys()
 
     def pause(self):
-        if self.PAUSED.get():
-            self.PAUSED.set(False)
+        if self.paused:
             keyboard.remove_all_hotkeys()
             self.start()
         else:
-            self.PAUSED.set(True)
+            self.paused = True
             self.stop()
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)

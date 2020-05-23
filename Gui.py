@@ -1,274 +1,569 @@
-import tkinter as tk
-from tkinter.ttk import *
-from tkinter.filedialog import askopenfilename
-from tkinter.messagebox import askokcancel
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QTabWidget,
+    QGridLayout,
+    QCheckBox,
+    QGroupBox,
+    QLabel,
+    QPushButton,
+    QRadioButton,
+    QMessageBox,
+    QLineEdit,
+    QFileDialog,
+    QListWidget,
+    QListWidgetItem,
+)
 import keyboard
+import sys
+import Style.windows as windows
+from utils import start_thirdparty, hotkey_delete_request
+import ressources
 import win32gui
-from threading import Thread
-from utils import start_thirdparty
-from ressources import pool_wps
+from time import sleep
+from Settings import Settings
+from Listener import Listener
+from kthread import KThread
 
 
-class App(tk.Tk):
+class MainWindow(QMainWindow):
     def __init__(self, settings, listener):
-        tk.Tk.__init__(self)
-        self.title('Eule.py')
+        super().__init__()
         self.settings = settings
         self.listener = listener
+        self.setWindowTitle('Eule.py')
+        self.table_widget = TableWidget(self)
+        self.setCentralWidget(self.table_widget)
 
-        tab_parent = Notebook(self)
-        self.main_frame = MainFrame(self)
-        self.settings_frame = SettingsFrame(self)
+        self.status_thread = KThread(target=self.set_status)
+        self.status_thread.start()
 
-        tab_parent.add(self.main_frame, text='Main')
-        tab_parent.add(self.settings_frame, text='Settings')
-        tab_parent.grid()
-
-
-class MainFrame(tk.Frame):
-    def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
-        self.parent = parent
-        parent.listener.PAUSED = tk.BooleanVar(self, False)
-        self.DACTIVE = tk.BooleanVar(self, True)
-        self.HKS = {}
-
-        self.EMP = tk.BooleanVar(self, parent.settings.special['empowered'])
-        self.FASTCONV = tk.BooleanVar(self, parent.settings.special['fast_convert'])
-        self.ARMORSWAP = tk.IntVar(self, parent.settings.special['armor_swap'])
-
-        frames = {
-            'cube': LabelFrame(self, text='Cube Hotkeys'),
-            'gr': LabelFrame(self, text='Greater Rift Hotkeys'),
-            'general': LabelFrame(self, text='General Hotkeys'),
-            'ports': LabelFrame(self, text='Porting Hotkeys'),
-            'town': LabelFrame(self, text='Town Hotkeys'),
-            'info': LabelFrame(self, text='Info'),
-        }
-
-        for i, (name, hotkey) in enumerate(parent.settings.hotkeys.items()):
-            self.HKS[name] = tk.StringVar(self, hotkey)
-            frame = frames['general']
-            if i <= 2:
-                frame = frames['cube']
-            elif 3 <= i <= 5:
-                frame = frames['gr']
-            elif 6 <= i <= 7:
-                frame = frames['town']
-            elif 8 <= i <= 12:
-                frame = frames['ports']
-
-            Label(frame, text=nice_name(name)).grid(column=0, row=i, sticky='W')
-            Button(
-                frame,
-                textvariable=self.HKS[name],
-                command=lambda x=name: self.set_hotkey(x),
-            ).grid(column=1, row=i)
-
-        Checkbutton(
-            frames['info'],
-            text='Diablo hooked',
-            onvalue=True,
-            offvalue=False,
-            variable=self.DACTIVE,
-            state=tk.DISABLED,
-        ).grid()
-
-        Checkbutton(
-            frames['info'],
-            text='Eule paused',
-            onvalue=True,
-            offvalue=False,
-            variable=parent.listener.PAUSED,
-            state=tk.DISABLED,
-        ).grid()
-
-        Checkbutton(
-            frames['gr'],
-            text='Empowered',
-            variable=self.EMP,
-            onvalue=True,
-            offvalue=False,
-            command=lambda x='emp': self.button_clicked(x),
-        ).grid()
-
-        Checkbutton(
-            frames['cube'],
-            text='SoL Converting',
-            variable=self.FASTCONV,
-            onvalue=True,
-            offvalue=False,
-            command=lambda x='conv': self.button_clicked(x),
-        ).grid()
-
-        Radiobutton(
-            frames['general'],
-            text='Cains',
-            variable=self.ARMORSWAP,
-            value=3,
-            command=lambda x='armor_swap': self.button_clicked(x),
-        ).grid()
-
-        Radiobutton(
-            frames['general'],
-            text='Bounty DH',
-            variable=self.ARMORSWAP,
-            value=2,
-            command=lambda x='armor_swap': self.button_clicked(x),
-        ).grid()
-
-        Button(
-            frames['info'],
-            text='Start Third Party',
-            command=lambda: Thread(
-                target=lambda: start_thirdparty(parent.settings.paths)
-            ).start(),
-        ).grid()
-
-        for i, v in enumerate(frames.values()):
-            v.grid(
-                row=int(0.5 * i),
-                column=i % 2,
-                sticky='NW',
-                pady=5,
-                padx=5,
-                ipadx=5,
-                ipady=5,
+    def set_status(self):
+        while True:
+            self.table_widget.main_page_tab.diablo_hooked.setChecked(
+                win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
             )
+            self.table_widget.main_page_tab.eule_paused.setChecked(self.listener.paused)
+            sleep(0.5)
+
+    def closeEvent(self, event):
+        self.settings.save()
+        self.listener.thread.terminate()
+        self.status_thread.terminate()
+        sys.stdout = sys.__stdout__
+        super().closeEvent(event)
+
+
+class TableWidget(QWidget):
+    def __init__(self, parent):
+        super(QWidget, self).__init__(parent)
+        self.settings = parent.settings
+        self.listener = parent.listener
+        self.layout = QGridLayout(self)
+
+        self.tabs = QTabWidget()
+        self.main_page_tab = MainPage(parent)
+        self.hotkeys_tab = HotkeyTab(parent)
+        self.settings_tab = SettingsTab(parent)
+
+        self.tabs.addTab(self.main_page_tab, 'Main Page')
+        self.tabs.addTab(self.hotkeys_tab, 'Hotkeys')
+        self.tabs.addTab(self.settings_tab, 'Settings')
+
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
+
+
+class MainPage(QWidget):
+    def __init__(self, parent):
+        QWidget.__init__(self)
+        self.layout = QGridLayout(self)
+        self.settings = parent.settings
+        self.listener = parent.listener
+
+        self.diablo_hooked = QCheckBox(self)
+        self.diablo_hooked.setText('Diablo hooked')
+        self.diablo_hooked.setDisabled(True)
+        self.layout.addWidget(self.diablo_hooked, 0, 0, 1, 1)
+
+        self.eule_paused = QCheckBox(self)
+        self.eule_paused.setText('Eule paused')
+        self.eule_paused.setDisabled(True)
+        self.layout.addWidget(self.eule_paused, 1, 0, 1, 1)
+
+        button = QPushButton(self)
+        button.setText('Start Third Party')
+        button.clicked.connect(lambda: start_thirdparty(self.settings.paths))
+        self.layout.addWidget(button, 0, 1, 1, 1)
+
+        label = QLabel(self)
+        label.setText('<a href="https://github.com/VocalTrance/Eule.py">Help</a>')
+        label.setOpenExternalLinks(True)
+        self.layout.addWidget(label, 1, 1, 1, 1)
+
+        self.setLayout(self.layout)
+
+
+class HotkeyTab(QWidget):
+    def __init__(self, parent):
+        super().__init__()
+        self.layout = QGridLayout(self)
+        self.settings = parent.settings
+        self.listener = parent.listener
+
+        self.buttons = {}
+
+        general = QGroupBox(self)
+        general_layout = QGridLayout(general)
+        general.setTitle('General')
+        self.layout.addWidget(general, 0, 0)
+
+        ###################################
+
+        label = QLabel(general)
+        label.setText('Spam Right Click')
+        general_layout.addWidget(label, 0, 0)
+
+        button = QPushButton(general)
+        self.buttons['right_click'] = button
+        button.setText(self.settings.hotkeys['right_click'])
+        button.clicked.connect(lambda: self.set_hotkey('right_click'))
+        general_layout.addWidget(button, 0, 1)
+
+        label = QLabel(general)
+        label.setText('Spam Left Click')
+        general_layout.addWidget(label, 1, 0)
+
+        button = QPushButton(general)
+        self.buttons['left_click'] = button
+        button.setText(self.settings.hotkeys['left_click'])
+        button.clicked.connect(lambda: self.set_hotkey('left_click'))
+        general_layout.addWidget(button, 1, 1)
+
+        label = QLabel(general)
+        label.setText('Normalize Difficulty')
+        general_layout.addWidget(label, 2, 0)
+
+        button = QPushButton(general)
+        self.buttons['lower_diff'] = button
+        button.setText(self.settings.hotkeys['lower_diff'])
+        button.clicked.connect(lambda: self.set_hotkey('lower_diff'))
+        general_layout.addWidget(button, 2, 1)
+
+        label = QLabel(general)
+        label.setText('Swap Armor')
+        general_layout.addWidget(label, 3, 0)
+
+        button = QPushButton(general)
+        self.buttons['armor_swap'] = button
+        button.setText(self.settings.hotkeys['armor_swap'])
+        button.clicked.connect(lambda: self.set_hotkey('armor_swap'))
+        general_layout.addWidget(button, 3, 1)
+
+        radio = QRadioButton(general)
+        radio.setText('Cains')
+        radio.clicked.connect(lambda: self.radio_clicked('cains'))
+        if self.settings.special['armor_swap'] == 3:
+            radio.setChecked(True)
+        general_layout.addWidget(radio, 4, 0)
+
+        radio = QRadioButton(general)
+        radio.setText('Bounty DH')
+        radio.clicked.connect(lambda: self.radio_clicked('bounty_dh'))
+        if self.settings.special['armor_swap'] == 2:
+            radio.setChecked(True)
+        general_layout.addWidget(radio, 4, 1)
+
+        label = QLabel(general)
+        label.setText('Pause Eule')
+        general_layout.addWidget(label, 5, 0)
+
+        button = QPushButton(general)
+        self.buttons['pause'] = button
+        button.setText(self.settings.hotkeys['pause'])
+        button.clicked.connect(lambda: self.set_hotkey('pause'))
+        general_layout.addWidget(button, 5, 1)
+
+        porting = QGroupBox(self)
+        porting_layout = QGridLayout(porting)
+        porting.setTitle('Porting')
+        self.layout.addWidget(porting, 1, 0, -1, 1)
+
+        ######################
+
+        label = QLabel(porting)
+        label.setText('Port to A1 Town')
+        porting_layout.addWidget(label, 0, 0)
+
+        button = QPushButton(porting)
+        self.buttons['port_a1'] = button
+        button.setText(self.settings.hotkeys['port_a1'])
+        button.clicked.connect(lambda: self.set_hotkey('port_a1'))
+        porting_layout.addWidget(button, 0, 1)
+
+        label = QLabel(porting)
+        label.setText('Port to A2 Town')
+        porting_layout.addWidget(label, 1, 0)
+
+        button = QPushButton(porting)
+        self.buttons['port_a2'] = button
+        button.setText(self.settings.hotkeys['port_a2'])
+        button.clicked.connect(lambda: self.set_hotkey('port_a2'))
+
+        porting_layout.addWidget(button, 1, 1)
+
+        label = QLabel(porting)
+        label.setText('Port to A3 / A4 Town')
+        porting_layout.addWidget(label, 2, 0)
+
+        button = QPushButton(porting)
+        self.buttons['port_a3'] = button
+
+        button.setText(self.settings.hotkeys['port_a3'])
+        button.clicked.connect(lambda: self.set_hotkey('port_a3'))
+
+        porting_layout.addWidget(button, 2, 1)
+
+        label = QLabel(porting)
+        label.setText('Port to A5 Town')
+        porting_layout.addWidget(label, 3, 0)
+
+        button = QPushButton(porting)
+        self.buttons['port_a5'] = button
+        button.setText(self.settings.hotkeys['port_a5'])
+        button.clicked.connect(lambda: self.set_hotkey('port_a5'))
+        porting_layout.addWidget(button, 3, 1)
+
+        label = QLabel(porting)
+        label.setText('Port to Pool')
+        porting_layout.addWidget(label, 4, 0)
+
+        button = QPushButton(porting)
+        self.buttons['port_pool'] = button
+        button.setText(self.settings.hotkeys['port_pool'])
+        button.clicked.connect(lambda: self.set_hotkey('port_pool'))
+        porting_layout.addWidget(button, 4, 1)
+
+        greater_rift = QGroupBox(self)
+        greater_rift_layout = QGridLayout(greater_rift)
+        greater_rift.setTitle('Greater Rift')
+        self.layout.addWidget(greater_rift, 0, 1)
+
+        ####################
+
+        label = QLabel(greater_rift)
+        label.setText('Open Grift')
+        greater_rift_layout.addWidget(label, 0, 0)
+
+        button = QPushButton(greater_rift)
+        self.buttons['open_gr'] = button
+
+        button.setText(self.settings.hotkeys['open_gr'])
+        button.clicked.connect(lambda: self.set_hotkey('open_gr'))
+        greater_rift_layout.addWidget(button, 0, 1)
+
+        label = QLabel(greater_rift)
+        label.setText('Upgrade Gem')
+        greater_rift_layout.addWidget(label, 1, 0)
+
+        button = QPushButton(greater_rift)
+        self.buttons['gem_up'] = button
+        button.setText(self.settings.hotkeys['gem_up'])
+        button.clicked.connect(lambda: self.set_hotkey('gem_up'))
+        greater_rift_layout.addWidget(button, 1, 1)
+
+        checkbox = QCheckBox(greater_rift)
+        checkbox.setText('Empowered')
+        checkbox.stateChanged.connect(lambda: self.checkbox_clicked('empowered'))
+        if self.settings.special['empowered']:
+            checkbox.setChecked(True)
+        greater_rift_layout.addWidget(checkbox, 2, 0)
+
+        label = QLabel(greater_rift)
+        label.setText('Leave Game')
+        greater_rift_layout.addWidget(label, 3, 0)
+
+        button = QPushButton(greater_rift)
+        self.buttons['leave_game'] = button
+
+        button.setText(self.settings.hotkeys['leave_game'])
+        button.clicked.connect(lambda: self.set_hotkey('leave_game'))
+        greater_rift_layout.addWidget(button, 3, 1)
+
+        after_rift = QGroupBox(self)
+        after_rift_layout = QGridLayout(after_rift)
+        after_rift.setTitle('After Rift')
+        self.layout.addWidget(after_rift, 1, 1)
+
+        ######################
+
+        label = QLabel(after_rift)
+        label.setText('Salvage')
+        after_rift_layout.addWidget(label, 0, 0)
+
+        button = QPushButton(after_rift)
+        self.buttons['salvage'] = button
+        button.setText(self.settings.hotkeys['salvage'])
+        button.clicked.connect(lambda: self.set_hotkey('salvage'))
+        after_rift_layout.addWidget(button, 0, 1)
+
+        label = QLabel(after_rift)
+        label.setText('Drop Inventory')
+        after_rift_layout.addWidget(label, 1, 0)
+
+        button = QPushButton(after_rift)
+        self.buttons['drop_inventory'] = button
+        button.setText(self.settings.hotkeys['drop_inventory'])
+        button.clicked.connect(lambda: self.set_hotkey('drop_inventory'))
+        after_rift_layout.addWidget(button, 1, 1)
+
+        cube_converter = QGroupBox(self)
+        cube_converter_layout = QGridLayout(cube_converter)
+        cube_converter.setTitle('After Rift')
+        self.layout.addWidget(cube_converter, 2, 1)
+
+        ######################
+
+        label = QLabel(cube_converter)
+        label.setText('Convert 1-Slot')
+        cube_converter_layout.addWidget(label, 0, 0)
+
+        button = QPushButton(cube_converter)
+        self.buttons['cube_conv_sm'] = button
+        button.setText(self.settings.hotkeys['cube_conv_sm'])
+        button.clicked.connect(lambda: self.set_hotkey('cube_conv_sm'))
+        cube_converter_layout.addWidget(button, 0, 1)
+
+        label = QLabel(cube_converter)
+        label.setText('Convert 2-Slot')
+        cube_converter_layout.addWidget(label, 1, 0)
+
+        button = QPushButton(cube_converter)
+        self.buttons['cube_conv_lg'] = button
+
+        button.setText(self.settings.hotkeys['cube_conv_lg'])
+        button.clicked.connect(lambda: self.set_hotkey('cube_conv_lg'))
+
+        cube_converter_layout.addWidget(button, 1, 1)
+
+        checkbox = QCheckBox(cube_converter)
+        checkbox.setText('SoL Converting')
+        checkbox.clicked.connect(lambda: self.checkbox_clicked('fast_convert'))
+        if self.settings.special['fast_convert']:
+            checkbox.setChecked(True)
+        cube_converter_layout.addWidget(checkbox, 2, 0)
+
+        label = QLabel(cube_converter)
+        label.setText('Reforge / Convert Set')
+        cube_converter_layout.addWidget(label, 3, 0)
+
+        button = QPushButton(cube_converter)
+        self.buttons['reforge'] = button
+        button.setText(self.settings.hotkeys['reforge'])
+        button.clicked.connect(lambda: self.set_hotkey('reforge'))
+
+        cube_converter_layout.addWidget(button, 3, 1)
+
+        self.setLayout(self.layout)
 
     def set_hotkey(self, hotkey):
-        settings = self.parent.settings
-        listener = self.parent.listener
-        listener.stop()
+        self.listener.stop()
+        sender = self.sender()
         input = keyboard.read_hotkey(suppress=False)
-        if input != 'esc' and not hotkey_delete_request(input):
-            if askokcancel(message=f'New Hotkey: {input}. Save?'):
-                for k, v in settings.hotkeys.items():
-                    if v == input:
-                        settings.hotkeys[k] = ''
-                        self.HKS[k].set('')
-                settings.hotkeys[hotkey] = input
-                self.HKS[hotkey].set(input)
-        elif hotkey_delete_request(input):
-            settings.hotkeys[hotkey] = ''
-            self.HKS[hotkey].set('')
-        if not listener.PAUSED.get():
-            listener.start()
-        else:
-            keyboard.add_hotkey(settings.hotkeys['pause'], listener.pause)
+        if input != 'esc':
+            if hotkey_delete_request(input):
+                self.settings.hotkeys[hotkey] = ''
+                self.buttons[hotkey].setText('')
+            else:
+                reply = QMessageBox.question(
+                    self, 'Save Hotkey?', f'New Hotkey: {input}.\n Save Hotkey?'
+                )
+                if reply == QMessageBox.Yes:
+                    for k, hk in self.settings.hotkeys.items():
+                        if hk == input:
+                            self.settings.hotkeys[k] = ''
+                            self.buttons[k].setText('')
+                    self.settings.hotkeys[hotkey] = input
+                    sender.setText(input)
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
-    def button_clicked(self, cb):
-        settings = self.parent.settings
-        self.parent.listener.stop()
-        if cb == 'emp':
-            settings.special['empowered'] = self.EMP.get()
-        elif cb == 'conv':
-            settings.special['fast_convert'] = self.FASTCONV.get()
-        elif cb == 'armor_swap':
-            settings.special['armor_swap'] = self.ARMORSWAP.get()
-        self.parent.listener.start()
+    def checkbox_clicked(self, value):
+        self.listener.stop()
+        sender = self.sender()
+        if value == 'empowered':
+            settings.special['empowered'] = sender.isChecked()
+        elif value == 'fast_convert':
+            settings.special['fast_convert'] = sender.isChecked()
 
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
-class SettingsFrame(tk.Frame):
-    def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
-        self.parent = parent
-        self.PATHS = {}
-        frame = LabelFrame(self, text='Third Party Paths')  # Need frames for pools etc.
-        for i, (name, path) in enumerate(parent.settings.paths.items()):
-            self.PATHS[name] = tk.StringVar(self, path)
-            Label(frame, text=name).grid(column=0, row=i, sticky='W')
-            entry = Entry(frame, textvariable=self.PATHS[name])
-            entry.grid(column=1, row=i, ipady=2, pady=2)
-            entry.bind('<1>', lambda event, x=name: self.set_path(event, x))
+    def radio_clicked(self, value):
+        self.listener.stop()
+        if value == 'cains':
+            self.settings.special['armor_swap'] = 3
+        elif value == 'bounty_dh':
+            self.settings.special['armor_swap'] = 2
 
-        Button(
-            self, text='Choose Poolspots', command=lambda: PopupPoolspots(self.parent),
-        ).grid()
-
-        frame.grid(
-            row=int(0.5 * i),
-            column=i % 2,
-            sticky='NW',
-            pady=5,
-            padx=5,
-            ipadx=5,
-            ipady=5,
-        )
-
-    def set_path(self, event, name):
-        path = askopenfilename(initialdir='./')
-        if path:
-            self.parent.settings.paths[name] = path
-            self.PATHS[name].set(path)
+        if not self.listener.paused:
+            self.listener.start()
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
 
-class PopupPoolspots(tk.Toplevel):
-    def __init__(self, elder):  # XD
-        tk.Toplevel.__init__(self)
-        self.wm_title('Choose Poolspots')
+class SettingsTab(QWidget):
+    def __init__(self, elder):
+        super().__init__()
         self.elder = elder
+        self.layout = QGridLayout(self)
+        self.settings = elder.settings
+        self.listener = elder.listener
 
-        self.poolspots = []
-        for act, wps in pool_wps().items():
-            frame = LabelFrame(self, text=f'Act {act}')
-            for wp in wps:
-                if wp in elder.settings.poolspots:
-                    var = tk.StringVar(value=wp)
-                else:
-                    var = tk.StringVar('')
-                self.poolspots.append(var)
-                Checkbutton(frame, var=var, text=wp, onvalue=wp).grid(sticky='W')
-            frame.grid(sticky='NW', padx=5, ipadx=5)
+        paths = QGroupBox(self)
+        paths.setTitle('Paths')
+        paths_layout = QGridLayout(paths)
+        self.layout.addWidget(paths)
 
-        Button(self, text="Save", command=lambda: self.update_poolspots()).grid()
-        Button(self, text="Cancel", command=self.destroy).grid()
+        label = QLabel(paths)
+        label.setText('Fiddler Path')
+        paths_layout.addWidget(label, 0, 0, 1, 1)
+
+        self.fiddler_path = QLineEdit(paths)
+        self.fiddler_path.setText(self.settings.paths['Fiddler'])
+        self.fiddler_path.setDisabled(True)
+        paths_layout.addWidget(self.fiddler_path, 0, 1, 1, 1)
+
+        button = QPushButton(paths)
+        button.setText('...')
+        button.clicked.connect(lambda: self.set_path('fiddler'))
+        paths_layout.addWidget(button, 0, 2, 1, 1)
+
+        label = QLabel(paths)
+        label.setText('TurboHUD Path')
+        paths_layout.addWidget(label, 1, 0, 1, 1)
+
+        self.turbohud_path = QLineEdit(paths)
+        self.turbohud_path.setText(self.settings.paths['TurboHUD'])
+        self.turbohud_path.setDisabled(True)
+        paths_layout.addWidget(self.turbohud_path, 1, 1, 1, 1)
+
+        button = QPushButton(paths)
+        button.setText('...')
+        button.clicked.connect(lambda: self.set_path('turbohud'))
+        paths_layout.addWidget(button, 1, 2, 1, 1)
+
+        label = QLabel(paths)
+        label.setText('pHelper Path')
+        paths_layout.addWidget(label, 2, 0, 1, 1)
+
+        self.phelper_path = QLineEdit(paths)
+        self.phelper_path.setText(self.settings.paths['pHelper'])
+        self.phelper_path.setDisabled(True)
+        paths_layout.addWidget(self.phelper_path, 2, 1, 1, 1)
+
+        button = QPushButton(paths)
+        button.setText('...')
+        button.clicked.connect(lambda: self.set_path('phelper'))
+        paths_layout.addWidget(button, 2, 2, 1, 1)
+
+        poolspots = QGroupBox(self)
+        poolspots.setTitle('Poolspots')
+        poolspots_layout = QGridLayout(poolspots)
+        self.layout.addWidget(poolspots)
+
+        self.poolspot_list = QListWidget(poolspots)
+        self.poolspot_list.setSelectionMode(QListWidget.MultiSelection)
+        for act, ps in ressources.poolspots().items():
+            for poolspot in ps:
+                item = QListWidgetItem(self.poolspot_list)
+                item.setText(f'Act {act}: {poolspot.replace("_", " ")}')
+                item.poolspot = poolspot
+                if poolspot in self.settings.poolspots:
+                    item.setSelected(True)
+        poolspots_layout.addWidget(self.poolspot_list)
+
+        button = QPushButton(poolspots)
+        button.setText('Save')
+        button.clicked.connect(self.update_poolspots)
+        poolspots_layout.addWidget(button)
+
+        self.setLayout(self.layout)
+
+    def set_path(self, path):
+        exe = str(
+            QFileDialog.getOpenFileName(
+                self, 'Select Executables', '', 'Executables (*.exe)'
+            )[0]
+        )
+        if exe:
+            if path == 'fiddler':
+                self.settings.paths['Fiddler'] = exe
+                self.fiddler_path.setText(exe)
+            elif path == 'turbohud':
+                self.settings.paths['TurboHUD'] = exe
+                self.turbohud_path.setText(exe)
+            elif path == 'phelper':
+                self.settings.paths['pHelper'] = exe
+                self.phelper_path.setText(exe)
 
     def update_poolspots(self):
-        settings = self.elder.settings
-        self.elder.listener.stop()
-        settings.poolspots = [
-            p.get() for p in self.poolspots if p.get() not in ['', '0']
-        ]
-        self.elder.listener.start()
-        self.destroy()
+        self.listener.stop()
+
+        selected_spots = []
+        for i in range(self.poolspot_list.count()):
+            item = self.poolspot_list.item(i)
+            if item.isSelected():
+                selected_spots.append(item.poolspot)
+        self.settings.poolspots = selected_spots
+
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
 
-def hotkey_delete_request(hotkey):
-    try:
-        scan_codes = keyboard.key_to_scan_codes(hotkey)
-        return scan_codes[0] == 83
-    except:
-        return False
-
-
-def nice_name(name):
-    switcher = {
-        'cube_conv_sm': 'Cube Conv (Single Slot)',
-        'cube_conv_lg': 'Cube Conv (Dual Slot)',
-        'reforge': 'Reforge / Conv Set',
-        'open_gr': 'Open Grift',
-        'gem_up': 'Upgrade Gem',
-        'leave_game': 'Leave Game',
-        'salvage': 'Salvage',
-        'drop_inventory': 'Drop Inventory',
-        'right_click': 'Spam Right Click',
-        'left_click': 'Spam Left Click',
-        'port_a1': 'Port to A1 Town',
-        'port_a2': 'Port to A2 Town',
-        'port_a3': 'Port to A3 / A4 Town',
-        'port_a5': 'Port to A5 Town',
-        'lower_diff': 'Normalize Difficulty',
-        'armor_swap': 'Swap Armor',
-        'pool_tp': 'Port to next Pool Spot',
-        'pause': 'Pause Eule.py',
-    }
-    return switcher.get(name, 'Key not found!')
-
-
-if __name__ == "__main__":
-    handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+if __name__ == '__main__':
     settings = Settings()
-    listener = Listener(settings, handle)
-    app = App(settings, listener)
-    app.mainloop()
+    listener = Listener(settings)
+    app = QApplication(sys.argv)
+    win = MainWindow(settings, listener)
+    mw = windows.ModernWindow(win)
+
+    with open('./Style/frameless.qss') as stylesheet:
+        mw.setStyleSheet(stylesheet.read())
+
+    mw.show()
+    sys.exit(app.exec_())
+
+
+"""
+    def item_changed(self, item):
+        self.listener.stop()
+        print('Before:')
+        print(self.settings.poolspots)
+        if item.isSelected():
+            self.settings.poolspots.append(item.poolspot)
+        else:
+            try:
+                self.settings.poolspots.remove(item.poolspot)
+            except ValueError:
+                # TODO
+                print('Poolspot war inkonsistent.')
+        print('After:')
+        print(self.settings.poolspots)
+
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+"""

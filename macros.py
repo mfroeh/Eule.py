@@ -215,21 +215,19 @@ def port_town(act):
         send_mouse(handle, 'LM', town[0], town[1])
 
 
-def pool_tp(poolspotlist):
+def port_pool(poolspotlist):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         poolspot = poolspotlist.next_spot()
+        if poolspot:
+            bw_map = transform_coordinates(handle, 895, 125)
+            act = transform_coordinates(handle, poolspot[0][0], poolspot[0][1])
+            wp = transform_coordinates(handle, poolspot[1][0], poolspot[1][1])
 
-        bw_map = transform_coordinates(handle, 895, 125)
-        act = transform_coordinates(
-            handle, poolspot.act_coords[0], poolspot.act_coords[1]
-        )
-        wp = transform_coordinates(handle, poolspot.wp_coords[0], poolspot.wp_coords[1])
-
-        send_key(handle, 'm')
-        send_mouse(handle, 'LM', bw_map[0], bw_map[1])
-        send_mouse(handle, 'LM', act[0], act[1])
-        send_mouse(handle, 'LM', wp[0], wp[1])
+            send_key(handle, 'm')
+            send_mouse(handle, 'LM', bw_map[0], bw_map[1])
+            send_mouse(handle, 'LM', act[0], act[1])
+            send_mouse(handle, 'LM', wp[0], wp[1])
 
 
 def lower_diff():

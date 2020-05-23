@@ -538,6 +538,14 @@ if __name__ == '__main__':
     win = MainWindow(settings, listener)
     mw = windows.ModernWindow(win)
 
+    # for pyinstaller
+    """
+    wd = sys._MEIPASS
+    file_path = os.path.join(wd, './Style/frameless.qss')
+    with open(file_path) as stylesheet:
+        mw.setStyleSheet(stylesheet.read())
+    """
+    # Normal
     with open('./Style/frameless.qss') as stylesheet:
         mw.setStyleSheet(stylesheet.read())
 

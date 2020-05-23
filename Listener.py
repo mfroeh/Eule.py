@@ -31,6 +31,10 @@ class Listener:
                         drop_inventory,
                         args=(self.settings.special['spare_columns'],),
                     )
+                elif k == 'gamble':
+                    self.listeners[k] = keyboard.add_hotkey(
+                        v, gamble, args=(self.settings.special['gamble_item'],),
+                    )
                 elif k == 'gem_up':
                     self.listeners[k] = keyboard.add_hotkey(
                         v, gem_up, args=(self.settings.special['empowered'],)

@@ -86,3 +86,65 @@ def poolspots():
         4: ['lower_realm_of_infernal_fate', 'realm_of_fractured_fate'],
         5: ['pandemonium_fortress_level_1'],
     }
+
+
+def items():
+    return [
+        '1-h_weapon',
+        '2-h_weapon',
+        'quiver',
+        'mojo',
+        'orb',
+        'phylactery',
+        'helm',
+        'boots',
+        'belt',
+        'pants',
+        'shield',
+        'gloves',
+        'chest_armor',
+        'shoulders',
+        'bracers',
+        'ring',
+        'amulet',
+    ]
+
+
+def kadala_item_by_name(item):
+    switcher = {
+        **dict.fromkeys(['1-h_weapon', 'helm', 'ring'], (70, 210)),
+        **dict.fromkeys(['quiver', 'boots'], (70, 310)),
+        **dict.fromkeys(['mojo', 'belt'], (70, 410)),
+        'pants': (70, 510),
+        'shield': (70, 610),
+        **dict.fromkeys(['2-h_weapon', 'gloves', 'amulet'], (290, 210)),
+        **dict.fromkeys(['orb', 'chest_armor'], (290, 310)),
+        **dict.fromkeys(['phylactery', 'shoulders'], (290, 410)),
+        'bracers': (290, 510),
+    }
+    return switcher.get(item, (0, 0))
+
+
+def kadala_tab_by_name(item):
+    switcher = {
+        **dict.fromkeys(
+            ['1-h_weapon', '2-h_weapon', 'quiver', 'mojo', 'orb', 'phylactery'],
+            (515, 220),
+        ),
+        **dict.fromkeys(
+            [
+                'helm',
+                'boots',
+                'belt',
+                'pants',
+                'shield',
+                'gloves',
+                'chest_armor',
+                'shoulders',
+                'bracers',
+            ],
+            (515, 350),
+        ),
+        **dict.fromkeys(['ring', 'amulet'], (515, 480)),
+    }
+    return switcher.get(item, (0, 0))

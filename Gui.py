@@ -15,7 +15,9 @@ from PyQt5.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QSpinBox,
+    QComboBox,
 )
+from PyQt5.QtGui import QStandardItem
 import keyboard
 import sys
 import Style.windows as windows
@@ -330,6 +332,16 @@ class HotkeyTab(QWidget):
         spinbox.valueChanged.connect(self.spinbox_changed)
         after_rift_layout.addWidget(spinbox, 2, 1)
 
+        label = QLabel(after_rift)
+        label.setText('Gamble')
+        after_rift_layout.addWidget(label, 3, 0)
+
+        button = QPushButton(after_rift)
+        self.buttons['gamble'] = button
+        button.setText(self.settings.hotkeys['gamble'])
+        button.clicked.connect(lambda: self.set_hotkey('gamble'))
+        after_rift_layout.addWidget(button, 3, 1)
+
         cube_converter = QGroupBox(self)
         cube_converter_layout = QGridLayout(cube_converter)
         cube_converter.setTitle('Cube Converter')
@@ -499,7 +511,7 @@ class SettingsTab(QWidget):
         poolspots = QGroupBox(self)
         poolspots.setTitle('Poolspots')
         poolspots_layout = QGridLayout(poolspots)
-        self.layout.addWidget(poolspots)
+        self.layout.addWidget(poolspots, 1, 0)
 
         self.poolspot_list = QListWidget(poolspots)
         self.poolspot_list.setSelectionMode(QListWidget.MultiSelection)
@@ -516,6 +528,22 @@ class SettingsTab(QWidget):
         button.setText('Save')
         button.clicked.connect(self.update_poolspots)
         poolspots_layout.addWidget(button)
+
+        gamble_item = QGroupBox(self)
+        gamble_item.setTitle('Gamble Item')
+        gamble_item_layout = QGridLayout(gamble_item)
+        self.layout.addWidget(gamble_item, 1, 1)
+
+        self.gamble_item_list = QListWidget(gamble_item)
+        self.gamble_item_list.setSelectionMode(QListWidget.SingleSelection)
+        for _item in ressources.items():
+            item = QListWidgetItem(self.gamble_item_list)
+            item.setText(_item.replace('_', ' '))
+            item.item = _item
+            if _item == self.settings.special['gamble_item']:
+                item.setSelected(True)
+        self.gamble_item_list.itemSelectionChanged.connect(self.update_gamble_item)
+        gamble_item_layout.addWidget(self.gamble_item_list)
 
         self.setLayout(self.layout)
 
@@ -545,6 +573,18 @@ class SettingsTab(QWidget):
             if item.isSelected():
                 selected_spots.append(item.poolspot)
         self.settings.poolspots = selected_spots
+
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def update_gamble_item(self):
+        self.listener.stop()
+
+        selected_item = self.gamble_item_list.selectedItems()[0]
+        self.settings.special['gamble_item'] = selected_item.item
 
         if not self.listener.paused:
             self.listener.start()

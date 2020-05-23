@@ -17,6 +17,7 @@ class Settings:
                     "gem_up": "",
                     "leave_game": "",
                     "salvage": "",
+                    "gamble": "alt",
                     "drop_inventory": "f+strg",
                     "port_a1": "",
                     "port_a2": "",
@@ -47,6 +48,7 @@ class Settings:
                     "fast_convert": False,
                     "armor_swap": 3,
                     "spare_columns": 1,
+                    "gamble_item": "ring",
                     "auto_start": False,
                 },
             }

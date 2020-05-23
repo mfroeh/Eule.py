@@ -4,7 +4,12 @@ from time import sleep
 from sends import send_mouse, send_key, send_mousemove, send_key_down, send_key_up
 import keyboard
 from utils import transform_coordinates
-from ressources import map_act_coords_by_act, map_town_coords_by_act
+from ressources import (
+    map_act_coords_by_act,
+    map_town_coords_by_act,
+    kadala_tab_by_name,
+    kadala_item_by_name,
+)
 
 
 def right_click():
@@ -262,6 +267,19 @@ def armor_swap(items):
             else:
                 send_mouse(handle, 'RM', coords[0], coords[1])
         send_key(handle, 'c')
+
+
+def gamble(item):
+    handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+    if handle:
+        tab_coords = kadala_tab_by_name(item)
+        item_coords = kadala_item_by_name(item)
+        tab = transform_coordinates(handle, tab_coords[0], tab_coords[1])
+        item = transform_coordinates(handle, item_coords[0], item_coords[1])
+
+        send_mouse(handle, 'LM', tab[0], tab[1])
+        for i in range(60):
+            send_mouse(handle, 'RM', item[0], item[1])
 
 
 class StopMacro(Exception):

@@ -1,6 +1,6 @@
 # Eule.py
 A Diablo III Macro Collection.\
-Working with all 16:9 Resolutions guaranteed.
+Working with all 16:9 Resolutions guaranteed.\
 Should be working for 16:10 or any other Resolution aswell.
 
 ## Macros

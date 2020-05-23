@@ -79,9 +79,11 @@ class Listener:
 
     def pause(self):
         if self.paused:
+            self.gui_paused.setChecked(False)
             keyboard.remove_all_hotkeys()
             self.start()
         else:
             self.paused = True
+            self.gui_paused.setChecked(True)
             self.stop()
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)

@@ -47,8 +47,7 @@ class MainWindow(QMainWindow):
             self.table_widget.main_page_tab.diablo_hooked.setChecked(
                 win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
             )
-            self.table_widget.main_page_tab.eule_paused.setChecked(self.listener.paused)
-            sleep(0.5)
+            sleep(1)
 
     def closeEvent(self, event):
         self.settings.save()
@@ -94,6 +93,8 @@ class MainPage(QWidget):
         self.eule_paused.setText('Eule paused')
         self.eule_paused.setDisabled(True)
         self.layout.addWidget(self.eule_paused, 1, 0, 1, 1)
+        # Add to Listener, so he can change
+        self.listener.gui_paused = self.eule_paused
 
         button = QPushButton(self)
         button.setText('Start Third Party')

@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import (
     QSpinBox,
     QComboBox,
 )
-from PyQt5.QtGui import QStandardItem
+import string
 import keyboard
 import sys
 import Style.windows as windows
@@ -518,7 +518,9 @@ class SettingsTab(QWidget):
         for act, ps in ressources.poolspots().items():
             for poolspot in ps:
                 item = QListWidgetItem(self.poolspot_list)
-                item.setText(f'Act {act}: {poolspot.replace("_", " ")}')
+                item.setText(
+                    f'Act {act}: {string.capwords(poolspot.replace("_", " "))}'
+                )
                 item.poolspot = poolspot
                 if poolspot in self.settings.poolspots:
                     item.setSelected(True)
@@ -538,7 +540,7 @@ class SettingsTab(QWidget):
         self.gamble_item_list.setSelectionMode(QListWidget.SingleSelection)
         for _item in ressources.items():
             item = QListWidgetItem(self.gamble_item_list)
-            item.setText(_item.replace('_', ' '))
+            item.setText(string.capwords(_item.replace('_', ' ')))
             item.item = _item
             if _item == self.settings.special['gamble_item']:
                 item.setSelected(True)

@@ -88,14 +88,12 @@ class Listener:
                 keyboard.add_abbreviation(abbrevation, msg)
 
     def stop(self):
-        keyboard.remove_all_hotkeys()
-        for abbrevation in self.settings.abbrevations.keys():
-            keyboard.remove_word_listener(abbrevation)
+        keyboard.unhook_all()
 
     def pause(self):
         if self.paused:
             self.gui_paused.setChecked(False)
-            keyboard.remove_all_hotkeys()
+            keyboard.unhook_all()
             self.start()
         else:
             self.paused = True

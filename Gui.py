@@ -621,6 +621,17 @@ class SettingsTab(QWidget):
         button.clicked.connect(lambda: self.set_path('phelper'))
         paths_layout.addWidget(button, 2, 2, 1, 1)
 
+        image_recognition = QGroupBox(self)
+        image_recognition.setTitle('Auto Stuff')
+        image_recognition_layout = QGridLayout(image_recognition)
+        self.layout.addWidget(image_recognition, 0, 1)
+
+        checkbox = QCheckBox(image_recognition)
+        checkbox.setText('Auto start Game')
+        checkbox.setChecked(self.settings.special['auto_start'])
+        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_start'))
+        image_recognition_layout.addWidget(checkbox, 0, 0)
+
         poolspots = QGroupBox(self)
         poolspots.setTitle('Poolspots')
         poolspots_layout = QGridLayout(poolspots)
@@ -707,6 +718,11 @@ class SettingsTab(QWidget):
         # TODO: Wenn man seinen Pause key deleted
         elif self.settings.hotkeys['pause']:
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def checkbox_clicked(self, value):
+        sender = self.sender()
+        if value == 'auto_start':
+            self.settings.special['auto_start'] = sender.isChecked()
 
 
 class CustomListWidget(QWidget):

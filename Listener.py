@@ -3,18 +3,23 @@ import macros
 from kthread import KThread
 from PoolSpot import PoolSpotList
 from ahk import AHK
+import win32gui
+import utils
+from sends import send_mouse
+from time import sleep
 
 
 class Listener:
     def __init__(self, settings):
         self.settings = settings
-        self.start()
 
         self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))
         self.thread.start()
 
         self.image_recognition_thread = KThread(target=self.watch_screen)
         self.image_recognition_thread.start()
+
+        self.start()
 
     def start(self):
         self.paused = False
@@ -108,5 +113,14 @@ class Listener:
     def watch_screen(self):
         ahk = AHK()
         while True:
-            if not self.paused and self.settings.special['auto_start']:
-                pass
+            handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+            if handle and self.settings.special['auto_start'] and not self.paused:
+                x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+                image_path = f'./images/start_game_{x2 - x1}_{y2 - y1}.png'
+                x1, y1 = utils.transform_coordinates(handle, 160, 500)
+                x2, y2 = utils.transform_coordinates(handle, 320, 540)
+                found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
+                if found:
+                    print('FOUND!')
+                    send_mouse(handle, 'LM', x1, y1)
+                sleep(0.3)

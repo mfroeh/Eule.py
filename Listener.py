@@ -2,6 +2,7 @@ import keyboard
 import macros
 from kthread import KThread
 from PoolSpot import PoolSpotList
+from ahk import AHK
 
 
 class Listener:
@@ -11,6 +12,9 @@ class Listener:
 
         self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))
         self.thread.start()
+
+        self.image_recognition_thread = KThread(target=self.watch_screen)
+        self.image_recognition_thread.start()
 
     def start(self):
         self.paused = False
@@ -100,3 +104,9 @@ class Listener:
             self.gui_paused.setChecked(True)
             self.stop()
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)
+
+    def watch_screen(self):
+        ahk = AHK()
+        while True:
+            if not self.paused and self.settings.special['auto_start']:
+                pass

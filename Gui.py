@@ -63,6 +63,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         self.settings.save()
         self.listener.thread.terminate()
+        self.listener.image_recognition_thread.terminate()
         self.status_thread.terminate()
         sys.stdout = sys.__stdout__
         super().closeEvent(event)
@@ -776,6 +777,7 @@ if __name__ == '__main__':
     # for pyinstaller
     """
     from PyQt5.QtGui import QIcon
+
     wd = sys._MEIPASS
     file_path = os.path.join(wd, './Style/frameless.qss')
     with open(file_path) as stylesheet:

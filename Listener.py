@@ -110,6 +110,7 @@ class Listener:
             self.stop()
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)
 
+    # Regular Version
     def watch_screen(self):
         ahk = AHK()
         while True:
@@ -123,4 +124,31 @@ class Listener:
                 if found:
                     print('FOUND!')
                     send_mouse(handle, 'LM', x1, y1)
+                else:
+                    print('Not found!')
                 sleep(0.3)
+
+    """
+    # Pyinstaller Version
+    def watch_screen(self):
+        import sys
+        import os
+
+        wd = sys._MEIPASS
+
+        ahk_path = os.path.join(wd, './AutoHotkey/AutoHotkey.exe')
+        ahk = AHK(executable_path=ahk_path)
+        while True:
+            handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+            if handle and self.settings.special['auto_start'] and not self.paused:
+                x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+                image_path = os.path.join(
+                    wd, f'./images/start_game_{x2 - x1}_{y2 - y1}.png'
+                )
+                x1, y1 = utils.transform_coordinates(handle, 160, 500)
+                x2, y2 = utils.transform_coordinates(handle, 320, 540)
+                found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
+                if found:
+                    send_mouse(handle, 'LM', x1, y1)
+                sleep(0.3)
+    """

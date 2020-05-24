@@ -89,12 +89,12 @@ def set_status(diablo_hooked, eule_paused, listener):
 
 # Transforms from 1920x1080 Base
 # Works for all 16 / 9 Resolutions
-# Should work for 16 / 10 on native Monitor aswell
 def transform_coordinates(handle, x, y):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     w = x2 - x1
     h = y2 - y1
-    new_x = int((w / 1920) * x)
+    # sixteen_to_nine = (w / h) == 1.7777777777777777
+    new_x = int((w / 1920) * x)  # if sixteen_to_nine else int((w / 1920) * x * 0.965)
     new_y = int((h / 1080) * y)
     return (new_x, new_y)
 

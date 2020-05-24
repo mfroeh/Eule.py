@@ -16,6 +16,7 @@ class Listener:
         self.paused = False
         hotkeys = self.settings.hotkeys
         special = self.settings.special
+        abbrevations = self.settings.abbrevations
 
         if hotkeys['right_click']:
             keyboard.add_hotkey(hotkeys['right_click'], macros.right_click)
@@ -82,8 +83,14 @@ class Listener:
         if hotkeys['reforge']:
             keyboard.add_hotkey(hotkeys['reforge'], macros.reforge)
 
+        if self.settings.special['abbrevations_enabled']:
+            for abbrevation, msg in abbrevations.items():
+                keyboard.add_abbreviation(abbrevation, msg)
+
     def stop(self):
         keyboard.remove_all_hotkeys()
+        for abbrevation in self.settings.abbrevations.keys():
+            keyboard.remove_word_listener(abbrevation)
 
     def pause(self):
         if self.paused:

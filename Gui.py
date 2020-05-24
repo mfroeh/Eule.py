@@ -17,6 +17,9 @@ from PyQt5.QtWidgets import (
     QSpinBox,
     QComboBox,
     QDesktopWidget,
+    QSpacerItem,
+    QDialogButtonBox,
+    QDialog,
 )
 import string
 import keyboard
@@ -74,11 +77,13 @@ class TableWidget(QWidget):
 
         self.tabs = QTabWidget()
         self.main_page_tab = MainPage(parent)
-        self.hotkeys_tab = HotkeyTab(parent)
+        self.hotkey_tab = HotkeyTab(parent)
+        self.abbrevation_tab = AbbrevationTab(parent)
         self.settings_tab = SettingsTab(parent)
 
         self.tabs.addTab(self.main_page_tab, 'Main Page')
-        self.tabs.addTab(self.hotkeys_tab, 'Hotkeys')
+        self.tabs.addTab(self.hotkey_tab, 'Hotkeys')
+        self.tabs.addTab(self.abbrevation_tab, 'Abbrevations')
         self.tabs.addTab(self.settings_tab, 'Settings')
 
         self.layout.addWidget(self.tabs)
@@ -460,6 +465,107 @@ class HotkeyTab(QWidget):
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
 
+class AbbrevationTab(QWidget):
+    def __init__(self, elder):
+        super().__init__()
+        self.elder = elder
+        self.layout = QGridLayout(self)
+        self.settings = elder.settings
+        self.listener = elder.listener
+
+        checkbox = QCheckBox(self)
+        checkbox.setText('Abbrevations enabled')
+        checkbox.setChecked(self.settings.special['abbrevations_enabled'])
+        checkbox.clicked.connect(self.checkbox_clicked)
+        self.layout.addWidget(checkbox)
+
+        abbrevations = QGroupBox(self)
+        abbrevations.setTitle('Current Abbrevations')
+        abbrevations_layout = QGridLayout(abbrevations)
+        self.layout.addWidget(abbrevations)
+
+        self.abbrevations_list = QListWidget(abbrevations)
+        self.abbrevations_list.setSelectionMode(QListWidget.SingleSelection)
+        for abbrevation, msg in self.settings.abbrevations.items():
+            # Add the new Item to QListWidget
+            custom_widget = CustomListWidget(abbrevation, msg)
+            item = QListWidgetItem(self.abbrevations_list)
+            item.abbrevation = abbrevation
+            item.msg_line_edit = custom_widget.msg_edit
+
+            self.abbrevations_list.addItem(item)
+            item.setSizeHint(custom_widget.minimumSizeHint())
+            self.abbrevations_list.setItemWidget(item, custom_widget)
+        abbrevations_layout.addWidget(self.abbrevations_list, 0, 0, 1, 0)
+
+        button = QPushButton(abbrevations)
+        button.setText('Save')
+        button.clicked.connect(self.update_abbrevations)
+        abbrevations_layout.addWidget(button, 1, 0)
+
+        button = QPushButton(abbrevations)
+        button.setText('Add new')
+        button.clicked.connect(self.add_item)
+        abbrevations_layout.addWidget(button, 1, 1)
+
+        button = QPushButton(abbrevations)
+        button.setText('Remove selected')
+        button.clicked.connect(self.remove_selected_item)
+        abbrevations_layout.addWidget(button, 1, 2)
+
+        self.layout.addWidget(abbrevations)
+
+    def checkbox_clicked(self):
+        self.listener.stop()
+        sender = self.sender()
+
+        self.settings.special['abbrevations_enabled'] = sender.isChecked()
+
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def update_abbrevations(self):
+        self.listener.stop()
+
+        new_abbrevations = {}
+        for i in range(self.abbrevations_list.count()):
+            item = self.abbrevations_list.item(i)
+            abbrevation = item.abbrevation
+            msg = item.msg_line_edit.text()
+            new_abbrevations[abbrevation] = msg
+        self.settings.abbrevations = new_abbrevations
+
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def remove_selected_item(self):
+        if self.abbrevations_list.selectedItems():
+            item = self.abbrevations_list.selectedItems()[0]
+            self.abbrevations_list.takeItem(self.abbrevations_list.row(item))
+
+    def add_item(self):
+        dlg = AddItemDialog(self)
+        if dlg.exec_():
+            abbrevation = dlg.abbrevation_edit.text()
+            msg = dlg.msg_edit.text()
+
+            # Add the new Item to QListWidget
+            custom_widget = CustomListWidget(abbrevation, msg)
+            item = QListWidgetItem(self.abbrevations_list)
+            item.abbrevation = abbrevation
+            item.msg_line_edit = custom_widget.msg_edit
+
+            self.abbrevations_list.addItem(item)
+            item.setSizeHint(custom_widget.minimumSizeHint())
+            self.abbrevations_list.setItemWidget(item, custom_widget)
+
+
 class SettingsTab(QWidget):
     def __init__(self, elder):
         super().__init__()
@@ -601,6 +707,47 @@ class SettingsTab(QWidget):
         # TODO: Wenn man seinen Pause key deleted
         elif self.settings.hotkeys['pause']:
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+
+class CustomListWidget(QWidget):
+    def __init__(self, abbrevation, msg):
+        super().__init__()
+        self.row = QGridLayout(self)
+        self.row.setSpacing(50)
+        self.msg_edit = QLineEdit(msg)
+        self.row.addWidget(QLabel(abbrevation), 0, 0)
+        self.row.addWidget(self.msg_edit, 0, 1)
+
+        self.setLayout(self.row)
+
+
+class AddItemDialog(QDialog):
+    def __init__(self, parent):
+        super().__init__()
+        self.setWindowTitle('Add a new Abbrevation')
+        self.layout = QGridLayout(self)
+
+        label = QLabel(self)
+        label.setText('Abbrevation')
+        self.layout.addWidget(label, 0, 0)
+
+        self.abbrevation_edit = QLineEdit(self)
+        self.layout.addWidget(self.abbrevation_edit, 0, 1)
+
+        label = QLabel(self)
+        label.setText('Replacement Text')
+        self.layout.addWidget(label, 1, 0)
+
+        self.msg_edit = QLineEdit(self)
+        self.layout.addWidget(self.msg_edit, 1, 1)
+
+        QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+        self.layout.addWidget(self.buttonBox, 2, 1)
+
+        self.setLayout(self.layout)
 
 
 if __name__ == '__main__':

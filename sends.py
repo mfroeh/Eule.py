@@ -33,3 +33,9 @@ def send_key_down(handle, key):
 
 def send_key_up(handle, key):
     win32api.PostMessage(handle, win32con.WM_KEYUP, key_to_hex(key), 0)
+
+
+# Sends text to a Window
+def send_message(handle, message):
+    for c in message:
+        win32api.PostMessage(handle, win32con.WM_KEYUP, key_to_hex(c), 0)

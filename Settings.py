@@ -30,6 +30,12 @@ class Settings:
                     "swap_armor": "",
                     "pause": "",
                 },
+                "abbrevations": {
+                    'pool': 'There is a pool on me please TP!',
+                    'test4': 'askjdhgfksjahgfkjkj',
+                    'test3': 'sdf',
+                    'test5': 'askjdhgfksjahgfkjkj',
+                },
                 "poolspots": [
                     "cemetry_of_the_forsaken",
                     "the_weeping_hollow",
@@ -49,11 +55,13 @@ class Settings:
                     "armor_swap_amount": 3,
                     "spare_columns": 1,
                     "gamble_item": "ring",
+                    "abbrevations_enabled": True,
                     "auto_start": False,
                 },
             }
         self.paths = self.json['paths']
         self.hotkeys = self.json['hotkeys']
+        self.abbrevations = self.json['abbrevations']
         self.poolspots = self.json['poolspots']
         self.special = self.json['special']
 
@@ -62,6 +70,7 @@ class Settings:
             d = {
                 'paths': self.paths,
                 'hotkeys': self.hotkeys,
+                'abbrevations': self.abbrevations,
                 'poolspots': self.poolspots,
                 'special': self.special,
             }

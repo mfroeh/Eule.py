@@ -89,6 +89,7 @@ def set_status(diablo_hooked, eule_paused, listener):
 
 # Transforms from 1920x1080 Base
 # Works for all 16 / 9 Resolutions
+# No idea why it doesnt work for 16 / 10 for me. If native is 16 / 10 it might work
 def transform_coordinates(handle, x, y):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     w = x2 - x1

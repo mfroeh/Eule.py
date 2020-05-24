@@ -30,12 +30,7 @@ class Settings:
                     "swap_armor": "",
                     "pause": "",
                 },
-                "abbrevations": {
-                    'pool': 'There is a pool on me please TP!',
-                    'test4': 'askjdhgfksjahgfkjkj',
-                    'test3': 'sdf',
-                    'test5': 'askjdhgfksjahgfkjkj',
-                },
+                "abbrevations": {'pool': 'There is a pool on me please TP!'},
                 "poolspots": [
                     "cemetry_of_the_forsaken",
                     "the_weeping_hollow",

@@ -158,9 +158,9 @@ class HotkeyTab(QWidget):
         general_layout.addWidget(label, 2, 0)
 
         button = QPushButton(general)
-        self.buttons['lower_diff'] = button
-        button.setText(self.settings.hotkeys['lower_diff'])
-        button.clicked.connect(lambda: self.set_hotkey('lower_diff'))
+        self.buttons['lower_difficulty'] = button
+        button.setText(self.settings.hotkeys['lower_difficulty'])
+        button.clicked.connect(lambda: self.set_hotkey('lower_difficulty'))
         general_layout.addWidget(button, 2, 1)
 
         label = QLabel(general)
@@ -168,23 +168,21 @@ class HotkeyTab(QWidget):
         general_layout.addWidget(label, 3, 0)
 
         button = QPushButton(general)
-        self.buttons['armor_swap'] = button
-        button.setText(self.settings.hotkeys['armor_swap'])
-        button.clicked.connect(lambda: self.set_hotkey('armor_swap'))
+        self.buttons['swap_armor'] = button
+        button.setText(self.settings.hotkeys['swap_armor'])
+        button.clicked.connect(lambda: self.set_hotkey('swap_armor'))
         general_layout.addWidget(button, 3, 1)
 
         radio = QRadioButton(general)
         radio.setText('Cains')
         radio.clicked.connect(lambda: self.radio_clicked('cains'))
-        if self.settings.special['armor_swap'] == 3:
-            radio.setChecked(True)
+        radio.setChecked(self.settings.special['armor_swap_amount'] == 3)
         general_layout.addWidget(radio, 4, 0)
 
         radio = QRadioButton(general)
         radio.setText('Bounty DH')
         radio.clicked.connect(lambda: self.radio_clicked('bounty_dh'))
-        if self.settings.special['armor_swap'] == 2:
-            radio.setChecked(True)
+        radio.setChecked(self.settings.special['armor_swap_amount'] == 2)
         general_layout.addWidget(radio, 4, 1)
 
         label = QLabel(general)
@@ -280,9 +278,9 @@ class HotkeyTab(QWidget):
         greater_rift_layout.addWidget(label, 1, 0)
 
         button = QPushButton(greater_rift)
-        self.buttons['gem_up'] = button
-        button.setText(self.settings.hotkeys['gem_up'])
-        button.clicked.connect(lambda: self.set_hotkey('gem_up'))
+        self.buttons['upgrade_gem'] = button
+        button.setText(self.settings.hotkeys['upgrade_gem'])
+        button.clicked.connect(lambda: self.set_hotkey('upgrade_gem'))
         greater_rift_layout.addWidget(button, 1, 1)
 
         checkbox = QCheckBox(greater_rift)
@@ -442,9 +440,9 @@ class HotkeyTab(QWidget):
     def radio_clicked(self, value):
         self.listener.stop()
         if value == 'cains':
-            self.settings.special['armor_swap'] = 3
+            self.settings.special['armor_swap_amount'] = 3
         elif value == 'bounty_dh':
-            self.settings.special['armor_swap'] = 2
+            self.settings.special['armor_swap_amount'] = 2
 
         if not self.listener.paused:
             self.listener.start()
@@ -533,12 +531,13 @@ class SettingsTab(QWidget):
                 item.poolspot = poolspot
                 if poolspot in self.settings.poolspots:
                     item.setSelected(True)
+        self.poolspot_list.itemSelectionChanged.connect(self.update_poolspots)
         poolspots_layout.addWidget(self.poolspot_list)
 
-        button = QPushButton(poolspots)
-        button.setText('Save')
-        button.clicked.connect(self.update_poolspots)
-        poolspots_layout.addWidget(button)
+        # button = QPushButton(poolspots)
+        # button.setText('Save')
+        # button.clicked.connect(self.update_poolspots)
+        # poolspots_layout.addWidget(button)
 
         gamble_item = QGroupBox(self)
         gamble_item.setTitle('Gamble Item')

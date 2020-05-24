@@ -142,7 +142,7 @@ def reforge():
         send_mousemove(handle, item[0], item[1])
 
 
-def gem_up(empowered):
+def upgrade_gem(empowered):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         first_gem = transform_coordinates(handle, 100, 640)
@@ -250,7 +250,7 @@ def port_pool(poolspotlist):
             send_mouse(handle, 'LM', wp[0], wp[1])
 
 
-def lower_diff():
+def lower_difficulty():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         lower = transform_coordinates(handle, 1700, 400)
@@ -262,7 +262,7 @@ def lower_diff():
         send_key(handle, 'esc')
 
 
-def armor_swap(items):
+def swap_armor(items):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         item_coords = []

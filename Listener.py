@@ -1,5 +1,5 @@
 import keyboard
-from macros import *
+import macros
 from kthread import KThread
 from PoolSpot import PoolSpotList
 
@@ -14,65 +14,73 @@ class Listener:
 
     def start(self):
         self.paused = False
-        self.listeners = {}
-        for k, v in self.settings.hotkeys.items():
-            if v:
-                if k == 'right_click':
-                    self.listeners[k] = keyboard.add_hotkey(v, right_click)
-                elif k == 'left_click':
-                    self.listeners[k] = keyboard.add_hotkey(v, left_click)
-                elif k == 'salvage':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, salvage, args=(self.settings.special['spare_columns'],)
-                    )
-                elif k == 'drop_inventory':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v,
-                        drop_inventory,
-                        args=(self.settings.special['spare_columns'],),
-                    )
-                elif k == 'gamble':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, gamble, args=(self.settings.special['gamble_item'],),
-                    )
-                elif k == 'gem_up':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, gem_up, args=(self.settings.special['empowered'],)
-                    )
-                elif k == 'cube_conv_sm':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, cube_conv_sm, args=(self.settings.special['fast_convert'],),
-                    )
-                elif k == 'cube_conv_lg':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, cube_conv_lg, args=(self.settings.special['fast_convert'],),
-                    )
-                elif k == 'reforge':
-                    self.listeners[k] = keyboard.add_hotkey(v, reforge)
-                elif k == 'open_gr':
-                    self.listeners[k] = keyboard.add_hotkey(v, open_gr)
-                elif k == 'leave_game':
-                    self.listeners[k] = keyboard.add_hotkey(v, leave_game)
-                elif k == 'port_a1':
-                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(1,))
-                elif k == 'port_a2':
-                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(2,))
-                elif k == 'port_a3':
-                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(3,))
-                elif k == 'port_a5':
-                    self.listeners[k] = keyboard.add_hotkey(v, port_town, args=(5,))
-                elif k == 'lower_diff':
-                    self.listeners[k] = keyboard.add_hotkey(v, lower_diff)
-                elif k == 'armor_swap':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, armor_swap, args=(self.settings.special['armor_swap'],),
-                    )
-                elif k == 'port_pool':
-                    self.listeners[k] = keyboard.add_hotkey(
-                        v, port_pool, args=(PoolSpotList(self.settings.poolspots),),
-                    )
-                elif k == 'pause':
-                    self.listeners[k] = keyboard.add_hotkey(v, self.pause)
+        hotkeys = self.settings.hotkeys
+        special = self.settings.special
+
+        if hotkeys['right_click']:
+            keyboard.add_hotkey(hotkeys['right_click'], macros.right_click)
+        if hotkeys['left_click']:
+            keyboard.add_hotkey(hotkeys['left_click'], macros.left_click)
+        if hotkeys['lower_difficulty']:
+            keyboard.add_hotkey(hotkeys['lower_difficulty'], macros.lower_difficulty)
+        if hotkeys['swap_armor']:
+            keyboard.add_hotkey(
+                hotkeys['swap_armor'],
+                macros.swap_armor,
+                args=(special['armor_swap_amount'],),
+            )
+        if hotkeys['pause']:
+            keyboard.add_hotkey(hotkeys['pause'], self.pause)
+        if hotkeys['port_a1']:
+            keyboard.add_hotkey(hotkeys['port_a1'], macros.port_town, args=(1,))
+        if hotkeys['port_a2']:
+            keyboard.add_hotkey(hotkeys['port_a2'], macros.port_town, args=(2,))
+        if hotkeys['port_a3']:
+            keyboard.add_hotkey(hotkeys['port_a3'], macros.port_town, args=(3,))
+        if hotkeys['port_a5']:
+            keyboard.add_hotkey(hotkeys['port_a5'], macros.port_town, args=(5,))
+        if hotkeys['port_pool']:
+            keyboard.add_hotkey(
+                hotkeys['port_pool'],
+                macros.port_pool,
+                args=(PoolSpotList(self.settings.poolspots),),
+            )
+        if hotkeys['open_gr']:
+            keyboard.add_hotkey(hotkeys['open_gr'], macros.open_gr)
+        if hotkeys['upgrade_gem']:
+            keyboard.add_hotkey(
+                hotkeys['upgrade_gem'], macros.upgrade_gem, args=(special['empowered'],)
+            )
+        if hotkeys['leave_game']:
+            keyboard.add_hotkey(hotkeys['leave_game'], macros.leave_game)
+        if hotkeys['salvage']:
+            keyboard.add_hotkey(
+                hotkeys['salvage'], macros.salvage, args=(special['spare_columns'],)
+            )
+        if hotkeys['drop_inventory']:
+            keyboard.add_hotkey(
+                hotkeys['drop_inventory'],
+                macros.drop_inventory,
+                args=(special['spare_columns'],),
+            )
+        if hotkeys['gamble']:
+            keyboard.add_hotkey(
+                hotkeys['gamble'], macros.gamble, args=(special['gamble_item'],)
+            )
+        if hotkeys['cube_conv_sm']:
+            keyboard.add_hotkey(
+                hotkeys['cube_conv_sm'],
+                macros.cube_conv_sm,
+                args=(special['fast_convert'],),
+            )
+        if hotkeys['cube_conv_lg']:
+            keyboard.add_hotkey(
+                hotkeys['cube_conv_lg'],
+                macros.cube_conv_lg,
+                args=(special['fast_convert'],),
+            )
+        if hotkeys['reforge']:
+            keyboard.add_hotkey(hotkeys['reforge'], macros.reforge)
 
     def stop(self):
         keyboard.remove_all_hotkeys()

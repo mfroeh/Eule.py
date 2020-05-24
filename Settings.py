@@ -14,7 +14,7 @@ class Settings:
                     "cube_conv_lg": "6+strg",
                     "reforge": "4+strg",
                     "open_gr": "",
-                    "gem_up": "",
+                    "upgrade_gem": "",
                     "leave_game": "",
                     "salvage": "",
                     "gamble": "alt",
@@ -26,8 +26,8 @@ class Settings:
                     "port_pool": "",
                     "right_click": "",
                     "left_click": "",
-                    "lower_diff": "",
-                    "armor_swap": "",
+                    "lower_difficulty": "",
+                    "swap_armor": "",
                     "pause": "",
                 },
                 "poolspots": [
@@ -46,7 +46,7 @@ class Settings:
                 "special": {
                     "empowered": False,
                     "fast_convert": False,
-                    "armor_swap": 3,
+                    "armor_swap_amount": 3,
                     "spare_columns": 1,
                     "gamble_item": "ring",
                     "auto_start": False,

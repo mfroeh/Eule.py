@@ -410,7 +410,11 @@ class HotkeyTab(QWidget):
     def set_hotkey(self, hotkey):
         self.listener.stop()
         sender = self.sender()
+        dialog = AddHotkeyDialog(self)
+        dialog.show()
+        QApplication.processEvents()
         input = keyboard.read_hotkey(suppress=False)
+        dialog.close()
         if input != 'esc':
             if hotkey_delete_request(input):
                 self.settings.hotkeys[hotkey] = ''
@@ -518,6 +522,8 @@ class AbbrevationTab(QWidget):
         abbrevations_layout.addWidget(button, 1, 2)
 
         self.layout.addWidget(abbrevations)
+
+        self.setLayout(self.layout)
 
     def checkbox_clicked(self):
         self.listener.stop()
@@ -804,6 +810,27 @@ class AddItemDialog(QDialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
         self.layout.addWidget(self.buttonBox, 2, 1)
+
+        self.setLayout(self.layout)
+
+
+class AddHotkeyDialog(QDialog):
+    def __init__(self, parent):
+        super().__init__()
+        self.setWindowTitle('Add new Hotkey')
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.layout = QGridLayout(self)
+        label = QLabel(self)
+        label.setText('New Hotkey: Enter Keycombination')
+        self.layout.addWidget(label)
+
+        label = QLabel(self)
+        label.setText('Delete Hotkey: Press DELETE')
+        self.layout.addWidget(label)
+
+        label = QLabel(self)
+        label.setText('Cancel: Press ESC')
+        self.layout.addWidget(label)
 
         self.setLayout(self.layout)
 

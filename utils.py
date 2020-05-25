@@ -25,32 +25,20 @@ def kill_process(name):
 def start_thirdparty(paths):
     process_names = [p.name() for p in psutil.process_iter()]
     try:
-        if is_user_admin():
-            if 'Diablo III64.exe' in process_names:
-                if paths['Fiddler'] and 'Fiddler.exe' not in process_names:
-                    start_Fiddler(paths['Fiddler'])
-                if paths['TurboHUD'] and 'TurboHUD.exe' not in process_names:
-                    start_TurboHUD(paths['TurboHUD'])
-                if paths['pHelper'] and 'pHelper.exe' not in process_names:
-                    sleep(1)
-                    start_pHelper(paths['pHelper'])
-            else:
-                error_dialog = QMessageBox()
-                error_dialog.setIcon(QMessageBox.Warning)
-                error_dialog.setWindowTitle('Diablo III isnt running')
-                error_dialog.setText('Please start Diablo III.')
-                error_dialog.exec_()
+        if 'Diablo III64.exe' in process_names:
+            if paths['Fiddler'] and 'Fiddler.exe' not in process_names:
+                start_Fiddler(paths['Fiddler'])
+            if paths['TurboHUD'] and 'TurboHUD.exe' not in process_names:
+                start_TurboHUD(paths['TurboHUD'])
+            if paths['pHelper'] and 'pHelper.exe' not in process_names:
+                sleep(1)
+                start_pHelper(paths['pHelper'])
         else:
-            info_dialog = QMessageBox()
-            info_dialog.setIcon(QMessageBox.Information)
-            info_dialog.setWindowTitle('Administrator Privileges required')
-            info_dialog.setText(
-                'Please start Eule.py with Administrator Privileges to use the Third Party Launcher.'
-            )
-            info_dialog.setInformativeText(
-                'This is required, so that pHelper is started once TurboHUD is properly loaded.'
-            )
-            info_dialog.exec_()
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Warning)
+            error_dialog.setWindowTitle('Diablo III isnt running')
+            error_dialog.setText('Please start Diablo III.')
+            error_dialog.exec_()
     except OSError:
         print('User interrupted starting Programms')
     print('Done')
@@ -64,7 +52,10 @@ def start_Fiddler(path):
 
 def start_TurboHUD(path):
     os.startfile(path)
-    sleep(2)
+    if is_user_admin():
+        sleep(2)
+    else:
+        sleep(5)  # Time to press start as admin
     thud_starting = win32gui.FindWindow(None, 'TurboHUD')
     while thud_starting:
         thud_starting = win32gui.FindWindow(None, 'TurboHUD')

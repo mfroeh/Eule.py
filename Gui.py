@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import (
     QDialogButtonBox,
     QDialog,
 )
+from PyQt5 import QtCore
 import string
 import keyboard
 import sys
@@ -96,27 +97,33 @@ class MainPage(QWidget):
         self.settings = parent.settings
         self.listener = parent.listener
 
+        self.image = QLabel(self)
+        # Add the image
+        self.layout.addWidget(self.image, 0, 0, 1, 0)
+
         self.diablo_hooked = QCheckBox(self)
         self.diablo_hooked.setText('Diablo hooked')
         self.diablo_hooked.setDisabled(True)
-        self.layout.addWidget(self.diablo_hooked, 0, 0, 1, 1)
+        self.layout.addWidget(self.diablo_hooked, 1, 0)
 
         self.eule_paused = QCheckBox(self)
         self.eule_paused.setText('Eule paused')
         self.eule_paused.setDisabled(True)
-        self.layout.addWidget(self.eule_paused, 1, 0, 1, 1)
+        self.layout.addWidget(self.eule_paused, 1, 1)
         # Add to Listener, so he can change
         self.listener.gui_paused = self.eule_paused
 
         button = QPushButton(self)
         button.setText('Start Third Party')
         button.clicked.connect(lambda: start_thirdparty(self.settings.paths))
-        self.layout.addWidget(button, 0, 1, 1, 1)
+        self.layout.addWidget(button, 1, 2)
 
         label = QLabel(self)
-        label.setText('<a href="https://github.com/VocalTrance/Eule.py">Help</a>')
+        label.setText(
+            '<a href="https://github.com/VocalTrance/Eule.py">Github / Help</a>'
+        )
         label.setOpenExternalLinks(True)
-        self.layout.addWidget(label, 1, 1, 1, 1)
+        self.layout.addWidget(label, 1, 3, QtCore.Qt.AlignRight)
 
         self.setLayout(self.layout)
 

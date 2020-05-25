@@ -32,10 +32,10 @@ Coming soon TM
 
 ## Image Recognition Checklist
 
-| Feature           | 1920x1080 | 2715x1527 | 3840x2160 |
-| :---------------- | :-------: | :-------: | :-------: |
-| Start Game        | &#10003;  | &#10003;  | &#10003;  |
-| Open Rift / Grift | &#10003;  | &#10003;  | &#10003;  |
-| Accept Grift      | &#10003;  |           |           |
-| Upgrade Gem       | &#10003;  | &#10003;  | &#10003;  |
-| Gamble            | &#10003;  | &#10003;  | &#10003;  |
+| Feature           |      1920x1080      |           2715x1527            | others |
+| :---------------- | :-----------------: | :----------------------------: | :----: |
+| Start Game        |      &#10003;       |            &#10003;            |        |
+| Open Rift / Grift |      &#10003;       |      &#10003; (untested)       |        |
+| Accept Grift      | &#10003; (untested) |                                |        |
+| Upgrade Gem       |      &#10003;       | &#10003; (untested and only 4) |        |
+| Gamble            |      &#10003;       |      &#10003; (untested)       |        |

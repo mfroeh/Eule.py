@@ -4,7 +4,7 @@ test.py
 Old/
 Compiled/
 Abbrevations/
-
+screen_search_pyinstaller.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

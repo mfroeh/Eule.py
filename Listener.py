@@ -115,7 +115,7 @@ class Listener:
         ahk = AHK()
         while True:
             handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-            if handle and not self.paused:
+            if handle and win32gui.GetForegroundWindow() == handle and not self.paused:
                 if self.settings.special['auto_start']:
                     Thread(target=screen_search.start_game, args=(ahk, handle)).start()
                 if self.settings.special['auto_open']:
@@ -144,15 +144,20 @@ class Listener:
         ahk = AHK(executable_path=ahk_path)
         while True:
             handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-            if handle and self.settings.special['auto_start'] and not self.paused:
-                x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-                image_path = os.path.join(
-                    wd, f'./images/start_game_{x2 - x1}_{y2 - y1}.png'
-                )
-                x1, y1 = utils.transform_coordinates(handle, 160, 500)
-                x2, y2 = utils.transform_coordinates(handle, 320, 540)
-                found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
-                if found:
-                    send_mouse(handle, 'LM', x1, y1)
-                sleep(0.3)
+            if handle and win32gui.GetForegroundWindow() == handle and not self.paused:
+                if self.settings.special['auto_start']:
+                    Thread(target=screen_search.start_game, args=(ahk, handle)).start()
+                if self.settings.special['auto_open']:
+                    Thread(
+                        target=screen_search.open_rift,
+                        args=(ahk, handle, self.settings.special['auto_open_option']),
+                    ).start()
+                if self.settings.special['auto_gamble']:
+                    Thread(
+                        target=screen_search.gamble,
+                        args=(ahk, handle, self.settings.special['gamble_item']),
+                    ).start()
+                if self.settings.special['auto_accept_gr']:
+                    Thread(target=screen_search.accept_gr, args=(ahk, handle)).start()
+            sleep(0.3)
     """

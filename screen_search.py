@@ -2,7 +2,6 @@ import win32gui
 from utils import transform_coordinates
 from sends import send_mouse, send_key
 import macros
-from time import sleep
 
 
 def start_game(ahk, handle):

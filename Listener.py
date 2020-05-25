@@ -161,5 +161,7 @@ class Listener:
                     ).start()
                 if self.settings.special['auto_accept_gr']:
                     Thread(target=screen_search.accept_gr, args=(ahk, handle)).start()
+                if self.settings.special['auto_upgrade_gem']:
+                    Thread(target=screen_search.upgrade_gem, args=(ahk, handle)).start()
             sleep(0.3)
     """

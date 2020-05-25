@@ -15,9 +15,7 @@ from PyQt5.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QSpinBox,
-    QComboBox,
     QDesktopWidget,
-    QSpacerItem,
     QDialogButtonBox,
     QDialog,
 )

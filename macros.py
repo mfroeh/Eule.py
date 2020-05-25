@@ -210,6 +210,16 @@ def open_gr():
         send_mouse(handle, 'LM', accept[0], accept[1])
 
 
+def open_rift():
+    handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+    if handle:
+        rift = transform_coordinates(handle, 270, 300)
+        accept = transform_coordinates(handle, 260, 850)
+
+        send_mouse(handle, 'LM', rift[0], rift[1])
+        send_mouse(handle, 'LM', accept[0], accept[1])
+
+
 def leave_game():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:

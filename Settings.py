@@ -51,11 +51,12 @@ class Settings:
                     "spare_columns": 1,
                     "gamble_item": "ring",
                     "abbrevations_enabled": True,
-                    "auto_open": True,
-                    "auto_open_option": "rift",
                     "auto_start": False,
-                    "auto_gamble": True,
-                    "auto_accept_gr": True,
+                    "auto_open": False,
+                    "auto_open_option": "rift",
+                    "auto_accept_gr": False,
+                    "auto_upgrade_gem": False,
+                    "auto_gamble": False,
                 },
             }
         self.paths = self.json['paths']

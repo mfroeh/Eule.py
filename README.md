@@ -23,3 +23,13 @@ You may delete a Hotkey by clicking and pressing __Delete__.
 
 ## Macro Explanations
 Coming soon TM
+
+## Image Recognition Checklist
+
+| Feature           | 1920x1080 | 2715x1527 | 3840x2160 & others |
+| :---------------- | :-------: | :-------: | :----------------: |
+| Start Game        | &#10003;  | &#10003;  |                    |
+| Open Rift / Grift | &#10003;  | &#10003;  |                    |
+| Accept Grift      | &#10003;  |           |                    |
+| Upgrade Gem       | &#10003;  | &#10003;  |                    |
+| Gamble            | &#10003;  | &#10003;  |                    |

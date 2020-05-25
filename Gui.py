@@ -656,10 +656,16 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(checkbox, 3, 0)
 
         checkbox = QCheckBox(image_recognition)
+        checkbox.setText('Auto upgrade Gem')
+        checkbox.setChecked(self.settings.special['auto_upgrade_gem'])
+        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_upgrade_gem'))
+        image_recognition_layout.addWidget(checkbox, 4, 0)
+
+        checkbox = QCheckBox(image_recognition)
         checkbox.setText('Auto gamble')
         checkbox.setChecked(self.settings.special['auto_gamble'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_gamble'))
-        image_recognition_layout.addWidget(checkbox, 4, 0)
+        image_recognition_layout.addWidget(checkbox, 5, 0)
 
         poolspots = QGroupBox(self)
         poolspots.setTitle('Poolspots')

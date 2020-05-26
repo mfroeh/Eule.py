@@ -108,16 +108,31 @@ class Listener:
 
     def pause(self):
         if self.paused:
-            self.gui_paused.setChecked(False)
             keyboard.unhook_all()
             self.start()
+            self.gui_paused.setChecked(False)
+            p = os.path.join(wd, './Compiled/active.png').replace('\\', '/')
+            self.status_image.setStyleSheet(
+                "background-image: url("
+                + p
+                + ");"
+                + "background-repeat: no-repeat;"
+                + "background-position: center;"
+            )
         else:
             self.paused = True
-            self.gui_paused.setChecked(True)
             self.stop()
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)
+            self.gui_paused.setChecked(True)
+            p = os.path.join(wd, './Compiled/inactive.png').replace('\\', '/')
+            self.status_image.setStyleSheet(
+                f"background-image: url("
+                + p
+                + ");"
+                + "background-repeat: no-repeat;"
+                + "background-position: center;"
+            )
 
-    # Regular Version
     def watch_screen(self):
         ahk_path = os.path.join(wd, './Compiled/AutoHotkey/AutoHotkey.exe')
         ahk = AHK(executable_path=ahk_path)

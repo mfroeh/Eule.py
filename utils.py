@@ -31,7 +31,6 @@ def start_thirdparty(paths):
             if paths['TurboHUD'] and 'TurboHUD.exe' not in process_names:
                 start_TurboHUD(paths['TurboHUD'])
             if paths['pHelper'] and 'pHelper.exe' not in process_names:
-                sleep(1)
                 start_pHelper(paths['pHelper'])
         else:
             error_dialog = QMessageBox()
@@ -52,14 +51,17 @@ def start_Fiddler(path):
 
 def start_TurboHUD(path):
     os.startfile(path)
-    if is_user_admin():
-        sleep(2)
-    else:
-        sleep(5)  # Time to press start as admin
-    thud_starting = win32gui.FindWindow(None, 'TurboHUD')
-    while thud_starting:
-        thud_starting = win32gui.FindWindow(None, 'TurboHUD')
+    if not user_is_admin():
+        # While TurboHUD hasnt started
+        while not win32gui.FindWindow(None, 'TurboHUD'):
+            sleep(0.2)
+            print('THUD wasnt started yet')
+    sleep(2)
+    # While TurboHUD hasnt fully loaded
+    while win32gui.FindWindow(None, 'TurboHUD'):
         sleep(0.2)
+        print('THUD is loading')
+    print('THUD has loaded!')
 
 
 def start_pHelper(path):
@@ -95,7 +97,7 @@ class AdminStateUnknownError(Exception):
     pass
 
 
-def is_user_admin():
+def user_is_admin():
     try:
         return os.getuid() == 0
     except AttributeError:

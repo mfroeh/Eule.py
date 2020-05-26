@@ -34,6 +34,11 @@ from Settings import Settings
 from Listener import Listener
 from kthread import KThread
 
+try:
+    wd = sys._MEIPASS
+except AttributeError:
+    wd = ''
+
 
 class MainWindow(QMainWindow):
     def __init__(self, settings, listener):
@@ -99,9 +104,16 @@ class MainPage(QWidget):
         self.settings = parent.settings
         self.listener = parent.listener
 
-        self.image = QLabel(self)
-        # Add the image
-        self.layout.addWidget(self.image, 0, 0, 1, 0)
+        self.status_image = QLabel(self)
+        p = os.path.join(wd, './Compiled/active.png').replace('\\', '/')
+        self.status_image.setStyleSheet(
+            "background-image: url("
+            + p
+            + ");"
+            + "background-repeat: no-repeat;"
+            + "background-position: center;"
+        )
+        self.layout.addWidget(self.status_image, 0, 0, 1, 0)
 
         self.diablo_hooked = QCheckBox(self)
         self.diablo_hooked.setText('Diablo hooked')
@@ -111,9 +123,10 @@ class MainPage(QWidget):
         self.eule_paused = QCheckBox(self)
         self.eule_paused.setText('Eule paused')
         self.eule_paused.setDisabled(True)
-        self.layout.addWidget(self.eule_paused, 1, 1)
+        self.layout.addWidget(self.eule_paused, 1, 1)  # TODO:
         # Add to Listener, so he can change
         self.listener.gui_paused = self.eule_paused
+        self.listener.status_image = self.status_image
 
         button = QPushButton(self)
         button.setText('Start Third Party')
@@ -844,10 +857,6 @@ if __name__ == '__main__':
     win = MainWindow(settings, listener)
     mw = windows.ModernWindow(win)
 
-    try:
-        wd = sys._MEIPASS
-    except AttributeError:
-        wd = ''
     stylesheet_path = os.path.join(wd, './Style/frameless.qss')
     icon_path = os.path.join(wd, './Compiled/owl.ico')
 

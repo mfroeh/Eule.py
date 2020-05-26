@@ -61,28 +61,35 @@ def accept_gr(ahk, handle):
 
 def upgrade_gem(ahk, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-    image_paths = [
-        os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
-        for i in range(1, 6)
-    ]
-    x1, y1 = transform_coordinates(handle, 200, 530)
-    x2, y2 = transform_coordinates(handle, 335, 560)
-    upgrade = transform_coordinates(handle, 280, 550)
-    if ahk.image_search(image_paths[0], (x1, y1), (x2, y2), 30):  # 1 upgrade left
-        send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-        send_key(handle, 't')
-        print('Found 1 Upgrades Left!')
-    elif ahk.image_search(image_paths[1], (x1, y1), (x2, y2), 30):  # 2 upgrades left
-        send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-        send_key(handle, 't')
-        print('Found 2 Upgrades Left!')
-    elif ahk.image_search(image_paths[2], (x1, y1), (x2, y2), 30):  # 3 upgrade left
-        send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-        send_key(handle, 't')
-        print('Found 3 Upgrades Left!')
-    elif ahk.image_search(image_paths[3], (x1, y1), (x2, y2), 30):  # 4 upgrade left
-        send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-        print('Found 4 Upgrades Left!')
-    elif ahk.image_search(image_paths[4], (x1, y1), (x2, y2), 30):  # 5 upgrade left
-        send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-        print('Found 5 Upgrades Left!')
+    uhrsi = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi.png')
+    x1, y1 = transform_coordinates(handle, 220, 30)
+    x2, y2 = transform_coordinates(handle, 300, 100)
+    if ahk.image_search(uhrsi, (x1, y1), (x2, y2), 30):
+        x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+        image_paths = [
+            os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
+            for i in range(1, 6)
+        ]
+        x1, y1 = transform_coordinates(handle, 200, 530)
+        x2, y2 = transform_coordinates(handle, 335, 560)
+        upgrade = transform_coordinates(handle, 280, 550)
+        if ahk.image_search(image_paths[0], (x1, y1), (x2, y2), 30):  # 1 upgrade left
+            send_mouse(handle, 'LM', upgrade[0], upgrade[1])
+            send_key(handle, 't')
+            print('Found 1 Upgrades Left!')
+        elif ahk.image_search(
+            image_paths[1], (x1, y1), (x2, y2), 30
+        ):  # 2 upgrades left
+            send_mouse(handle, 'LM', upgrade[0], upgrade[1])
+            send_key(handle, 't')
+            print('Found 2 Upgrades Left!')
+        elif ahk.image_search(image_paths[2], (x1, y1), (x2, y2), 30):  # 3 upgrade left
+            send_mouse(handle, 'LM', upgrade[0], upgrade[1])
+            send_key(handle, 't')
+            print('Found 3 Upgrades Left!')
+        elif ahk.image_search(image_paths[3], (x1, y1), (x2, y2), 30):  # 4 upgrade left
+            send_mouse(handle, 'LM', upgrade[0], upgrade[1])
+            print('Found 4 Upgrades Left!')
+        elif ahk.image_search(image_paths[4], (x1, y1), (x2, y2), 30):  # 5 upgrade left
+            send_mouse(handle, 'LM', upgrade[0], upgrade[1])
+            print('Found 5 Upgrades Left!')

@@ -682,7 +682,7 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(checkbox, 3, 0)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto upgrade Gem')
+        checkbox.setText('Auto upgrade Gem (Not working with TurboHUD)')
         checkbox.setChecked(self.settings.special['auto_upgrade_gem'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_upgrade_gem'))
         image_recognition_layout.addWidget(checkbox, 4, 0)

@@ -64,7 +64,7 @@ Sets the Game Difficulty to normal.
 #### Swap Armor
 
 Swaps your equipped Items with Items from your Inventory.\
-![](https://ibb.co/Pj2brM4)\
+![](https://i.ibb.co/YQ5KNX8/swap-armor.png)\
 BountyDH swaps the Items in the orange, Cains the ones in the blue rectangle.
 
 #### Pause Eule
@@ -96,7 +96,7 @@ Leaves the Game.
 
 Salvages or Drops the Items from your Inventory.\
 Spares x Columns looking from the left of the Inventory.
-![](https://ibb.co/Jc0nDZs)\
+![](https://i.ibb.co/BfdL0kC/spare-columns.png)\
 Spare Columns = 0: Salvages the entire Inventory - including the Blue Column\
 Spare Columns = 1: Salvages everything besides the Blue Column\
 and so on

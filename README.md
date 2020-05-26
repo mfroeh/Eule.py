@@ -44,7 +44,7 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 This Feature is _VERY_ suboptimal right now, as it is using AHK to capture the Screen.\
 I am sadly forced to that compromise, due to Python Image Librarys beeing extremely large when compiled (Current exe with better Image Recognition would be 6x the Size).
 
-##### Limitations
+### Limitations
 Image Recognition with AHK requires a basicly pixel perfect match to recognise an Image, which means that, in Order to work with a certain Resolution, you first have to take screenshot of the image to be recognised in that Resolution .\
 Upscaling Images also does not work.\
 If you want your Resolution to be supported, sent me Screenshots of the Events.

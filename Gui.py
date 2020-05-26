@@ -20,9 +20,11 @@ from PyQt5.QtWidgets import (
     QDialog,
 )
 from PyQt5 import QtCore
+from PyQt5.QtGui import QIcon
+import sys
+import os
 import string
 import keyboard
-import sys
 import Style.windows as windows
 from utils import start_thirdparty, hotkey_delete_request
 import ressources
@@ -842,44 +844,16 @@ if __name__ == '__main__':
     win = MainWindow(settings, listener)
     mw = windows.ModernWindow(win)
 
-    # for pyinstaller
-    """
-    from PyQt5.QtGui import QIcon
+    try:
+        wd = sys._MEIPASS
+    except AttributeError:
+        wd = ''
+    stylesheet_path = os.path.join(wd, './Style/frameless.qss')
+    icon_path = os.path.join(wd, './Compiled/owl.ico')
 
-    wd = sys._MEIPASS
-    file_path = os.path.join(wd, './Style/frameless.qss')
-    with open(file_path) as stylesheet:
+    with open(stylesheet_path) as stylesheet:
         mw.setStyleSheet(stylesheet.read())
-    icon_path = os.path.join(wd, './owl.ico')
     mw.setWindowIcon(QIcon(icon_path))
-    """
-    # Normal
-    with open('./Style/frameless.qss') as stylesheet:
-        mw.setStyleSheet(stylesheet.read())
 
     mw.show()
     sys.exit(app.exec_())
-
-
-"""
-    def item_changed(self, item):
-        self.listener.stop()
-        print('Before:')
-        print(self.settings.poolspots)
-        if item.isSelected():
-            self.settings.poolspots.append(item.poolspot)
-        else:
-            try:
-                self.settings.poolspots.remove(item.poolspot)
-            except ValueError:
-                # TODO
-                print('Poolspot war inkonsistent.')
-        print('After:')
-        print(self.settings.poolspots)
-
-        if not self.listener.paused:
-            self.listener.start()
-        # TODO: Wenn man seinen Pause key deleted
-        elif self.settings.hotkeys['pause']:
-            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
-"""

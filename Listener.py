@@ -7,6 +7,13 @@ from ahk import AHK
 import win32gui
 from time import sleep
 from threading import Thread
+import sys
+import os
+
+try:
+    wd = sys._MEIPASS
+except AttributeError:
+    wd = ''
 
 
 class Listener:
@@ -112,37 +119,7 @@ class Listener:
 
     # Regular Version
     def watch_screen(self):
-        ahk = AHK()
-        while True:
-            handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-            if handle and win32gui.GetForegroundWindow() == handle and not self.paused:
-                if self.settings.special['auto_start']:
-                    Thread(target=screen_search.start_game, args=(ahk, handle)).start()
-                if self.settings.special['auto_open']:
-                    Thread(
-                        target=screen_search.open_rift,
-                        args=(ahk, handle, self.settings.special['auto_open_option']),
-                    ).start()
-                if self.settings.special['auto_gamble']:
-                    Thread(
-                        target=screen_search.gamble,
-                        args=(ahk, handle, self.settings.special['gamble_item']),
-                    ).start()
-                if self.settings.special['auto_accept_gr']:
-                    Thread(target=screen_search.accept_gr, args=(ahk, handle)).start()
-                if self.settings.special['auto_upgrade_gem']:
-                    Thread(target=screen_search.upgrade_gem, args=(ahk, handle)).start()
-            sleep(0.3)
-
-    """
-    # Pyinstaller Version
-    def watch_screen(self):
-        import sys
-        import os
-
-        wd = sys._MEIPASS
-
-        ahk_path = os.path.join(wd, './AutoHotkey/AutoHotkey.exe')
+        ahk_path = os.path.join(wd, './Compiled/AutoHotkey/AutoHotkey.exe')
         ahk = AHK(executable_path=ahk_path)
         while True:
             handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
@@ -164,4 +141,3 @@ class Listener:
                 if self.settings.special['auto_upgrade_gem']:
                     Thread(target=screen_search.upgrade_gem, args=(ahk, handle)).start()
             sleep(0.3)
-    """

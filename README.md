@@ -1,12 +1,14 @@
 # Eule.py
 
 A Diablo III Macro Collection.\
-Working with all 16:9 Resolutions guaranteed and should work on any Resolution (not tested).
+Working with all 16:9 Resolutions guaranteed.\
+Should work on any Resolution (not tested).
 
 ## Macros
 
 All Macros are sent directly to Diablo III without using your physical mouse or keyboard.\
 This has numerous advantages, such as
+
 * Faster Macro execution time
 * Reliability
 * Working without Diablo III beeing in the foreground
@@ -24,7 +26,7 @@ You may delete a Hotkey by clicking and pressing __Delete__.
 
 ## Abbrevations
 
-* Replaces Abbrevations with full sentences
+* Replaces Abbrevations with full sentences.
 * To use an added Abbrevation, type it in the chat and then tap __space__ once.
 
 I prefer this Version of sending Messages over a simple Hotkey Version due to having to remember less Hotkeys.
@@ -36,8 +38,8 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 
 ## Auto Stuff
 
-* Automates some of the Macros using Image Recognition.\
-* Check at the Bottom if it is working for your Resolution.\
+* Automates some of the Macros using Image Recognition.
+* Check at the Bottom if it is working for your Resolution.
 
 This Feature is _VERY_ suboptimal right now, as it is using AHK to capture the Screen.\
 I am sadly forced to that compromise, due to Python Image Librarys beeing extremely large when compiled (Current exe with better Image Recognition would be 6x the Size).

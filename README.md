@@ -53,65 +53,65 @@ For working Resolutions there also cannot be Image Recognition of inactive Windo
 
 ## Macro Explanations
 
-##### Spam Right / Left Click
+#### Spam Right / Left Click
 
 Spam Clicks the Right / Left Mousebutton.
 
-##### Normalize Difficulty
+#### Normalize Difficulty
 
 Sets the Game Difficulty to normal.
 
-##### Swap Armor
+#### Swap Armor
 
 Swaps your equipped Items with Items from your Inventory.\
-![](README_IMG/swap_armor.png)\
+![](https://ibb.co/Pj2brM4)\
 BountyDH swaps the Items in the orange, Cains the ones in the blue rectangle.
 
-##### Pause Eule
+#### Pause Eule
 
 Stops any Hotkey or Screen Listeners.
 
-##### Port to Ax Town
+#### Port to Ax Town
 
 Ports to Town of Act x.
 
-##### Port to Pool
+#### Port to Pool
 
 Ports to the next Poolspot from the Poolspots List (Settings).
 
-###### Open Grift
+#### Open Grift
 
 Opens a Greater Rift from when you have clicked the Obelisk.
 
-##### Upgrade Gem
+#### Upgrade Gem
 
 Upgrades the Gem in the top left Spot.\
 Set the amount of Upgrades to do before porting to town with the Empowered option.
 
-##### Leave Game
+#### Leave Game
 
 Leaves the Game.
 
-##### Salvage / Drop Inventory
+#### Salvage / Drop Inventory
 
 Salvages or Drops the Items from your Inventory.\
 Spares x Columns looking from the left of the Inventory.
-![](README_IMG/spare_columns.png)\
+![](https://ibb.co/Jc0nDZs)\
 Spare Columns = 0: Salvages the entire Inventory - including the Blue Column\
 Spare Columns = 1: Salvages everything besides the Blue Column\
 and so on
 
-##### Gamble
+#### Gamble
 
 Gambles the Itemtype specified in Settings.
 
-##### Convert 1/2-Slot
+#### Convert 1/2-Slot
 
 Converts all the Items in your Inventory whilst taking vertical steps the size of 1/2 Inventory slots.\
 E.g. use 1-Slot for Rings and 2-Slot for Gloves.\
 The SoL Option does two converting rotations in less time than a non SoL convert takes for one Rotation.
 
-###### Reforge / Convert Set
+#### Reforge / Convert Set
 
 Reforges or Converts the Item in the top left corner.
 

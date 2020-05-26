@@ -30,6 +30,8 @@ You may delete a Hotkey by clicking and pressing __Delete__.
 
 Coming soon TM
 
+Due to Python Image Librarys beeing extremely huge (compiled exe would be 6x the current size), im using an AHK Wrapper, which sadly is extremely limited (e.g. no Image Recognition of inactive Windows => No Image Recognition inside Rift when using TurboHUD).
+
 ## Image Recognition Checklist
 
 | Feature           |      1920x1080      |           2715x1527            | others |

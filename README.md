@@ -33,6 +33,7 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 
 * Launches your Third Party Tools.
 * Upon first Startup select the paths to your Tools.
+* You will have to reconfigure pHelper at first use.
 
 ## Auto Stuff
 

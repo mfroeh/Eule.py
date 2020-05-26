@@ -6,7 +6,7 @@ class Settings:
         try:
             with open('./settings.json') as f:
                 self.json = json.load(f)
-        except FileNotFoundError:
+        except:
             self.json = {
                 "paths": {"Fiddler": "", "TurboHUD": "", "pHelper": ""},
                 "hotkeys": {

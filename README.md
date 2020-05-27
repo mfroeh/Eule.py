@@ -115,10 +115,10 @@ Reforges or Converts the Item in the top left corner.
 
 ## Image Recognition Checklist
 
-| Feature           |      1920x1080      |           2715x1527            | others |
-| :---------------- | :-----------------: | :----------------------------: | :----: |
-| Start Game        |      &#10003;       |            &#10003;            |        |
-| Open Rift / Grift |      &#10003;       |      &#10003; (untested)       |        |
-| Accept Grift      | &#10003; (untested) |                                |        |
-| Upgrade Gem       |      &#10003;       |        
-| Gamble            |      &#10003;       |      &#10003; (untested)
+| Feature           | 1920x1080 |      2715x1527      |  others  |
+| ----------------- | :-------: | :-----------------: | :------: |
+| Start Game        | &#10003;  |      &#10003;       | &#10003; |
+| Open Rift / Grift | &#10003;  |      &#10003;       | &#10003; |
+| Accept Grift      | &#10003;  | &#10003; (untested) |          |
+| Upgrade Gem       | &#10003;  |      &#10003;       | &#10003; |
+| Gamble            | &#10003;  |      &#10003;       | &#10003; |

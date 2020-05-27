@@ -29,8 +29,8 @@ You may delete a Hotkey by clicking and pressing __Delete__.
 * Replaces Abbrevations with full sentences.
 * To use an added Abbrevation, type it in the chat and then tap __space__ once.
 
-I prefer this Version of sending Messages over a simple Hotkey Version due to having to remember less Hotkeys.\
-[Video](https://www.youtube.com/watch?v=iwmcFQ65hb0)
+[Video](https://www.youtube.com/watch?v=iwmcFQ65hb0)\
+I prefer this Version of sending Messages over a simple Hotkey Version due to having to remember less Hotkeys.
 
 ## Third Party Launcher
 

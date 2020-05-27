@@ -207,6 +207,7 @@ class HotkeyTab(QWidget):
 
         radio = QRadioButton(general)
         radio.setText('Bounty DH')
+        radio.setDisabled(True)
         radio.clicked.connect(lambda: self.radio_clicked('bounty_dh'))
         radio.setChecked(self.settings.special['armor_swap_amount'] == 2)
         general_layout.addWidget(radio, 4, 1)
@@ -658,7 +659,7 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(checkbox, 0, 0)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto open Rift / Grift')
+        checkbox.setText('Auto open Rift / Grift (Not working with TurboHUD)')
         checkbox.setChecked(self.settings.special['auto_open'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_open'))
         image_recognition_layout.addWidget(checkbox, 1, 0)
@@ -676,7 +677,7 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(radio, 2, 1)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto accept Grift')
+        checkbox.setText('Auto accept Grift (Not working with TurboHUD)')
         checkbox.setChecked(self.settings.special['auto_accept_gr'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_accept_gr'))
         image_recognition_layout.addWidget(checkbox, 3, 0)
@@ -688,7 +689,7 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(checkbox, 4, 0)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto gamble')
+        checkbox.setText('Auto gamble (Not working with TurboHUD)')
         checkbox.setChecked(self.settings.special['auto_gamble'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_gamble'))
         image_recognition_layout.addWidget(checkbox, 5, 0)

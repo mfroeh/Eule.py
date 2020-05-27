@@ -254,7 +254,7 @@ def port_pool(poolspotlist):
             act = transform_coordinates(handle, poolspot[0][0], poolspot[0][1])
             wp = transform_coordinates(handle, poolspot[1][0], poolspot[1][1])
 
-            send_key(handle, 'm')
+            # send_key(handle, 'm')
             send_mouse(handle, 'LM', bw_map[0], bw_map[1])
             send_mouse(handle, 'LM', act[0], act[1])
             send_mouse(handle, 'LM', wp[0], wp[1])

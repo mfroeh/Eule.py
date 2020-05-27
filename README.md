@@ -100,7 +100,7 @@ Set the amount of Upgrades to do before porting to town with the Empowered optio
 #### Leave Game
 
 Leaves the Game.\
-[Video](https://www.youtube.com/watch?v=1SfbbTvYITY)\
+[Video](https://www.youtube.com/watch?v=1SfbbTvYITY)
 
 
 #### Salvage / Drop Inventory
@@ -116,7 +116,7 @@ and so on
 #### Gamble
 
 Gambles the Itemtype specified in Settings.\
-[Video](https://www.youtube.com/watch?v=NJsJpJb3Fas)\
+[Video](https://www.youtube.com/watch?v=NJsJpJb3Fas
 
 #### Convert 1/2-Slot
 

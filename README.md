@@ -53,7 +53,8 @@ If people really want to use all of those Auto Features and dont mind the huge e
 
 #### Spam Right / Left Click
 
-Spam Clicks the Right / Left Mousebutton.
+Spam Clicks the Right / Left Mousebutton.\
+[Video](https://www.youtube.com/watch?v=Dy1rWLSG2VY)
 
 #### Normalize Difficulty
 

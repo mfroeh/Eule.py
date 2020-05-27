@@ -116,7 +116,7 @@ and so on
 #### Gamble
 
 Gambles the Itemtype specified in Settings.\
-[Video](https://www.youtube.com/watch?v=NJsJpJb3Fas
+[Video](https://www.youtube.com/watch?v=NJsJpJb3Fas)
 
 #### Convert 1/2-Slot
 

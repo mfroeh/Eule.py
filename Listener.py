@@ -3,7 +3,6 @@ import macros
 import screen_search
 from kthread import KThread
 from PoolSpot import PoolSpotList
-from ahk import AHK
 import win32gui
 from time import sleep
 from threading import Thread
@@ -135,8 +134,6 @@ class Listener:
             )
 
     def watch_screen(self):
-        ahk_path = os.path.join(wd, './Compiled/AutoHotkey/AutoHotkey.exe')
-        ahk = AHK(executable_path=ahk_path)
         while True:
             handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
             if (
@@ -156,13 +153,12 @@ class Listener:
                 screenshot = get_image(handle)
                 if self.settings.special['auto_start']:
                     Thread(
-                        target=screen_search.start_game, args=(ahk, screenshot, handle)
+                        target=screen_search.start_game, args=(screenshot, handle)
                     ).start()
                 if self.settings.special['auto_open']:
                     Thread(
                         target=screen_search.open_rift,
                         args=(
-                            ahk,
                             screenshot,
                             handle,
                             self.settings.special['auto_open_option'],
@@ -172,7 +168,6 @@ class Listener:
                     Thread(
                         target=screen_search.gamble,
                         args=(
-                            ahk,
                             screenshot,
                             handle,
                             self.settings.special['gamble_item'],
@@ -180,10 +175,10 @@ class Listener:
                     ).start()
                 if self.settings.special['auto_accept_gr']:
                     Thread(
-                        target=screen_search.accept_gr, args=(ahk, screenshot, handle)
+                        target=screen_search.accept_gr, args=(screenshot, handle)
                     ).start()
                 if self.settings.special['auto_upgrade_gem']:
                     Thread(
-                        target=screen_search.upgrade_gem, args=(ahk, screenshot, handle)
+                        target=screen_search.upgrade_gem, args=(screenshot, handle)
                     ).start()
             sleep(0.3)

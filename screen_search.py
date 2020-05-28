@@ -75,7 +75,7 @@ def image_search(image, src_img, precision=0.8):
 ########################################################################################
 
 
-def start_game(ahk, screenshot, handle):
+def start_game(screenshot, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/start_game.png')
     x1, y1 = transform_coordinates(handle, 160, 500)
@@ -86,7 +86,7 @@ def start_game(ahk, screenshot, handle):
         send_mouse(handle, 'LM', x1, y1)
 
 
-def open_rift(ahk, screenshot, handle, rift_type):
+def open_rift(screenshot, handle, rift_type):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/obelisk.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
@@ -100,7 +100,7 @@ def open_rift(ahk, screenshot, handle, rift_type):
             macros.open_rift()
 
 
-def gamble(ahk, screenshot, handle, item):
+def gamble(screenshot, handle, item):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/kadala.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
@@ -111,7 +111,7 @@ def gamble(ahk, screenshot, handle, item):
         macros.gamble(item)
 
 
-def accept_gr(ahk, screenshot, handle):
+def accept_gr(screenshot, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/keystone.png')
     x1, y1 = transform_coordinates(handle, 705, 755)
@@ -123,7 +123,7 @@ def accept_gr(ahk, screenshot, handle):
         send_mouse(handle, 'LM', accept[0], accept[1])
 
 
-def upgrade_gem(ahk, screenshot, handle):
+def upgrade_gem(screenshot, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     uhrsi = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi.png')
     x1, y1 = transform_coordinates(handle, 220, 30)

@@ -49,18 +49,18 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 [Video](https://www.youtube.com/watch?v=mjKnKkUijIk)
 
 There are two different Versions.\
-Regular Version (Eule.py)
+Regular Version (Eule.py):
 * Uses AHK for Image Recognition.
 * Only Auto Start Game works with TurboHUD enabled.
 * Smaller Size => Shorter Startup.
 
-Good Image Recognition (Eule.py - Img)
+Good Image Recognition (Eule.py - Img):
 * Everything works with TurboHUD enabled.
 * More performant once started.
 * Huge Size => Longer Startup (depending on your Hardware).
 
 The Size of the good Image Recognition Version sadly is staying the way it is.\
-I am forced to that compromise, due to Python Image Librarys beeing extremely large when compiled.\
+This is the case due to Python Image Librarys beeing extremely large when compiled.
 
 ## Macro Explanations
 

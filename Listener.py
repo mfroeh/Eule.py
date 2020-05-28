@@ -138,7 +138,20 @@ class Listener:
         ahk = AHK(executable_path=ahk_path)
         while True:
             handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-            if handle and win32gui.GetForegroundWindow() == handle and not self.paused:
+            if (
+                handle
+                and win32gui.GetForegroundWindow() == handle
+                and any(
+                    (
+                        self.settings.special['auto_start'],
+                        self.settings.special['auto_open'],
+                        self.settings.special['auto_gamble'],
+                        self.settings.special['auto_upgrade_gem'],
+                        self.settings.special['auto_accept_gr'],
+                    )
+                )
+                and not self.paused
+            ):
                 if self.settings.special['auto_start']:
                     Thread(target=screen_search.start_game, args=(ahk, handle)).start()
                 if self.settings.special['auto_open']:

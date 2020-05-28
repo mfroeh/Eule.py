@@ -43,15 +43,24 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 
 ## Auto Stuff
 
-* Only Auto Start Game works with TurboHUD enabled.
 * Automates some of the Macros using Image Recognition.
 * Check at the Bottom if it is working for your Resolution.
 
-[Video](https://www.youtube.com/watch?v=mjKnKkUijIk)\
-This Feature is _VERY_ suboptimal right now, as it is using AHK to capture the Screen.\
-Thus not beeing able to capture inactive Windows => Not working with TurboHud.\
-I am sadly forced to that compromise, due to Python Image Librarys beeing extremely large when compiled (Current exe with good Image Recognition would be 6x the Size).\
-If people really want to use all of those Auto Features and dont mind the huge exe size (this means longer start up time, but fast when started), I will release a Version with that.
+[Video](https://www.youtube.com/watch?v=mjKnKkUijIk)
+
+There are two different Versions.\
+Regular Version (Eule.py)
+* Uses AHK for Image Recognition.
+* Only Auto Start Game works with TurboHUD enabled.
+* Smaller Size => Shorter Startup.
+
+Good Image Recognition (Eule.py - Img)
+* Everything works with TurboHUD enabled.
+* More performant once started.
+* Huge Size => Longer Startup (depending on your Hardware).
+
+The Size of the good Image Recognition Version sadly is staying the way it is.\
+I am forced to that compromise, due to Python Image Librarys beeing extremely large when compiled.\
 
 ## Macro Explanations
 

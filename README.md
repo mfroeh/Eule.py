@@ -44,6 +44,7 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 ## Auto Stuff
 
 * Automates some of the Macros using Image Recognition.
+* Requires Diablo to be in Windowed (Fullscreen) Mode
 * Check at the Bottom if it is working for your Resolution.
 
 [Video](https://www.youtube.com/watch?v=mjKnKkUijIk)

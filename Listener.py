@@ -9,6 +9,7 @@ from time import sleep
 from threading import Thread
 import sys
 import os
+from screen_search import get_image
 
 try:
     wd = sys._MEIPASS
@@ -138,21 +139,51 @@ class Listener:
         ahk = AHK(executable_path=ahk_path)
         while True:
             handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-            if handle and win32gui.GetForegroundWindow() == handle and not self.paused:
+            if (
+                handle
+                and win32gui.GetForegroundWindow() == handle
+                and any(
+                    (
+                        self.settings.special['auto_start'],
+                        self.settings.special['auto_open'],
+                        self.settings.special['auto_gamble'],
+                        self.settings.special['auto_upgrade_gem'],
+                        self.settings.special['auto_accept_gr'],
+                    )
+                )
+                and not self.paused
+            ):
+                screenshot = get_image(handle)
                 if self.settings.special['auto_start']:
-                    Thread(target=screen_search.start_game, args=(ahk, handle)).start()
+                    Thread(
+                        target=screen_search.start_game, args=(ahk, screenshot, handle)
+                    ).start()
                 if self.settings.special['auto_open']:
                     Thread(
                         target=screen_search.open_rift,
-                        args=(ahk, handle, self.settings.special['auto_open_option']),
+                        args=(
+                            ahk,
+                            screenshot,
+                            handle,
+                            self.settings.special['auto_open_option'],
+                        ),
                     ).start()
                 if self.settings.special['auto_gamble']:
                     Thread(
                         target=screen_search.gamble,
-                        args=(ahk, handle, self.settings.special['gamble_item']),
+                        args=(
+                            ahk,
+                            screenshot,
+                            handle,
+                            self.settings.special['gamble_item'],
+                        ),
                     ).start()
                 if self.settings.special['auto_accept_gr']:
-                    Thread(target=screen_search.accept_gr, args=(ahk, handle)).start()
+                    Thread(
+                        target=screen_search.accept_gr, args=(ahk, screenshot, handle)
+                    ).start()
                 if self.settings.special['auto_upgrade_gem']:
-                    Thread(target=screen_search.upgrade_gem, args=(ahk, handle)).start()
+                    Thread(
+                        target=screen_search.upgrade_gem, args=(ahk, screenshot, handle)
+                    ).start()
             sleep(0.3)

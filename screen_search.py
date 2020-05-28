@@ -4,6 +4,19 @@ from sends import send_mouse, send_key
 import macros
 import os
 import sys
+from numpy import array
+import win32ui
+from ctypes import windll
+from PIL import Image
+from cv2 import (
+    cvtColor,
+    imread,
+    minMaxLoc,
+    matchTemplate,
+    TM_CCOEFF_NORMED,
+    COLOR_BGR2GRAY,
+)
+
 
 try:
     wd = sys._MEIPASS
@@ -11,24 +24,75 @@ except AttributeError:
     wd = ''
 
 
-def start_game(ahk, handle):
+def crop_image(image, *rect):
+    return image.crop(x for x in rect)
+
+
+def get_image(handle):
+    # left, top, right, bot = win32gui.GetClientRect(hwnd)
+    left, top, right, bot = win32gui.GetWindowRect(handle)
+    w = right - left
+    h = bot - top
+
+    hwndDC = win32gui.GetWindowDC(handle)
+    mfcDC = win32ui.CreateDCFromHandle(hwndDC)
+    saveDC = mfcDC.CreateCompatibleDC()
+
+    saveBitMap = win32ui.CreateBitmap()
+    saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
+
+    saveDC.SelectObject(saveBitMap)
+
+    windll.user32.PrintWindow(handle, saveDC.GetSafeHdc(), 0)
+
+    bmpinfo = saveBitMap.GetInfo()
+    bmpstr = saveBitMap.GetBitmapBits(True)
+
+    im = Image.frombuffer(
+        'RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1
+    )
+    win32gui.DeleteObject(saveBitMap.GetHandle())
+    saveDC.DeleteDC()
+    mfcDC.DeleteDC()
+    win32gui.ReleaseDC(handle, hwndDC)
+
+    return im
+
+
+# Searches for an image inside of a source image
+def image_search(image, src_img, precision=0.8):
+    img_rgb = array(src_img)
+    img_gray = cvtColor(img_rgb, COLOR_BGR2GRAY)
+    template = imread(image, 0)
+
+    res = matchTemplate(img_gray, template, TM_CCOEFF_NORMED)
+    min_val, max_val, min_loc, max_loc = minMaxLoc(res)
+    if max_val < precision:
+        return False
+    return True
+
+
+########################################################################################
+
+
+def start_game(ahk, screenshot, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-    image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/start_game.png')
+    img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/start_game.png')
     x1, y1 = transform_coordinates(handle, 160, 500)
     x2, y2 = transform_coordinates(handle, 320, 540)
-    found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
-    if found:
+    img = crop_image(screenshot, x1, y1, x2, y2)
+    if image_search(img_to_find, img, precision=0.8):
         print('FOUND START GAME!')
         send_mouse(handle, 'LM', x1, y1)
 
 
-def open_rift(ahk, handle, rift_type):
+def open_rift(ahk, screenshot, handle, rift_type):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-    image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/obelisk.png')
+    img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/obelisk.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
-    found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
-    if found:
+    img = crop_image(screenshot, x1, y1, x2, y2)
+    if image_search(img_to_find, img, precision=0.8):
         print('FOUND OPEN RIFT!')
         if rift_type == 'grift':
             macros.open_gr()
@@ -36,60 +100,66 @@ def open_rift(ahk, handle, rift_type):
             macros.open_rift()
 
 
-def gamble(ahk, handle, item):
+def gamble(ahk, screenshot, handle, item):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-    image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/kadala.png')
+    img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/kadala.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
-    found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
-    if found:
+    img = crop_image(screenshot, x1, y1, x2, y2)
+    if image_search(img_to_find, img, precision=0.8):
         print('FOUND Kadala!')
         macros.gamble(item)
 
 
-def accept_gr(ahk, handle):
+def accept_gr(ahk, screenshot, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-    image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/keystone.png')
+    img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/keystone.png')
     x1, y1 = transform_coordinates(handle, 705, 755)
     x2, y2 = transform_coordinates(handle, 790, 815)
     accept = transform_coordinates(handle, 800, 900)
-    found = ahk.image_search(image_path, (x1, y1), (x2, y2), 30)
-    if found:
+    img = crop_image(screenshot, x1, y1, x2, y2)
+    if image_search(img_to_find, img, precision=0.8):
         print('FOUND accept GR')
         send_mouse(handle, 'LM', accept[0], accept[1])
 
 
-def upgrade_gem(ahk, handle):
+def upgrade_gem(ahk, screenshot, handle):
     x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
     uhrsi = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
-    if ahk.image_search(uhrsi, (x1, y1), (x2, y2), 30):
+    img = crop_image(screenshot, x1, y1, x2, y2)
+    if image_search(uhrsi, img, precision=0.8):
         x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
-        image_paths = [
+        images_to_find = [
             os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
             for i in range(1, 6)
         ]
         x1, y1 = transform_coordinates(handle, 200, 530)
         x2, y2 = transform_coordinates(handle, 335, 560)
         upgrade = transform_coordinates(handle, 280, 550)
-        if ahk.image_search(image_paths[0], (x1, y1), (x2, y2), 30):  # 1 upgrade left
+
+        one_upgrade = crop_image(screenshot, x1, y1, x2, y2)
+        two_upgrade = crop_image(screenshot, x1, y1, x2, y2)
+        three_upgrade = crop_image(screenshot, x1, y1, x2, y2)
+        four_upgrade = crop_image(screenshot, x1, y1, x2, y2)
+        five_upgrade = crop_image(screenshot, x1, y1, x2, y2)
+
+        if image_search(images_to_find[0], one_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 1 Upgrades Left!')
-        elif ahk.image_search(
-            image_paths[1], (x1, y1), (x2, y2), 30
-        ):  # 2 upgrades left
+        elif image_search(images_to_find[1], two_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 2 Upgrades Left!')
-        elif ahk.image_search(image_paths[2], (x1, y1), (x2, y2), 30):  # 3 upgrade left
+        elif image_search(images_to_find[2], three_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 3 Upgrades Left!')
-        elif ahk.image_search(image_paths[3], (x1, y1), (x2, y2), 30):  # 4 upgrade left
+        elif image_search(images_to_find[3], four_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             print('Found 4 Upgrades Left!')
-        elif ahk.image_search(image_paths[4], (x1, y1), (x2, y2), 30):  # 5 upgrade left
+        elif image_search(images_to_find[4], five_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             print('Found 5 Upgrades Left!')

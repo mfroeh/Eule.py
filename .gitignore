@@ -2,7 +2,10 @@
 *.json
 test.py
 Old/
-Compiled/
+dist/
+build/
+ahk/
+AutoHotkey/
 Abbrevations/
 README_IMG/
 screen_search_pyinstaller.py

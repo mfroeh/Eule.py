@@ -145,21 +145,21 @@ def upgrade_gem(screenshot, handle):
         four_upgrade = crop_image(screenshot, x1, y1, x2, y2)
         five_upgrade = crop_image(screenshot, x1, y1, x2, y2)
 
-        if image_search(images_to_find[0], one_upgrade, precision=0.95):
+        if image_search(images_to_find[4], five_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-            send_key(handle, 't')
-            print('Found 1 Upgrades Left!')
-        elif image_search(images_to_find[1], two_upgrade, precision=0.95):
+            print('Found 5 Upgrades left!')
+        elif image_search(images_to_find[3], four_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-            send_key(handle, 't')
-            print('Found 2 Upgrades Left!')
+            print('Found 4 Upgrades Left!')
         elif image_search(images_to_find[2], three_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 3 Upgrades Left!')
-        elif image_search(images_to_find[3], four_upgrade, precision=0.95):
+        elif image_search(images_to_find[1], two_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-            print('Found 4 Upgrades Left!')
-        elif image_search(images_to_find[4], five_upgrade, precision=0.95):
+            send_key(handle, 't')
+            print('Found 2 Upgrades Left!')
+        elif image_search(images_to_find[0], one_upgrade, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-            print('Found 5 Upgrades Left!')
+            send_key(handle, 't')
+            print('Found 1 Upgrades Left!')

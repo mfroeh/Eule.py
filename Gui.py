@@ -384,42 +384,52 @@ class HotkeyTab(QWidget):
 
         label = QLabel(cube_converter)
         label.setText('Convert 1-Slot')
-        cube_converter_layout.addWidget(label, 0, 0)
+        cube_converter_layout.addWidget(label, 0, 0, 1, 3)
 
         button = QPushButton(cube_converter)
         self.buttons['cube_conv_sm'] = button
         button.setText(self.settings.hotkeys['cube_conv_sm'])
         button.clicked.connect(lambda: self.set_hotkey('cube_conv_sm'))
-        cube_converter_layout.addWidget(button, 0, 1)
+        cube_converter_layout.addWidget(button, 0, 3, 1, 3)
 
         label = QLabel(cube_converter)
         label.setText('Convert 2-Slot')
-        cube_converter_layout.addWidget(label, 1, 0)
+        cube_converter_layout.addWidget(label, 1, 0, 1, 3)
 
         button = QPushButton(cube_converter)
         self.buttons['cube_conv_lg'] = button
-
         button.setText(self.settings.hotkeys['cube_conv_lg'])
         button.clicked.connect(lambda: self.set_hotkey('cube_conv_lg'))
+        cube_converter_layout.addWidget(button, 1, 3, 1, 3)
 
-        cube_converter_layout.addWidget(button, 1, 1)
+        radio = QRadioButton(cube_converter)
+        radio.setText('SoL')
+        radio.setChecked(self.settings.special['cube_conv_speed'] == 'sol')
+        radio.clicked.connect(lambda: self.radio_clicked('sol'))
+        cube_converter_layout.addWidget(radio, 2, 0, 1, 2)
 
-        checkbox = QCheckBox(cube_converter)
-        checkbox.setText('SoL Converting')
-        checkbox.clicked.connect(lambda: self.checkbox_clicked('fast_convert'))
-        checkbox.setChecked(self.settings.special['fast_convert'])
-        cube_converter_layout.addWidget(checkbox, 2, 0)
+        radio = QRadioButton(cube_converter)
+        radio.setText('Normal')
+        radio.setChecked(self.settings.special['cube_conv_speed'] == 'normal')
+        radio.clicked.connect(lambda: self.radio_clicked('normal'))
+        cube_converter_layout.addWidget(radio, 2, 2, 1, 2)
+
+        radio = QRadioButton(cube_converter)
+        radio.setText('Slow')
+        radio.setChecked(self.settings.special['cube_conv_speed'] == 'slow')
+        radio.clicked.connect(lambda: self.radio_clicked('slow'))
+        cube_converter_layout.addWidget(radio, 2, 4, 1, 2)
 
         label = QLabel(cube_converter)
         label.setText('Reforge / Convert Set')
-        cube_converter_layout.addWidget(label, 3, 0)
+        cube_converter_layout.addWidget(label, 3, 0, 1, 3)
 
         button = QPushButton(cube_converter)
         self.buttons['reforge'] = button
         button.setText(self.settings.hotkeys['reforge'])
         button.clicked.connect(lambda: self.set_hotkey('reforge'))
 
-        cube_converter_layout.addWidget(button, 3, 1)
+        cube_converter_layout.addWidget(button, 3, 3, 1, 3)
 
         self.setLayout(self.layout)
 
@@ -472,6 +482,8 @@ class HotkeyTab(QWidget):
             self.settings.special['armor_swap_amount'] = 3
         elif value == 'bounty_dh':
             self.settings.special['armor_swap_amount'] = 2
+        elif value in ['sol', 'normal', 'slow']:
+            self.settings.special['cube_conv_speed'] = value
 
         if not self.listener.paused:
             self.listener.start()
@@ -606,7 +618,7 @@ class SettingsTab(QWidget):
         self.layout.addWidget(paths)
 
         label = QLabel(paths)
-        label.setText('Fiddler Path')
+        label.setText('Fiddler')
         paths_layout.addWidget(label, 0, 0, 1, 1)
 
         self.fiddler_path = QLineEdit(paths)
@@ -620,7 +632,7 @@ class SettingsTab(QWidget):
         paths_layout.addWidget(button, 0, 2, 1, 1)
 
         label = QLabel(paths)
-        label.setText('TurboHUD Path')
+        label.setText('TurboHUD')
         paths_layout.addWidget(label, 1, 0, 1, 1)
 
         self.turbohud_path = QLineEdit(paths)
@@ -634,7 +646,7 @@ class SettingsTab(QWidget):
         paths_layout.addWidget(button, 1, 2, 1, 1)
 
         label = QLabel(paths)
-        label.setText('pHelper Path')
+        label.setText('pHelper')
         paths_layout.addWidget(label, 2, 0, 1, 1)
 
         self.phelper_path = QLineEdit(paths)
@@ -659,7 +671,7 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(checkbox, 0, 0)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto open Rift / Grift (Not working with TurboHUD)')
+        checkbox.setText('Auto open Rift / Grift')
         checkbox.setChecked(self.settings.special['auto_open'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_open'))
         image_recognition_layout.addWidget(checkbox, 1, 0)
@@ -677,19 +689,19 @@ class SettingsTab(QWidget):
         image_recognition_layout.addWidget(radio, 2, 1)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto accept Grift (Not working with TurboHUD)')
+        checkbox.setText('Auto accept Grift')
         checkbox.setChecked(self.settings.special['auto_accept_gr'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_accept_gr'))
         image_recognition_layout.addWidget(checkbox, 3, 0)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto upgrade Gem (Not working with TurboHUD)')
+        checkbox.setText('Auto upgrade Gem')
         checkbox.setChecked(self.settings.special['auto_upgrade_gem'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_upgrade_gem'))
         image_recognition_layout.addWidget(checkbox, 4, 0)
 
         checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto gamble (Not working with TurboHUD)')
+        checkbox.setText('Auto gamble')
         checkbox.setChecked(self.settings.special['auto_gamble'])
         checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_gamble'))
         image_recognition_layout.addWidget(checkbox, 5, 0)

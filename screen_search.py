@@ -135,31 +135,27 @@ def upgrade_gem(screenshot, handle):
             os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
             for i in range(1, 6)
         ]
-        x1, y1 = transform_coordinates(handle, 200, 530)
-        x2, y2 = transform_coordinates(handle, 335, 560)
+        x1, y1 = transform_coordinates(handle, 270, 530)
+        x2, y2 = transform_coordinates(handle, 355, 560)
         upgrade = transform_coordinates(handle, 280, 550)
 
-        one_upgrade = crop_image(screenshot, x1, y1, x2, y2)
-        two_upgrade = crop_image(screenshot, x1, y1, x2, y2)
-        three_upgrade = crop_image(screenshot, x1, y1, x2, y2)
-        four_upgrade = crop_image(screenshot, x1, y1, x2, y2)
-        five_upgrade = crop_image(screenshot, x1, y1, x2, y2)
+        upgrade_img = crop_image(screenshot, x1, y1, x2, y2)
 
-        if image_search(images_to_find[4], five_upgrade, precision=0.95):
+        if image_search(images_to_find[4], upgrade_img, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             print('Found 5 Upgrades left!')
-        elif image_search(images_to_find[3], four_upgrade, precision=0.95):
+        elif image_search(images_to_find[3], upgrade_img, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             print('Found 4 Upgrades Left!')
-        elif image_search(images_to_find[2], three_upgrade, precision=0.95):
+        elif image_search(images_to_find[2], upgrade_img, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 3 Upgrades Left!')
-        elif image_search(images_to_find[1], two_upgrade, precision=0.95):
+        elif image_search(images_to_find[1], upgrade_img, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 2 Upgrades Left!')
-        elif image_search(images_to_find[0], one_upgrade, precision=0.95):
+        elif image_search(images_to_find[0], upgrade_img, precision=0.95):
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])
             send_key(handle, 't')
             print('Found 1 Upgrades Left!')

@@ -61,7 +61,7 @@ Regular Version (Eule.py):
 Good Image Recognition (Eule.py - Img):
 * Everything works with TurboHUD enabled.
 * More performant once started.
-* Huge Size => Longer Startup (depending on your Hardware).
+* Bigger Size => Longer Startup (depending on your Hardware).
 
 The Size of the good Image Recognition Version sadly is staying the way it is.\
 This is the case due to Python Image Librarys beeing extremely large when compiled.

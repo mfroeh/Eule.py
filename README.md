@@ -2,7 +2,10 @@
 
 A Diablo III Macro Collection.\
 Working with all 16:9 Resolutions guaranteed.\
-Should work on any Resolution (not tested).
+Should also work on any Resolution (not tested).\
+
+There are two different Versions. The difference between them beeing Image Recognition.\
+Check below at __Auto Stuff__ to see the differences.
 
 ## Macros
 
@@ -43,15 +46,25 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 
 ## Auto Stuff
 
-* Only Auto Start Game works with TurboHUD enabled.
 * Automates some of the Macros using Image Recognition.
+* Requires Diablo to be in Windowed (Fullscreen) Mode
 * Check at the Bottom if it is working for your Resolution.
 
-[Video](https://www.youtube.com/watch?v=mjKnKkUijIk)\
-This Feature is _VERY_ suboptimal right now, as it is using AHK to capture the Screen.\
-Thus not beeing able to capture inactive Windows => Not working with TurboHud.\
-I am sadly forced to that compromise, due to Python Image Librarys beeing extremely large when compiled (Current exe with good Image Recognition would be 6x the Size).\
-If people really want to use all of those Auto Features and dont mind the huge exe size (this means longer start up time, but fast when started), I will release a Version with that.
+[Video](https://www.youtube.com/watch?v=mjKnKkUijIk)
+
+There are two different Versions.\
+Regular Version (Eule.py):
+* Uses AHK for Image Recognition.
+* Only Auto Start Game works with TurboHUD enabled.
+* Smaller Size => Shorter Startup.
+
+Good Image Recognition (Eule.py - Img):
+* Everything works with TurboHUD enabled.
+* More performant once started.
+* Huge Size => Longer Startup (depending on your Hardware).
+
+The Size of the good Image Recognition Version sadly is staying the way it is.\
+This is the case due to Python Image Librarys beeing extremely large when compiled.
 
 ## Macro Explanations
 
@@ -69,8 +82,6 @@ Sets the Game Difficulty to normal.\
 
 Swaps your equipped Items with Items from your Inventory.\
 [Video](https://www.youtube.com/watch?v=dM50BkYp81M)\
-![](https://i.ibb.co/YQ5KNX8/swap-armor.png)\
-BountyDH swaps the Items in the orange, Cains the ones in the blue rectangle.
 
 #### Pause Eule
 
@@ -79,7 +90,7 @@ Stops any Hotkey or Screen Listeners.\
 
 #### Port to Ax Town
 
-Ports to Town of Act x.
+Ports to the Town of Act x.
 
 #### Port to Pool
 
@@ -133,8 +144,8 @@ Reforges or Converts the Item in the top left corner.\
 
 | Feature           | 1920x1080 |      2715x1527      |  others  |
 | ----------------- | :-------: | :-----------------: | :------: |
-| Start Game        | &#10003;  |      &#10003;       | &#10003; |
-| Open Rift / Grift | &#10003;  |      &#10003;       | &#10003; |
+| Start Game        | &#10003;  |      &#10003;       | &#10003;  (untested)|
+| Open Rift / Grift | &#10003;  |      &#10003;       | &#10003;  (untested)|
 | Accept Grift      | &#10003;  | &#10003; (untested) |          |
-| Upgrade Gem       | &#10003;  |      &#10003;       | &#10003; |
-| Gamble            | &#10003;  |      &#10003;       | &#10003; |
+| Upgrade Gem       | &#10003;  |      &#10003;  (untested)      | &#10003;  (untested)|
+| Gamble            | &#10003;  |      &#10003;       | &#10003;  (untested)|

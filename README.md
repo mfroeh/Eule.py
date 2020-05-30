@@ -144,7 +144,7 @@ Reforges or Converts the Item in the top left corner.\
 
 ## Image Recognition Checklist
 
-| Feature           | 1920x1080 |      2715x1527      |  others  |
+| Feature           | 1920x1080 |      2715x1527      |  3840x2160  |
 | ----------------- | :-------: | :-----------------: | :------: |
 | Start Game        | &#10003;  |      &#10003;       | &#10003;  (untested)|
 | Open Rift / Grift | &#10003;  |      &#10003;       | &#10003;  (untested)|

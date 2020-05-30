@@ -88,13 +88,13 @@ class Listener:
             keyboard.add_hotkey(
                 hotkeys['cube_conv_sm'],
                 macros.cube_conv_sm,
-                args=(special['fast_convert'],),
+                args=(special['cube_conv_speed'],),
             )
         if hotkeys['cube_conv_lg']:
             keyboard.add_hotkey(
                 hotkeys['cube_conv_lg'],
                 macros.cube_conv_lg,
-                args=(special['fast_convert'],),
+                args=(special['cube_conv_speed'],),
             )
         if hotkeys['reforge']:
             keyboard.add_hotkey(hotkeys['reforge'], macros.reforge)

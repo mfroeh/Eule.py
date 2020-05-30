@@ -30,7 +30,7 @@ def left_click():
         sleep(0.001)
 
 
-def cube_conv_sm(fast):
+def cube_conv_sm(speed):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         item = transform_coordinates(handle, 1425, 580)
@@ -41,7 +41,7 @@ def cube_conv_sm(fast):
         fw = transform_coordinates(handle, 850, 850)
 
         try:
-            if not fast:
+            if speed == 'normal':
                 for i in range(6):
                     for j in range(10):
                         send_mouse(
@@ -55,7 +55,7 @@ def cube_conv_sm(fast):
                         # macro_sleep(0.1)
                         send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
                         send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
-            else:
+            elif speed == 'sol':
                 for _ in range(2):
                     for i in range(6):
                         for j in range(10):
@@ -71,11 +71,25 @@ def cube_conv_sm(fast):
                             macro_sleep(0.06)  # 0.025
                             send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
                             send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
+            elif speed == 'slow':
+                for i in range(6):
+                    for j in range(10):
+                        send_mouse(
+                            handle, 'RM', item[0] + j * step[0], item[1] + i * step[1]
+                        )
+                        macro_sleep(0.13)
+                        send_mouse(handle, 'LM', fill[0], fill[1])  # Fill
+                        macro_sleep(0.1)
+                        send_mouse(handle, 'LM', trans[0], trans[1])  # Transmute
+                        macro_sleep(0.13)
+                        send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
+                        macro_sleep(0.1)
+                        send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
         except StopMacro:
             pass
 
 
-def cube_conv_lg(fast):
+def cube_conv_lg(speed):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         item = transform_coordinates(handle, 1425, 580)
@@ -86,7 +100,7 @@ def cube_conv_lg(fast):
         fw = transform_coordinates(handle, 850, 850)
 
         try:
-            if not fast:
+            if speed == 'normal':
                 for i in range(3):
                     for j in range(10):
                         send_mouse(
@@ -103,7 +117,7 @@ def cube_conv_lg(fast):
                         macro_sleep(0.13)
                         send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
                         send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
-            else:
+            elif speed == 'sol':
                 for _ in range(2):
                     for i in range(3):
                         for j in range(10):
@@ -119,6 +133,23 @@ def cube_conv_lg(fast):
                             macro_sleep(0.06)  # 0.025
                             send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
                             send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
+            elif speed == 'slow':
+                for i in range(3):
+                    for j in range(10):
+                        send_mouse(
+                            handle,
+                            'RM',
+                            item[0] + j * step[0],
+                            item[1] + i * step[1] * 2,
+                        )
+                        macro_sleep(0.13)
+                        send_mouse(handle, 'LM', fill[0], fill[1])  # Fill
+                        macro_sleep(0.1)
+                        send_mouse(handle, 'LM', trans[0], trans[1])  # Transmute
+                        macro_sleep(0.13)
+                        send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
+                        macro_sleep(0.1)
+                        send_mouse(handle, 'LM', fw[0], fw[1])  # Forwards
         except StopMacro:
             pass
 

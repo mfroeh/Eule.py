@@ -49,7 +49,7 @@ class Settings:
                 ],
                 "special": {
                     "empowered": False,
-                    "fast_convert": False,
+                    "cube_conv_speed": 'normal',
                     "armor_swap_amount": 3,
                     "spare_columns": 1,
                     "gamble_item": "ring",

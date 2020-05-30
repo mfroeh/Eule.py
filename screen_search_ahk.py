@@ -70,8 +70,8 @@ def upgrade_gem(ahk, handle):
             os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
             for i in range(1, 6)
         ]
-        x1, y1 = transform_coordinates(handle, 200, 530)
-        x2, y2 = transform_coordinates(handle, 335, 560)
+        x1, y1 = transform_coordinates(handle, 270, 530)
+        x2, y2 = transform_coordinates(handle, 355, 560)
         upgrade = transform_coordinates(handle, 280, 550)
         if ahk.image_search(image_paths[0], (x1, y1), (x2, y2), 30):  # 1 upgrade left
             send_mouse(handle, 'LM', upgrade[0], upgrade[1])

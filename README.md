@@ -2,7 +2,7 @@
 
 A Diablo III Macro Collection.\
 Working with all 16:9 Resolutions guaranteed.\
-Should also work on any Resolution (not tested).\
+Should also work on any Resolution (not tested).
 
 There are two different Versions. The difference between them beeing Image Recognition.\
 Check below at __Auto Stuff__ to see the differences.
@@ -52,19 +52,21 @@ I prefer this Version of sending Messages over a simple Hotkey Version due to ha
 
 [Video](https://www.youtube.com/watch?v=mjKnKkUijIk)
 
-There are two different Versions.\
-Regular Version (Eule.py):
-* Uses AHK for Image Recognition.
-* Only Auto Start Game works with TurboHUD enabled.
-* Smaller Size => Shorter Startup.
+There are two different Versions.
 
-Good Image Recognition (Eule.py - Img):
+Regular Version (Eule.py):
 * Everything works with TurboHUD enabled.
 * More performant once started.
 * Bigger Size => Longer Startup (depending on your Hardware).
 
-The Size of the good Image Recognition Version sadly is staying the way it is.\
-This is the case due to Python Image Librarys beeing extremely large when compiled.
+AHK Image Recognition Version (Eule.py (AHK)):
+* Uses AHK for Image Recognition.
+* Only Auto Start Game works with TurboHUD enabled.
+* Smaller Size => Shorter Startup.
+
+The Size of the regular Version sadly is more or less staying the way it is.\
+This is the case due to Python Image Librarys beeing extremely large when compiled.\
+If you're willing to put up with potentially "long" Startup, the performance afterwards will be better.
 
 ## Macro Explanations
 

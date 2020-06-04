@@ -2,6 +2,7 @@
 
 A Diablo III Macro Collection.\
 Working with all 16:9 Resolutions guaranteed.\
+Use in Fullscreen (Windowed) for Auto Features.\
 Should also work on any Resolution (not tested).
 
 There are two different Versions. The difference between them beeing Image Recognition.\

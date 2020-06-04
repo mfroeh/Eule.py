@@ -145,10 +145,10 @@ Reforges or Converts the Item in the top left corner.\
 
 ## Image Recognition Checklist
 
-| Feature           | 1920x1080 |      2715x1527      |  3840x2160  |
-| ----------------- | :-------: | :-----------------: | :------: |
-| Start Game        | &#10003;  |      &#10003;       | &#10003;  (untested)|
-| Open Rift / Grift | &#10003;  |      &#10003;       | &#10003;  (untested)|
-| Accept Grift      | &#10003;  | &#10003; (untested) |          |
-| Upgrade Gem       | &#10003;  |      &#10003;  (untested)      | &#10003;  (untested)|
-| Gamble            | &#10003;  |      &#10003;       | &#10003;  (untested)|
+| Feature / Resolution | 1920x1080 |      2715x1527       |      3840x2160       |      2560x1440       |
+| -------------------- | :-------: | :------------------: | :------------------: | :------------------: |
+| Start Game           | &#10003;  |       &#10003;       | &#10003;  (untested) | &#10003;  (untested) |
+| Open Rift / Grift    | &#10003;  |       &#10003;       | &#10003;  (untested) | &#10003;  (untested) |
+| Accept Grift         | &#10003;  | &#10003; (untested)  |                      | &#10003;  (untested) |
+| Upgrade Gem          | &#10003;  | &#10003;  (untested) | &#10003;  (untested) | &#10003;  (untested) |
+| Gamble               | &#10003;  |       &#10003;       | &#10003;  (untested) | &#10003;  (untested) |

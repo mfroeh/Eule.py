@@ -1,9 +1,8 @@
 # Eule.py
 
 A Diablo III Macro Collection.\
-Working with all 16:9 Resolutions guaranteed.\
-Use in Fullscreen (Windowed) for Auto Features.\
-Should also work on any Resolution (not tested).
+The Macros work on all Resolutions.\
+Supported _Auto Stuff_ Resolutions can be found on the bottom.
 
 There are two different Versions. The difference between them beeing Image Recognition.\
 Check below at __Auto Stuff__ to see the differences.

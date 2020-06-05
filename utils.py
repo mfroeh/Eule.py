@@ -119,3 +119,27 @@ def hotkey_delete_request(hotkey):
         return scan_codes[0] == 83
     except:
         return False
+
+
+def hotkey_is_numlock(hotkey):
+    try:
+        scan_code = keyboard.key_to_scan_codes(hotkey)[1]
+        return scan_code in [71, 72, 73, 75, 76, 77, 79, 80, 81, 82]
+    except:
+        return False
+
+
+def nicer_text(hotkey):
+    switcher = {
+        82: 'Num0',
+        79: 'Num1',
+        80: 'Num2',
+        81: 'Num3',
+        75: 'Num4',
+        76: 'Num5',
+        77: 'Num6',
+        71: 'Num7',
+        72: 'Num8',
+        73: 'Num9',
+    }
+    return switcher.get(hotkey, hotkey)

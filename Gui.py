@@ -26,13 +26,14 @@ import os
 import string
 import keyboard
 import Style.windows as windows
-from utils import start_thirdparty, hotkey_delete_request
+from utils import start_thirdparty, hotkey_delete_request, hotkey_is_numlock, nicer_text
 import ressources
 import win32gui
 from time import sleep
 from Settings import Settings
 from Listener import Listener
 from kthread import KThread
+
 
 try:
     wd = sys._MEIPASS
@@ -165,7 +166,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(general)
         self.buttons['right_click'] = button
-        button.setText(self.settings.hotkeys['right_click'])
+        button.setText(nicer_text(self.settings.hotkeys['right_click']))
         button.clicked.connect(lambda: self.set_hotkey('right_click'))
         general_layout.addWidget(button, 0, 1)
 
@@ -175,7 +176,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(general)
         self.buttons['left_click'] = button
-        button.setText(self.settings.hotkeys['left_click'])
+        button.setText(nicer_text(self.settings.hotkeys['left_click']))
         button.clicked.connect(lambda: self.set_hotkey('left_click'))
         general_layout.addWidget(button, 1, 1)
 
@@ -185,7 +186,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(general)
         self.buttons['lower_difficulty'] = button
-        button.setText(self.settings.hotkeys['lower_difficulty'])
+        button.setText(nicer_text(self.settings.hotkeys['lower_difficulty']))
         button.clicked.connect(lambda: self.set_hotkey('lower_difficulty'))
         general_layout.addWidget(button, 2, 1)
 
@@ -195,7 +196,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(general)
         self.buttons['swap_armor'] = button
-        button.setText(self.settings.hotkeys['swap_armor'])
+        button.setText(nicer_text(self.settings.hotkeys['swap_armor']))
         button.clicked.connect(lambda: self.set_hotkey('swap_armor'))
         general_layout.addWidget(button, 3, 1)
 
@@ -218,7 +219,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(general)
         self.buttons['pause'] = button
-        button.setText(self.settings.hotkeys['pause'])
+        button.setText(nicer_text(self.settings.hotkeys['pause']))
         button.clicked.connect(lambda: self.set_hotkey('pause'))
         general_layout.addWidget(button, 5, 1)
 
@@ -235,7 +236,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(porting)
         self.buttons['port_a1'] = button
-        button.setText(self.settings.hotkeys['port_a1'])
+        button.setText(nicer_text(self.settings.hotkeys['port_a1']))
         button.clicked.connect(lambda: self.set_hotkey('port_a1'))
         porting_layout.addWidget(button, 0, 1)
 
@@ -245,7 +246,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(porting)
         self.buttons['port_a2'] = button
-        button.setText(self.settings.hotkeys['port_a2'])
+        button.setText(nicer_text(self.settings.hotkeys['port_a2']))
         button.clicked.connect(lambda: self.set_hotkey('port_a2'))
 
         porting_layout.addWidget(button, 1, 1)
@@ -257,7 +258,7 @@ class HotkeyTab(QWidget):
         button = QPushButton(porting)
         self.buttons['port_a3'] = button
 
-        button.setText(self.settings.hotkeys['port_a3'])
+        button.setText(nicer_text(self.settings.hotkeys['port_a3']))
         button.clicked.connect(lambda: self.set_hotkey('port_a3'))
 
         porting_layout.addWidget(button, 2, 1)
@@ -268,7 +269,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(porting)
         self.buttons['port_a5'] = button
-        button.setText(self.settings.hotkeys['port_a5'])
+        button.setText(nicer_text(self.settings.hotkeys['port_a5']))
         button.clicked.connect(lambda: self.set_hotkey('port_a5'))
         porting_layout.addWidget(button, 3, 1)
 
@@ -278,7 +279,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(porting)
         self.buttons['port_pool'] = button
-        button.setText(self.settings.hotkeys['port_pool'])
+        button.setText(nicer_text(self.settings.hotkeys['port_pool']))
         button.clicked.connect(lambda: self.set_hotkey('port_pool'))
         porting_layout.addWidget(button, 4, 1)
 
@@ -296,7 +297,7 @@ class HotkeyTab(QWidget):
         button = QPushButton(greater_rift)
         self.buttons['open_gr'] = button
 
-        button.setText(self.settings.hotkeys['open_gr'])
+        button.setText(nicer_text(self.settings.hotkeys['open_gr']))
         button.clicked.connect(lambda: self.set_hotkey('open_gr'))
         greater_rift_layout.addWidget(button, 0, 1)
 
@@ -306,7 +307,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(greater_rift)
         self.buttons['upgrade_gem'] = button
-        button.setText(self.settings.hotkeys['upgrade_gem'])
+        button.setText(nicer_text(self.settings.hotkeys['upgrade_gem']))
         button.clicked.connect(lambda: self.set_hotkey('upgrade_gem'))
         greater_rift_layout.addWidget(button, 1, 1)
 
@@ -323,7 +324,7 @@ class HotkeyTab(QWidget):
         button = QPushButton(greater_rift)
         self.buttons['leave_game'] = button
 
-        button.setText(self.settings.hotkeys['leave_game'])
+        button.setText(nicer_text(self.settings.hotkeys['leave_game']))
         button.clicked.connect(lambda: self.set_hotkey('leave_game'))
         greater_rift_layout.addWidget(button, 3, 1)
 
@@ -340,7 +341,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(after_rift)
         self.buttons['salvage'] = button
-        button.setText(self.settings.hotkeys['salvage'])
+        button.setText(nicer_text(self.settings.hotkeys['salvage']))
         button.clicked.connect(lambda: self.set_hotkey('salvage'))
         after_rift_layout.addWidget(button, 0, 1)
 
@@ -350,7 +351,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(after_rift)
         self.buttons['drop_inventory'] = button
-        button.setText(self.settings.hotkeys['drop_inventory'])
+        button.setText(nicer_text(self.settings.hotkeys['drop_inventory']))
         button.clicked.connect(lambda: self.set_hotkey('drop_inventory'))
         after_rift_layout.addWidget(button, 1, 1)
 
@@ -371,7 +372,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(after_rift)
         self.buttons['gamble'] = button
-        button.setText(self.settings.hotkeys['gamble'])
+        button.setText(nicer_text(self.settings.hotkeys['gamble']))
         button.clicked.connect(lambda: self.set_hotkey('gamble'))
         after_rift_layout.addWidget(button, 3, 1)
 
@@ -388,7 +389,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(cube_converter)
         self.buttons['cube_conv_sm'] = button
-        button.setText(self.settings.hotkeys['cube_conv_sm'])
+        button.setText(nicer_text(self.settings.hotkeys['cube_conv_sm']))
         button.clicked.connect(lambda: self.set_hotkey('cube_conv_sm'))
         cube_converter_layout.addWidget(button, 0, 3, 1, 3)
 
@@ -398,7 +399,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(cube_converter)
         self.buttons['cube_conv_lg'] = button
-        button.setText(self.settings.hotkeys['cube_conv_lg'])
+        button.setText(nicer_text(self.settings.hotkeys['cube_conv_lg']))
         button.clicked.connect(lambda: self.set_hotkey('cube_conv_lg'))
         cube_converter_layout.addWidget(button, 1, 3, 1, 3)
 
@@ -426,7 +427,7 @@ class HotkeyTab(QWidget):
 
         button = QPushButton(cube_converter)
         self.buttons['reforge'] = button
-        button.setText(self.settings.hotkeys['reforge'])
+        button.setText(nicer_text(self.settings.hotkeys['reforge']))
         button.clicked.connect(lambda: self.set_hotkey('reforge'))
 
         cube_converter_layout.addWidget(button, 3, 3, 1, 3)
@@ -445,6 +446,18 @@ class HotkeyTab(QWidget):
             if hotkey_delete_request(input):
                 self.settings.hotkeys[hotkey] = ''
                 self.buttons[hotkey].setText('')
+            elif hotkey_is_numlock(input):
+                scan_code = keyboard.key_to_scan_codes(input)[1]
+                reply = QMessageBox.question(
+                    self, 'Save Hotkey?', f'New Hotkey: Num{input}.\n Save Hotkey?'
+                )
+                if reply == QMessageBox.Yes:
+                    for k, hk in self.settings.hotkeys.items():
+                        if hk == scan_code:
+                            self.settings.hotkeys[k] = ''
+                            self.buttons[k].setText('')
+                    self.settings.hotkeys[hotkey] = scan_code
+                    sender.setText(f'Num{input}')
             else:
                 reply = QMessageBox.question(
                     self, 'Save Hotkey?', f'New Hotkey: {input}.\n Save Hotkey?'
@@ -456,6 +469,7 @@ class HotkeyTab(QWidget):
                             self.buttons[k].setText('')
                     self.settings.hotkeys[hotkey] = input
                     sender.setText(input)
+
         if not self.listener.paused:
             self.listener.start()
         # TODO: Wenn man seinen Pause key deleted

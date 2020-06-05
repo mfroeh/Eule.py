@@ -38,11 +38,11 @@ class Listener:
             keyboard.add_hotkey(
                 hotkeys['right_click'],
                 macros.right_click,
-                args=(hotkeys['right_click']),
+                args=(hotkeys['right_click'],),
             )
         if hotkeys['left_click']:
             keyboard.add_hotkey(
-                hotkeys['left_click'], macros.left_click, args=(hotkeys['left_click'])
+                hotkeys['left_click'], macros.left_click, args=(hotkeys['left_click'],)
             )
         if hotkeys['lower_difficulty']:
             keyboard.add_hotkey(hotkeys['lower_difficulty'], macros.lower_difficulty)

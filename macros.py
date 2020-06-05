@@ -12,23 +12,29 @@ from ressources import (
 )
 
 # Works
-def right_click():
+def right_click(hotkey):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
-
-        send_mouse(handle, 'RM', x, y)
-        sleep(0.001)
+        send_mouse(handle, 'LM', x, y)
+        keyboard.remove_hotkey(hotkey)
+        while keyboard.is_pressed(hotkey):
+            x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+            send_mouse(handle, 'RM', x, y)
+            sleep(0.005)
+    keyboard.add_hotkey(hotkey, right_click, args=(hotkey,))
 
 
 # Works
-def left_click():
+def left_click(hotkey):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
-
-        send_mouse(handle, 'LM', x, y)
-        sleep(0.001)
+        keyboard.remove_hotkey(hotkey)
+        while keyboard.is_pressed(hotkey):
+            x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+            send_mouse(handle, 'LM', x, y)
+            sleep(0.005)
+    keyboard.add_hotkey(hotkey, left_click, args=(hotkey,))
 
 
 # Works

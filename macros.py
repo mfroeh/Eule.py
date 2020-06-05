@@ -11,29 +11,31 @@ from ressources import (
     kadala_item_by_name,
 )
 
-
+# Works
 def right_click():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        x, y = win32api.GetCursorPos()
+        x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
 
         send_mouse(handle, 'RM', x, y)
         sleep(0.001)
 
 
+# Works
 def left_click():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        x, y = win32api.GetCursorPos()
+        x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
 
         send_mouse(handle, 'LM', x, y)
         sleep(0.001)
 
 
+# Works
 def cube_conv_sm(speed):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        item = transform_coordinates(handle, 1425, 580)
+        item = transform_coordinates(handle, 1425, 580, rel='right')
         step = transform_coordinates(handle, 50, 50)
         fill = transform_coordinates(handle, 710, 840)
         trans = transform_coordinates(handle, 250, 830)
@@ -89,10 +91,11 @@ def cube_conv_sm(speed):
             pass
 
 
+# Works
 def cube_conv_lg(speed):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        item = transform_coordinates(handle, 1425, 580)
+        item = transform_coordinates(handle, 1425, 580, rel='right')
         step = transform_coordinates(handle, 50, 50)
         fill = transform_coordinates(handle, 710, 840)
         trans = transform_coordinates(handle, 250, 830)
@@ -154,10 +157,11 @@ def cube_conv_lg(speed):
             pass
 
 
+# Works
 def reforge():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        item = transform_coordinates(handle, 1425, 580)
+        item = transform_coordinates(handle, 1425, 580, rel='right')
         fill = transform_coordinates(handle, 710, 840)
         trans = transform_coordinates(handle, 250, 830)
         bw = transform_coordinates(handle, 580, 850)
@@ -170,9 +174,11 @@ def reforge():
         sleep(0.1)
         send_mouse(handle, 'LM', bw[0], bw[1])  # Backwards
         send_mouse(handle, 'LM', fw[0], fw[1])  # Forth
-        send_mousemove(handle, item[0], item[1])
+        # send_mousemove(handle, item[0], item[1])
+        send_mouse(handle, 'RM', item[0], item[1])  # Item
 
 
+# Works
 def upgrade_gem(empowered):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
@@ -198,12 +204,13 @@ def upgrade_gem(empowered):
             pass
 
 
+# Works
 def salvage(spare_columns):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         menu = transform_coordinates(handle, 517, 480)
         anvil = transform_coordinates(handle, 165, 295)
-        item = transform_coordinates(handle, 1875, 585)
+        item = transform_coordinates(handle, 1875, 585, rel='right')
         step = transform_coordinates(handle, 50, 50)
 
         send_mouse(handle, 'LM', menu[0], menu[1])  # Salvage Menu
@@ -216,12 +223,13 @@ def salvage(spare_columns):
         send_key(handle, 'esc')
 
 
+# Works
 def drop_inventory(spare_columns):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        item = transform_coordinates(handle, 1875, 585)
+        item = transform_coordinates(handle, 1875, 585, rel='right')
         step = transform_coordinates(handle, 50, 50)
-        x, y = win32api.GetCursorPos()
+        x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
 
         send_key(handle, 'c')
         for i in range(6):
@@ -231,6 +239,7 @@ def drop_inventory(spare_columns):
         send_key(handle, 'c')
 
 
+# Works
 def open_gr():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
@@ -251,6 +260,7 @@ def open_rift():
         send_mouse(handle, 'LM', accept[0], accept[1])
 
 
+# Works
 def leave_game():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
@@ -260,15 +270,18 @@ def leave_game():
         send_mouse(handle, 'LM', leave[0], leave[1])
 
 
+# Works
 def port_town(act):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         act_coords = map_act_coords_by_act(act)
         town_coords = map_town_coords_by_act(act)
 
-        bw_map = transform_coordinates(handle, 895, 125)
-        act = transform_coordinates(handle, act_coords[0], act_coords[1])
-        town = transform_coordinates(handle, town_coords[0], town_coords[1])
+        bw_map = transform_coordinates(handle, 895, 125, rel='middle')
+        act = transform_coordinates(handle, act_coords[0], act_coords[1], rel='middle')
+        town = transform_coordinates(
+            handle, town_coords[0], town_coords[1], rel='middle'
+        )
 
         send_key(handle, 'm')
         send_mouse(handle, 'LM', bw_map[0], bw_map[1])
@@ -276,14 +289,19 @@ def port_town(act):
         send_mouse(handle, 'LM', town[0], town[1])
 
 
+# Works
 def port_pool(poolspotlist):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         poolspot = poolspotlist.next_spot()
         if poolspot:
-            bw_map = transform_coordinates(handle, 895, 125)
-            act = transform_coordinates(handle, poolspot[0][0], poolspot[0][1])
-            wp = transform_coordinates(handle, poolspot[1][0], poolspot[1][1])
+            bw_map = transform_coordinates(handle, 895, 125, rel='middle')
+            act = transform_coordinates(
+                handle, poolspot[0][0], poolspot[0][1], rel='middle'
+            )
+            wp = transform_coordinates(
+                handle, poolspot[1][0], poolspot[1][1], rel='middle'
+            )
 
             # send_key(handle, 'm')
             send_mouse(handle, 'LM', bw_map[0], bw_map[1])
@@ -291,10 +309,11 @@ def port_pool(poolspotlist):
             send_mouse(handle, 'LM', wp[0], wp[1])
 
 
+# Works
 def lower_difficulty():
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        lower = transform_coordinates(handle, 1700, 400)
+        lower = transform_coordinates(handle, 1700, 400, rel='right')
 
         send_key(handle, 'esc')
         for i in range(19):
@@ -303,12 +322,15 @@ def lower_difficulty():
         send_key(handle, 'esc')
 
 
+# Works
 def swap_armor(items):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
         item_coords = []
         for i in range(items):
-            item_coords.append(transform_coordinates(handle, 1425, 580 + i * 100))
+            item_coords.append(
+                transform_coordinates(handle, 1425, 580 + i * 100, rel='right')
+            )
 
         send_key(handle, 'c')
         for i, coords in enumerate(item_coords):

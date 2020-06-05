@@ -30,7 +30,7 @@ def crop_image(image, *rect):
 
 def get_image(handle):
     # left, top, right, bot = win32gui.GetClientRect(hwnd)
-    left, top, right, bot = win32gui.GetWindowRect(handle)
+    left, top, right, bot = win32gui.GetClientRect(handle)
     w = right - left
     h = bot - top
 
@@ -76,7 +76,7 @@ def image_search(image, src_img, precision=0.8):
 
 
 def start_game(screenshot, handle):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.getClientRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/start_game.png')
     x1, y1 = transform_coordinates(handle, 160, 500)
     x2, y2 = transform_coordinates(handle, 320, 540)
@@ -87,7 +87,7 @@ def start_game(screenshot, handle):
 
 
 def open_rift(screenshot, handle, rift_type):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.getClientRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/obelisk.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
@@ -101,7 +101,7 @@ def open_rift(screenshot, handle, rift_type):
 
 
 def gamble(screenshot, handle, item):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.getClientRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/kadala.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
@@ -112,7 +112,7 @@ def gamble(screenshot, handle, item):
 
 
 def accept_gr(screenshot, handle):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     img_to_find = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/keystone.png')
     x1, y1 = transform_coordinates(handle, 705, 755)
     x2, y2 = transform_coordinates(handle, 790, 815)
@@ -124,13 +124,13 @@ def accept_gr(screenshot, handle):
 
 
 def upgrade_gem(screenshot, handle):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     uhrsi = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
     img = crop_image(screenshot, x1, y1, x2, y2)
     if image_search(uhrsi, img, precision=0.8):
-        x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+        x1, y1, x2, y2 = win32gui.getClientRect(handle)
         images_to_find = [
             os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
             for i in range(1, 6)

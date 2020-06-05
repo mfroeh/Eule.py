@@ -12,7 +12,7 @@ except AttributeError:
 
 
 def start_game(ahk, handle):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/start_game.png')
     x1, y1 = transform_coordinates(handle, 160, 500)
     x2, y2 = transform_coordinates(handle, 320, 540)
@@ -23,7 +23,7 @@ def start_game(ahk, handle):
 
 
 def open_rift(ahk, handle, rift_type):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/obelisk.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
@@ -37,7 +37,7 @@ def open_rift(ahk, handle, rift_type):
 
 
 def gamble(ahk, handle, item):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/kadala.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
@@ -48,7 +48,7 @@ def gamble(ahk, handle, item):
 
 
 def accept_gr(ahk, handle):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     image_path = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/keystone.png')
     x1, y1 = transform_coordinates(handle, 705, 755)
     x2, y2 = transform_coordinates(handle, 790, 815)
@@ -60,12 +60,12 @@ def accept_gr(ahk, handle):
 
 
 def upgrade_gem(ahk, handle):
-    x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+    x1, y1, x2, y2 = win32gui.GetClientRect(handle)
     uhrsi = os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi.png')
     x1, y1 = transform_coordinates(handle, 220, 30)
     x2, y2 = transform_coordinates(handle, 300, 100)
     if ahk.image_search(uhrsi, (x1, y1), (x2, y2), 30):
-        x1, y1, x2, y2 = win32gui.GetWindowRect(handle)
+        x1, y1, x2, y2 = win32gui.GetClientRect(handle)
         image_paths = [
             os.path.join(wd, f'./images/{x2 - x1}_{y2 - y1}/urhsi_upgrade_{i}.png')
             for i in range(1, 6)

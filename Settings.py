@@ -52,6 +52,7 @@ class Settings:
                     "empowered": False,
                     "cube_conv_speed": 'normal',
                     "armor_swap_amount": 3,
+                    "choose_gem": False,
                     "spare_columns": 1,
                     "gamble_item": "ring",
                     "abbrevations_enabled": True,

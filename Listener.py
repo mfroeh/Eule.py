@@ -94,7 +94,7 @@ class Listener:
             keyboard.add_hotkey(
                 hotkeys['upgrade_gem'],
                 macros.upgrade_gem,
-                args=(special['empowered'],),
+                args=(special['empowered'], special['choose_gem']),
                 suppress=True,
             )
         if hotkeys['leave_game']:

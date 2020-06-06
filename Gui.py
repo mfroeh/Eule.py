@@ -324,6 +324,13 @@ class HotkeyTab(QWidget):
         checkbox.setChecked(self.settings.special['empowered'])
         greater_rift_layout.addWidget(checkbox, 2, 0)
 
+        checkbox = QCheckBox(greater_rift)
+        checkbox.setText('Choose Gem to upgrade')
+        checkbox.setToolTip('If checked, will upgrade the gem currently selected.')
+        checkbox.stateChanged.connect(lambda: self.checkbox_clicked('choose_gem'))
+        checkbox.setChecked(self.settings.special['choose_gem'])
+        greater_rift_layout.addWidget(checkbox, 2, 1)
+
         label = QLabel(greater_rift)
         label.setText('Leave Game')
         greater_rift_layout.addWidget(label, 3, 0)
@@ -488,6 +495,8 @@ class HotkeyTab(QWidget):
         sender = self.sender()
         if value == 'empowered':
             settings.special['empowered'] = sender.isChecked()
+        elif value == 'choose_gem':
+            settings.special['choose_gem'] = sender.isChecked()
         elif value == 'fast_convert':
             settings.special['fast_convert'] = sender.isChecked()
 

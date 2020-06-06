@@ -202,14 +202,15 @@ def reforge():
 
 
 # Works
-def upgrade_gem(empowered):
+def upgrade_gem(empowered, choose_gem):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     if handle:
-        first_gem = transform_coordinates(handle, 100, 640)
         upgrade = transform_coordinates(handle, 280, 550)
 
-        send_mouse(handle, 'LM', first_gem[0], first_gem[1])
-        sleep(0.1)
+        if not choose_gem:
+            first_gem = transform_coordinates(handle, 100, 640)
+            send_mouse(handle, 'LM', first_gem[0], first_gem[1])
+            sleep(0.1)
         try:
             if not empowered:
                 for i in range(4):

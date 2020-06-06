@@ -95,7 +95,6 @@ class Listener:
                 hotkeys['upgrade_gem'],
                 macros.upgrade_gem,
                 args=(special['empowered'], special['choose_gem']),
-                suppress=True,
             )
         if hotkeys['leave_game']:
             keyboard.add_hotkey(hotkeys['leave_game'], macros.leave_game, suppress=True)
@@ -125,14 +124,12 @@ class Listener:
                 hotkeys['cube_conv_sm'],
                 macros.cube_conv_sm,
                 args=(special['cube_conv_speed'],),
-                suppress=True,
             )
         if hotkeys['cube_conv_lg']:
             keyboard.add_hotkey(
                 hotkeys['cube_conv_lg'],
                 macros.cube_conv_lg,
                 args=(special['cube_conv_speed'],),
-                suppress=True,
             )
         if hotkeys['reforge']:
             keyboard.add_hotkey(hotkeys['reforge'], macros.reforge, suppress=True)

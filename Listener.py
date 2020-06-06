@@ -1,14 +1,9 @@
 import keyboard
 import macros
-import screen_search
 from kthread import KThread
 from PoolSpot import PoolSpotList
-import win32gui
-from time import sleep
-from threading import Thread
 import sys
 import os
-from screen_search import get_image
 
 try:
     wd = sys._MEIPASS
@@ -22,9 +17,6 @@ class Listener:
 
         self.thread = KThread(target=lambda: keyboard.wait('a+r+b+i+t+r+a+r+y'))
         self.thread.start()
-
-        self.image_recognition_thread = KThread(target=self.watch_screen)
-        self.image_recognition_thread.start()
 
         self.start()
 
@@ -170,56 +162,3 @@ class Listener:
                 + "background-repeat: no-repeat;"
                 + "background-position: center;"
             )
-
-    def watch_screen(self):
-        while True:
-            handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
-            if (
-                handle
-                and win32gui.GetForegroundWindow() == handle
-                and any(
-                    (
-                        self.settings.special['auto_start'],
-                        self.settings.special['auto_open'],
-                        self.settings.special['auto_gamble'],
-                        self.settings.special['auto_upgrade_gem'],
-                        self.settings.special['auto_accept_gr'],
-                    )
-                )
-                and not self.paused
-            ):
-                try:
-                    screenshot = get_image(handle)
-                    if self.settings.special['auto_start']:
-                        Thread(
-                            target=screen_search.start_game, args=(screenshot, handle)
-                        ).start()
-                    if self.settings.special['auto_open']:
-                        Thread(
-                            target=screen_search.open_rift,
-                            args=(
-                                screenshot,
-                                handle,
-                                self.settings.special['auto_open_option'],
-                            ),
-                        ).start()
-                    if self.settings.special['auto_gamble']:
-                        Thread(
-                            target=screen_search.gamble,
-                            args=(
-                                screenshot,
-                                handle,
-                                self.settings.special['gamble_item'],
-                            ),
-                        ).start()
-                    if self.settings.special['auto_accept_gr']:
-                        Thread(
-                            target=screen_search.accept_gr, args=(screenshot, handle)
-                        ).start()
-                    if self.settings.special['auto_upgrade_gem']:
-                        Thread(
-                            target=screen_search.upgrade_gem, args=(screenshot, handle)
-                        ).start()
-                except:
-                    print('Handle not found or sth')
-            sleep(0.3)

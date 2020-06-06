@@ -1,7 +1,7 @@
 import win32api
 import win32gui
 from time import sleep
-from sends import send_mouse, send_key, send_mousemove, send_key_down, send_key_up
+from sends import send_mouse, send_key, send_key_down, send_key_up
 import keyboard
 from utils import transform_coordinates
 from ressources import (

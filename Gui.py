@@ -689,53 +689,6 @@ class SettingsTab(QWidget):
         button.clicked.connect(lambda: self.set_path('phelper'))
         paths_layout.addWidget(button, 2, 2, 1, 1)
 
-        image_recognition = QGroupBox(self)
-        image_recognition.setTitle('Auto Stuff (Image Recognition)')
-        image_recognition_layout = QGridLayout(image_recognition)
-        self.layout.addWidget(image_recognition, 0, 1)
-
-        checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto start Game')
-        checkbox.setChecked(self.settings.special['auto_start'])
-        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_start'))
-        image_recognition_layout.addWidget(checkbox, 0, 0)
-
-        checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto open Rift / Grift')
-        checkbox.setChecked(self.settings.special['auto_open'])
-        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_open'))
-        image_recognition_layout.addWidget(checkbox, 1, 0)
-
-        radio = QRadioButton(image_recognition)
-        radio.setText('Rift')
-        radio.setChecked(self.settings.special['auto_open_option'] == 'rift')
-        radio.clicked.connect(lambda: self.radio_clicked('rift'))
-        image_recognition_layout.addWidget(radio, 2, 0)
-
-        radio = QRadioButton(image_recognition)
-        radio.setText('Grift')
-        radio.setChecked(self.settings.special['auto_open_option'] == 'grift')
-        radio.clicked.connect(lambda: self.radio_clicked('grift'))
-        image_recognition_layout.addWidget(radio, 2, 1)
-
-        checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto accept Grift')
-        checkbox.setChecked(self.settings.special['auto_accept_gr'])
-        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_accept_gr'))
-        image_recognition_layout.addWidget(checkbox, 3, 0)
-
-        checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto upgrade Gem')
-        checkbox.setChecked(self.settings.special['auto_upgrade_gem'])
-        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_upgrade_gem'))
-        image_recognition_layout.addWidget(checkbox, 4, 0)
-
-        checkbox = QCheckBox(image_recognition)
-        checkbox.setText('Auto gamble')
-        checkbox.setChecked(self.settings.special['auto_gamble'])
-        checkbox.clicked.connect(lambda: self.checkbox_clicked('auto_gamble'))
-        image_recognition_layout.addWidget(checkbox, 5, 0)
-
         poolspots = QGroupBox(self)
         poolspots.setTitle('Poolspots')
         poolspots_layout = QGridLayout(poolspots)

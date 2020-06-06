@@ -4,9 +4,9 @@ A Diablo III Macro Collection.\
 The Macros work on all Resolutions.\
 Supported _Auto Stuff_ Resolutions can be found on the bottom.
 
-There are two different Versions.\
-* Eule.py works with Image Recognition
-* Eule.py__noIR The difference between them beeing Image Recognition.\
+There are two different Versions
+* Eule.py works with Image Recognition.
+* Eule.py__noIR doesnt support Image Recognition.
 
 ## Macros
 

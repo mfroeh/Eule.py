@@ -73,6 +73,10 @@ class Listener:
             keyboard.add_hotkey(
                 hotkeys['port_a3'], macros.port_town, args=(3,), suppress=True
             )
+        if hotkeys['port_a4']:
+            keyboard.add_hotkey(
+                hotkeys['port_a4'], macros.port_town, args=(4,), suppress=True
+            )
         if hotkeys['port_a5']:
             keyboard.add_hotkey(
                 hotkeys['port_a5'], macros.port_town, args=(5,), suppress=True

@@ -22,6 +22,7 @@ class Settings:
                     "port_a1": "",
                     "port_a2": "",
                     "port_a3": "",
+                    "port_a4": "",
                     "port_a5": "",
                     "port_pool": "",
                     "right_click": "",

@@ -248,40 +248,47 @@ class HotkeyTab(QWidget):
         self.buttons['port_a2'] = button
         button.setText(nicer_text(self.settings.hotkeys['port_a2']))
         button.clicked.connect(lambda: self.set_hotkey('port_a2'))
-
         porting_layout.addWidget(button, 1, 1)
 
         label = QLabel(porting)
-        label.setText('Port to A3 / A4 Town')
+        label.setText('Port to A3 Town')
         porting_layout.addWidget(label, 2, 0)
 
         button = QPushButton(porting)
         self.buttons['port_a3'] = button
-
         button.setText(nicer_text(self.settings.hotkeys['port_a3']))
         button.clicked.connect(lambda: self.set_hotkey('port_a3'))
-
         porting_layout.addWidget(button, 2, 1)
 
         label = QLabel(porting)
-        label.setText('Port to A5 Town')
+        label.setText('Port to A4 Town')
         porting_layout.addWidget(label, 3, 0)
+
+        button = QPushButton(porting)
+        self.buttons['port_a4'] = button
+        button.setText(nicer_text(self.settings.hotkeys['port_a4']))
+        button.clicked.connect(lambda: self.set_hotkey('port_a4'))
+        porting_layout.addWidget(button, 3, 1)
+
+        label = QLabel(porting)
+        label.setText('Port to A5 Town')
+        porting_layout.addWidget(label, 4, 0)
 
         button = QPushButton(porting)
         self.buttons['port_a5'] = button
         button.setText(nicer_text(self.settings.hotkeys['port_a5']))
         button.clicked.connect(lambda: self.set_hotkey('port_a5'))
-        porting_layout.addWidget(button, 3, 1)
+        porting_layout.addWidget(button, 4, 1)
 
         label = QLabel(porting)
         label.setText('Port to Pool')
-        porting_layout.addWidget(label, 4, 0)
+        porting_layout.addWidget(label, 5, 0)
 
         button = QPushButton(porting)
         self.buttons['port_pool'] = button
         button.setText(nicer_text(self.settings.hotkeys['port_pool']))
         button.clicked.connect(lambda: self.set_hotkey('port_pool'))
-        porting_layout.addWidget(button, 4, 1)
+        porting_layout.addWidget(button, 5, 1)
 
         greater_rift = QGroupBox(self)
         greater_rift_layout = QGridLayout(greater_rift)

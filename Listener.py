@@ -60,7 +60,7 @@ class Listener:
                 suppress=True,
             )
         if hotkeys['pause']:
-            keyboard.add_hotkey(hotkeys['pause'], self.pause, suppress=True)
+            keyboard.add_hotkey(hotkeys['pause'], self.pause)
         if hotkeys['port_a1']:
             keyboard.add_hotkey(
                 hotkeys['port_a1'], macros.port_town, args=(1,), suppress=True

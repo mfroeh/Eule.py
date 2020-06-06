@@ -156,35 +156,38 @@ class Listener:
                 )
                 and not self.paused
             ):
-                screenshot = get_image(handle)
-                if self.settings.special['auto_start']:
-                    Thread(
-                        target=screen_search.start_game, args=(screenshot, handle)
-                    ).start()
-                if self.settings.special['auto_open']:
-                    Thread(
-                        target=screen_search.open_rift,
-                        args=(
-                            screenshot,
-                            handle,
-                            self.settings.special['auto_open_option'],
-                        ),
-                    ).start()
-                if self.settings.special['auto_gamble']:
-                    Thread(
-                        target=screen_search.gamble,
-                        args=(
-                            screenshot,
-                            handle,
-                            self.settings.special['gamble_item'],
-                        ),
-                    ).start()
-                if self.settings.special['auto_accept_gr']:
-                    Thread(
-                        target=screen_search.accept_gr, args=(screenshot, handle)
-                    ).start()
-                if self.settings.special['auto_upgrade_gem']:
-                    Thread(
-                        target=screen_search.upgrade_gem, args=(screenshot, handle)
-                    ).start()
+                try:
+                    screenshot = get_image(handle)
+                    if self.settings.special['auto_start']:
+                        Thread(
+                            target=screen_search.start_game, args=(screenshot, handle)
+                        ).start()
+                    if self.settings.special['auto_open']:
+                        Thread(
+                            target=screen_search.open_rift,
+                            args=(
+                                screenshot,
+                                handle,
+                                self.settings.special['auto_open_option'],
+                            ),
+                        ).start()
+                    if self.settings.special['auto_gamble']:
+                        Thread(
+                            target=screen_search.gamble,
+                            args=(
+                                screenshot,
+                                handle,
+                                self.settings.special['gamble_item'],
+                            ),
+                        ).start()
+                    if self.settings.special['auto_accept_gr']:
+                        Thread(
+                            target=screen_search.accept_gr, args=(screenshot, handle)
+                        ).start()
+                    if self.settings.special['auto_upgrade_gem']:
+                        Thread(
+                            target=screen_search.upgrade_gem, args=(screenshot, handle)
+                        ).start()
+                except:
+                    print('Handle not found or sth')
             sleep(0.3)

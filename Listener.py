@@ -72,7 +72,9 @@ class Listener:
             keyboard.add_hotkey(hotkeys['open_gr'], macros.open_gr)
         if hotkeys['upgrade_gem']:
             keyboard.add_hotkey(
-                hotkeys['upgrade_gem'], macros.upgrade_gem, args=(special['empowered'],)
+                hotkeys['upgrade_gem'],
+                macros.upgrade_gem,
+                args=(special['empowered'], special['choose_gem']),
             )
         if hotkeys['leave_game']:
             keyboard.add_hotkey(hotkeys['leave_game'], macros.leave_game)

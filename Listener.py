@@ -158,20 +158,33 @@ class Listener:
                 )
                 and not self.paused
             ):
-                if self.settings.special['auto_start']:
-                    Thread(target=screen_search.start_game, args=(ahk, handle)).start()
-                if self.settings.special['auto_open']:
-                    Thread(
-                        target=screen_search.open_rift,
-                        args=(ahk, handle, self.settings.special['auto_open_option']),
-                    ).start()
-                if self.settings.special['auto_gamble']:
-                    Thread(
-                        target=screen_search.gamble,
-                        args=(ahk, handle, self.settings.special['gamble_item']),
-                    ).start()
-                if self.settings.special['auto_accept_gr']:
-                    Thread(target=screen_search.accept_gr, args=(ahk, handle)).start()
-                if self.settings.special['auto_upgrade_gem']:
-                    Thread(target=screen_search.upgrade_gem, args=(ahk, handle)).start()
+                try:
+                    if self.settings.special['auto_start']:
+                        Thread(
+                            target=screen_search.start_game, args=(ahk, handle)
+                        ).start()
+                    if self.settings.special['auto_open']:
+                        Thread(
+                            target=screen_search.open_rift,
+                            args=(
+                                ahk,
+                                handle,
+                                self.settings.special['auto_open_option'],
+                            ),
+                        ).start()
+                    if self.settings.special['auto_gamble']:
+                        Thread(
+                            target=screen_search.gamble,
+                            args=(ahk, handle, self.settings.special['gamble_item']),
+                        ).start()
+                    if self.settings.special['auto_accept_gr']:
+                        Thread(
+                            target=screen_search.accept_gr, args=(ahk, handle)
+                        ).start()
+                    if self.settings.special['auto_upgrade_gem']:
+                        Thread(
+                            target=screen_search.upgrade_gem, args=(ahk, handle)
+                        ).start()
+                except:
+                    print('Handle not found or sth')
             sleep(0.3)

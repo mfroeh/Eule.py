@@ -21,7 +21,7 @@ def right_click(hotkey):
         while keyboard.is_pressed(hotkey):
             x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
             send_mouse(handle, 'RM', x, y)
-            sleep(0.005)
+            sleep(0.01)
     keyboard.add_hotkey(hotkey, right_click, args=(hotkey,))
 
 
@@ -33,7 +33,7 @@ def left_click(hotkey):
         while keyboard.is_pressed(hotkey):
             x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
             send_mouse(handle, 'LM', x, y)
-            sleep(0.005)
+            sleep(0.01)
     keyboard.add_hotkey(hotkey, left_click, args=(hotkey,))
 
 

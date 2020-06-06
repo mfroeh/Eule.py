@@ -70,7 +70,6 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         self.settings.save()
         self.listener.thread.terminate()
-        self.listener.image_recognition_thread.terminate()
         self.status_thread.terminate()
         sys.stdout = sys.__stdout__
         super().closeEvent(event)

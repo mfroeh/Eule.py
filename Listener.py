@@ -39,71 +39,99 @@ class Listener:
                 hotkeys['right_click'],
                 macros.right_click,
                 args=(hotkeys['right_click'],),
+                suppress=True,
             )
         if hotkeys['left_click']:
             keyboard.add_hotkey(
-                hotkeys['left_click'], macros.left_click, args=(hotkeys['left_click'],)
+                hotkeys['left_click'],
+                macros.left_click,
+                args=(hotkeys['left_click'],),
+                suppress=True,
             )
         if hotkeys['lower_difficulty']:
-            keyboard.add_hotkey(hotkeys['lower_difficulty'], macros.lower_difficulty)
+            keyboard.add_hotkey(
+                hotkeys['lower_difficulty'], macros.lower_difficulty, suppress=True
+            )
         if hotkeys['swap_armor']:
             keyboard.add_hotkey(
                 hotkeys['swap_armor'],
                 macros.swap_armor,
                 args=(special['armor_swap_amount'],),
+                suppress=True,
             )
         if hotkeys['pause']:
-            keyboard.add_hotkey(hotkeys['pause'], self.pause)
+            keyboard.add_hotkey(hotkeys['pause'], self.pause, suppress=True)
         if hotkeys['port_a1']:
-            keyboard.add_hotkey(hotkeys['port_a1'], macros.port_town, args=(1,))
+            keyboard.add_hotkey(
+                hotkeys['port_a1'], macros.port_town, args=(1,), suppress=True
+            )
         if hotkeys['port_a2']:
-            keyboard.add_hotkey(hotkeys['port_a2'], macros.port_town, args=(2,))
+            keyboard.add_hotkey(
+                hotkeys['port_a2'], macros.port_town, args=(2,), suppress=True
+            )
         if hotkeys['port_a3']:
-            keyboard.add_hotkey(hotkeys['port_a3'], macros.port_town, args=(3,))
+            keyboard.add_hotkey(
+                hotkeys['port_a3'], macros.port_town, args=(3,), suppress=True
+            )
         if hotkeys['port_a5']:
-            keyboard.add_hotkey(hotkeys['port_a5'], macros.port_town, args=(5,))
+            keyboard.add_hotkey(
+                hotkeys['port_a5'], macros.port_town, args=(5,), suppress=True
+            )
         if hotkeys['port_pool']:
             keyboard.add_hotkey(
                 hotkeys['port_pool'],
                 macros.port_pool,
                 args=(PoolSpotList(self.settings.poolspots),),
+                suppress=True,
             )
         if hotkeys['open_gr']:
-            keyboard.add_hotkey(hotkeys['open_gr'], macros.open_gr)
+            keyboard.add_hotkey(hotkeys['open_gr'], macros.open_gr, suppress=True)
         if hotkeys['upgrade_gem']:
             keyboard.add_hotkey(
-                hotkeys['upgrade_gem'], macros.upgrade_gem, args=(special['empowered'],)
+                hotkeys['upgrade_gem'],
+                macros.upgrade_gem,
+                args=(special['empowered'],),
+                suppress=True,
             )
         if hotkeys['leave_game']:
-            keyboard.add_hotkey(hotkeys['leave_game'], macros.leave_game)
+            keyboard.add_hotkey(hotkeys['leave_game'], macros.leave_game, suppress=True)
         if hotkeys['salvage']:
             keyboard.add_hotkey(
-                hotkeys['salvage'], macros.salvage, args=(special['spare_columns'],)
+                hotkeys['salvage'],
+                macros.salvage,
+                args=(special['spare_columns'],),
+                suppress=True,
             )
         if hotkeys['drop_inventory']:
             keyboard.add_hotkey(
                 hotkeys['drop_inventory'],
                 macros.drop_inventory,
                 args=(special['spare_columns'],),
+                suppress=True,
             )
         if hotkeys['gamble']:
             keyboard.add_hotkey(
-                hotkeys['gamble'], macros.gamble, args=(special['gamble_item'],)
+                hotkeys['gamble'],
+                macros.gamble,
+                args=(special['gamble_item'],),
+                suppress=True,
             )
         if hotkeys['cube_conv_sm']:
             keyboard.add_hotkey(
                 hotkeys['cube_conv_sm'],
                 macros.cube_conv_sm,
                 args=(special['cube_conv_speed'],),
+                suppress=True,
             )
         if hotkeys['cube_conv_lg']:
             keyboard.add_hotkey(
                 hotkeys['cube_conv_lg'],
                 macros.cube_conv_lg,
                 args=(special['cube_conv_speed'],),
+                suppress=True,
             )
         if hotkeys['reforge']:
-            keyboard.add_hotkey(hotkeys['reforge'], macros.reforge)
+            keyboard.add_hotkey(hotkeys['reforge'], macros.reforge, suppress=True)
 
         if self.settings.special['abbrevations_enabled']:
             for abbrevation, msg in abbrevations.items():

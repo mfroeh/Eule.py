@@ -11,6 +11,7 @@ from ressources import (
     kadala_item_by_name,
 )
 
+"""
 # Works
 def right_click(hotkey):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
@@ -24,7 +25,6 @@ def right_click(hotkey):
             sleep(0.01)
     keyboard.add_hotkey(hotkey, right_click, args=(hotkey,))
 
-
 # Works
 def left_click(hotkey):
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
@@ -35,6 +35,23 @@ def left_click(hotkey):
             send_mouse(handle, 'LM', x, y)
             sleep(0.01)
     keyboard.add_hotkey(hotkey, left_click, args=(hotkey,))
+"""
+
+
+def right_click(hotkey):
+    handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+    if handle:
+        x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+        send_mouse(handle, 'RM', x, y)
+        sleep(0.003)
+
+
+def left_click(hotkey):
+    handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+    if handle:
+        x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+        send_mouse(handle, 'LM', x, y)
+        sleep(0.003)
 
 
 # Works

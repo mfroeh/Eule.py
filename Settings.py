@@ -28,6 +28,7 @@ class Settings:
                     "right_click": "",
                     "left_click": "",
                     "lower_difficulty": "",
+                    "skill_macro": "",
                     "swap_armor": "",
                     "pause": "f10",
                 },
@@ -63,12 +64,18 @@ class Settings:
                     "auto_upgrade_gem": False,
                     "auto_gamble": False,
                 },
+                "skill_macro": {
+                    # 1st Skill, 2nd Skill,..., LeftClick Skill, RightClick Skill
+                    "hotkeys": [None, None, None, None, 'LeftClick', 'RightClick'],
+                    "delays": [0, 0, 0, 0, 0, 0],
+                },
             }
         self.paths = self.json['paths']
         self.hotkeys = self.json['hotkeys']
         self.abbrevations = self.json['abbrevations']
         self.poolspots = self.json['poolspots']
         self.special = self.json['special']
+        self.skill_macro = self.json["skill_macro"]
 
     def save(self):
         with open('./settings.json', 'w') as f:
@@ -78,5 +85,6 @@ class Settings:
                 'abbrevations': self.abbrevations,
                 'poolspots': self.poolspots,
                 'special': self.special,
+                'skill_macro': self.skill_macro,
             }
             json.dump(d, f)

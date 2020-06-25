@@ -1,7 +1,7 @@
 import win32api
 import win32gui
 from time import sleep
-from sends import send_mouse, send_key, send_mousemove, send_key_down, send_key_up
+from sends import send_mouse, send_key, send_key_down, send_key_up, send_mouse_shift
 import keyboard
 from utils import transform_coordinates
 from ressources import (
@@ -10,6 +10,7 @@ from ressources import (
     kadala_tab_by_name,
     kadala_item_by_name,
 )
+from threading import Timer
 
 """
 # Works
@@ -380,6 +381,49 @@ def gamble(item):
             send_mouse(handle, 'RM', item[0], item[1])
 
 
+# cant pause this via the regular pause hotkey for now
+is_running = False
+timers = []
+
+
+def skill_macro(settings, stop_hotkey):
+    global is_running
+    global timers
+    hotkeys = settings['hotkeys']
+    delays = settings['delays']
+
+    handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
+    print(is_running)
+    if handle and not is_running:
+        is_running = True
+        for i, (hotkey, delay) in enumerate(zip(hotkeys, delays)):
+            if hotkey and delay:
+                if i < 4:
+                    timers.append(
+                        RepeatedTimer(delay / 100, lambda x=hotkey: send_key(handle, x))
+                    )
+                elif i == 4:
+                    # ggf. press shift
+                    x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+                    timers.append(
+                        RepeatedTimer(
+                            delay / 100, lambda: send_mouse(handle, 'LM', x, y)
+                        )
+                    )
+                elif i == 5:
+                    x, y = win32gui.ScreenToClient(handle, win32api.GetCursorPos())
+                    timers.append(
+                        RepeatedTimer(
+                            delay / 100, lambda: send_mouse(handle, 'RM', x, y)
+                        )
+                    )
+        [t.start() for t in timers]
+    elif is_running:
+        [t.stop() for t in timers]
+        timers = []
+        is_running = False
+
+
 class StopMacro(Exception):
     pass
 
@@ -390,3 +434,29 @@ def macro_sleep(time):
             raise StopMacro
         else:
             sleep(0.008)
+
+
+class RepeatedTimer(object):
+    def __init__(self, interval, function, *args, **kwargs):
+        self._timer = None
+        self.interval = interval
+        self.function = function
+        self.args = args
+        self.kwargs = kwargs
+        self.is_running = False
+
+    def _run(self):
+        self.is_running = False
+        self.start()
+        self.function(*self.args, **self.kwargs)
+
+    def start(self):
+        if not self.is_running:
+            self._timer = Timer(self.interval, self._run)
+            self._timer.start()
+            self.is_running = True
+
+    def stop(self):
+        self._timer.cancel()
+        self.is_running = False
+        print('stopping timers')

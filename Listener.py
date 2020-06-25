@@ -60,7 +60,7 @@ class Listener:
                 suppress=True,
             )
         if hotkeys['pause']:
-            keyboard.add_hotkey(hotkeys['pause'], self.pause)
+            keyboard.add_hotkey(hotkeys['pause'], self.pause, suppress=True)
         if hotkeys['port_a1']:
             keyboard.add_hotkey(
                 hotkeys['port_a1'], macros.port_town, args=(1,), suppress=True
@@ -133,6 +133,12 @@ class Listener:
             )
         if hotkeys['reforge']:
             keyboard.add_hotkey(hotkeys['reforge'], macros.reforge, suppress=True)
+        if hotkeys['skill_macro']:
+            keyboard.add_hotkey(
+                hotkeys['skill_macro'],
+                macros.skill_macro,
+                args=(self.settings.skill_macro, hotkeys['skill_macro']),
+            )
 
         if self.settings.special['abbrevations_enabled']:
             for abbrevation, msg in abbrevations.items():
@@ -157,7 +163,9 @@ class Listener:
         else:
             self.paused = True
             self.stop()
-            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.pause)
+            keyboard.add_hotkey(
+                self.settings.hotkeys['pause'], self.pause, suppress=True
+            )
             self.gui_paused.setChecked(True)
             p = os.path.join(wd, './Compiled/inactive.png').replace('\\', '/')
             self.status_image.setStyleSheet(
@@ -167,6 +175,9 @@ class Listener:
                 + "background-repeat: no-repeat;"
                 + "background-position: center;"
             )
+            [t.stop() for t in macros.timers]
+            macros.timers = []
+            macros.is_running = False
 
     def watch_screen(self):
         while True:

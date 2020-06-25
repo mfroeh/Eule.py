@@ -86,11 +86,13 @@ class TableWidget(QWidget):
         self.main_page_tab = MainPage(parent)
         self.hotkey_tab = HotkeyTab(parent)
         self.abbrevation_tab = AbbrevationTab(parent)
+        self.skill_cast_tab = SkillCastTab(parent)
         self.settings_tab = SettingsTab(parent)
 
         self.tabs.addTab(self.main_page_tab, 'Main Page')
         self.tabs.addTab(self.hotkey_tab, 'Hotkeys')
         self.tabs.addTab(self.abbrevation_tab, 'Abbrevations')
+        self.tabs.addTab(self.skill_cast_tab, 'Skill Casting')
         self.tabs.addTab(self.settings_tab, 'Settings')
 
         self.layout.addWidget(self.tabs)
@@ -225,7 +227,7 @@ class HotkeyTab(QWidget):
         porting = QGroupBox(self)
         porting_layout = QGridLayout(porting)
         porting.setTitle('Porting')
-        self.layout.addWidget(porting, 1, 0, -1, 1)
+        self.layout.addWidget(porting, 1, 0)
 
         ######################
 
@@ -445,6 +447,21 @@ class HotkeyTab(QWidget):
 
         cube_converter_layout.addWidget(button, 3, 3, 1, 3)
 
+        skill_macro = QGroupBox(self)
+        skill_macro_layout = QGridLayout(skill_macro)
+        skill_macro.setTitle('Skill Macro')
+        self.layout.addWidget(skill_macro, 2, 0, -1, 1)
+
+        label = QLabel(skill_macro)
+        label.setText('Activate / Deactivate')
+        skill_macro_layout.addWidget(label, 0, 0)
+
+        button = QPushButton(self)
+        self.buttons['skill_macro'] = button
+        button.setText(nicer_text(self.settings.hotkeys['skill_macro']))
+        button.clicked.connect(lambda: self.set_hotkey('skill_macro'))
+        skill_macro_layout.addWidget(button, 0, 1)
+
         self.setLayout(self.layout)
 
     def set_hotkey(self, hotkey):
@@ -631,6 +648,98 @@ class AbbrevationTab(QWidget):
             self.abbrevations_list.addItem(item)
             item.setSizeHint(custom_widget.minimumSizeHint())
             self.abbrevations_list.setItemWidget(item, custom_widget)
+
+
+class SkillCastTab(QWidget):
+    def __init__(self, elder):
+        super().__init__()
+        self.elder = elder
+        self.layout = QGridLayout(self)
+        self.settings = elder.settings
+        self.listener = elder.listener
+
+        self.key_buttons = []
+        self.spinboxes = []
+
+        skills = QGroupBox(self)
+        skills.setTitle('Keys and Delays')
+        skills_layout = QGridLayout(skills)
+        self.layout.addWidget(skills)
+
+        label = QLabel(skills)
+        label.setText('Key')
+        skills_layout.addWidget(label, 0, 0)
+
+        label = QLabel(skills)
+        label.setText('Delay (in ms)')
+        skills_layout.addWidget(label, 1, 0)
+
+        for i, (hotkey, delay) in enumerate(
+            zip(
+                self.settings.skill_macro['hotkeys'],
+                self.settings.skill_macro['delays'],
+            )
+        ):
+            button = QPushButton(skills)
+            button.setText(hotkey)
+            button.clicked.connect(self.set_key)
+            skills_layout.addWidget(button, 0, i + 1)
+            if i >= 4:
+                button.setDisabled(True)
+            self.key_buttons.append(button)
+
+            spinbox = QSpinBox(skills)
+            spinbox.setMinimum(0)
+            spinbox.setMaximum(100000)
+            spinbox.setSingleStep(10)
+            spinbox.setValue(delay)
+            spinbox.valueChanged.connect(self.spinbox_changed)
+            skills_layout.addWidget(spinbox, 1, i + 1)
+            self.spinboxes.append(spinbox)
+            if i == 4:
+                spinbox.setDisabled(True)
+
+    def spinbox_changed(self):
+        self.listener.stop()
+        print(self.sender().value())
+        for i, spinbox in enumerate(self.spinboxes):
+            if spinbox is self.sender():
+                self.settings.skill_macro['delays'][i] = self.sender().value()
+        print(self.settings.skill_macro['delays'])
+        if not self.listener.paused:
+            self.listener.start()
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def set_key(self):
+        self.listener.stop()
+        sender = self.sender()
+        input = keyboard.read_hotkey(suppress=False)
+        if input != 'esc':
+            if hotkey_delete_request(input):
+                for i, key in enumerate(self.key_buttons):
+                    if key is sender:
+                        self.settings.skill_macro['hotkeys'][i] = None
+                        sender.setText(None)
+            else:
+                reply = QMessageBox.question(
+                    self, 'Save Key?', f'New Key: {input}.\n Save Key?'
+                )
+                if reply == QMessageBox.Yes:
+                    for i, key in enumerate(self.settings.skill_macro['hotkeys']):
+                        if key == input:
+                            self.settings.skill_macro['hotkeys'][i] = None
+                            self.key_buttons[i].setText(None)
+                    for i, key in enumerate(self.key_buttons):
+                        if key is sender:
+                            self.settings.skill_macro['hotkeys'][i] = input
+                            sender.setText(input)
+
+        if not self.listener.paused:
+            self.listener.start()
+        # TODO: Wenn man seinen Pause key deleted
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
 
 class SettingsTab(QWidget):

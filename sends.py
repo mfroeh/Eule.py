@@ -22,6 +22,12 @@ def send_mouse(handle, key, x, y):
         win32api.PostMessage(handle, win32con.WM_RBUTTONUP, 0, lParam)
 
 
+def send_mouse_shift(handle, key, x, y):
+    send_key_down(handle, 'shift')
+    send_mouse(handle, key, x, y)
+    send_key_up(handle, 'shift')
+
+
 def send_mousemove(handle, x, y):
     lParam = y << 16 | x
     win32api.PostMessage(handle, win32con.WM_MOUSEMOVE, 0, lParam)

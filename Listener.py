@@ -138,6 +138,7 @@ class Listener:
                 hotkeys['skill_macro'],
                 macros.skill_macro,
                 args=(self.settings.skill_macro, hotkeys['skill_macro']),
+                suppress=True,
             )
 
         if self.settings.special['abbrevations_enabled']:

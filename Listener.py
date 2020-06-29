@@ -126,10 +126,14 @@ class Listener:
         if hotkeys['reforge']:
             keyboard.add_hotkey(hotkeys['reforge'], macros.reforge, suppress=True)
         if hotkeys['skill_macro']:
+            active_macro = self.settings.skill_macro['profiles'][
+                self.settings.skill_macro['active']
+            ]
+            print(active_macro['name'])
             keyboard.add_hotkey(
                 hotkeys['skill_macro'],
                 macros.skill_macro,
-                args=(self.settings.skill_macro, hotkeys['skill_macro']),
+                args=(active_macro['hotkeys'], active_macro['delays']),
                 suppress=True,
             )
 

@@ -65,9 +65,22 @@ class Settings:
                     "auto_gamble": False,
                 },
                 "skill_macro": {
-                    # 1st Skill, 2nd Skill,..., LeftClick Skill, RightClick Skill
-                    "hotkeys": [None, None, None, None, 'LeftClick', 'RightClick'],
-                    "delays": [0, 0, 0, 0, 0, 0],
+                    "profiles": {
+                        "Profile 1": {
+                            "name": "Profile 1",
+                            # 1st Skill, 2nd Skill,..., LeftClick Skill, RightClick Skill
+                            "hotkeys": [
+                                None,
+                                None,
+                                None,
+                                None,
+                                'LeftClick',
+                                'RightClick',
+                            ],
+                            "delays": [0, 0, 0, 0, 0, 0],
+                        }
+                    },
+                    "active": "Profile 1",
                 },
             }
         self.paths = self.json['paths']

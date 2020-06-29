@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (
     QDesktopWidget,
     QDialogButtonBox,
     QDialog,
+    QInputDialog,
 )
 from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
@@ -659,88 +660,220 @@ class SkillCastTab(QWidget):
         self.settings = elder.settings
         self.listener = elder.listener
 
-        self.key_buttons = []
-        self.spinboxes = []
+        self.radiobuttons = QGroupBox(self)
+        self.radiobuttons.setTitle('Active')
+        self.radiobuttons_layout = QGridLayout(self.radiobuttons)
 
-        skills = QGroupBox(self)
-        skills.setTitle('Keys and Delays')
-        skills_layout = QGridLayout(skills)
-        self.layout.addWidget(skills)
+        self.profile_boxes = []
+        self.radiobuttons_x = []
 
-        label = QLabel(skills)
-        label.setText('Key')
-        skills_layout.addWidget(label, 0, 0)
+        self.generate_gui(self.settings.skill_macro)
 
-        label = QLabel(skills)
-        label.setText('Delay (in ms)')
-        skills_layout.addWidget(label, 1, 0)
+    def generate_gui(self, skill_macro):
+        self.profile_amt = 0
+        for name, profile in skill_macro['profiles'].items():
+            skills = QGroupBox(self)
+            skills.setTitle(profile['name'])
+            skills_layout = QGridLayout(skills)
+            self.layout.addWidget(skills)
+            self.profile_boxes.append(skills)
 
-        for i, (hotkey, delay) in enumerate(
-            zip(
-                self.settings.skill_macro['hotkeys'],
-                self.settings.skill_macro['delays'],
+            label = QLabel(skills)
+            label.setText('Key')
+            skills_layout.addWidget(label, 0, 0)
+
+            label = QLabel(skills)
+            label.setText('Delay (in ms)')
+            skills_layout.addWidget(label, 1, 0)
+
+            skills.name = profile['name']
+            skills.key_buttons = []
+            skills.spinboxes = []
+
+            for i, (hotkey, delay) in enumerate(
+                zip(profile['hotkeys'], profile['delays'],)
+            ):
+                button = QPushButton(skills)
+                button.setText(hotkey)
+                button.key_code = hotkey
+                button.clicked.connect(self.set_key)
+                skills_layout.addWidget(button, 0, i + 1)
+                if i >= 4:
+                    button.setDisabled(True)
+                skills.key_buttons.append(button)
+
+                spinbox = QSpinBox(skills)
+                spinbox.setMinimum(0)
+                spinbox.setMaximum(100000)
+                spinbox.setSingleStep(10)
+                spinbox.setValue(delay)
+                skills_layout.addWidget(spinbox, 1, i + 1)
+                skills.spinboxes.append(spinbox)
+                if i == 4:
+                    spinbox.setDisabled(True)
+
+            radiobutton = QRadioButton(self.radiobuttons)
+            radiobutton.setText(profile['name'])
+            radiobutton.setChecked(
+                profile['name'] == self.settings.skill_macro['active']
             )
-        ):
+            self.radiobuttons_layout.addWidget(radiobutton)
+            self.radiobuttons_x.append(radiobutton)
+
             button = QPushButton(skills)
-            button.setText(hotkey)
-            button.clicked.connect(self.set_key)
-            skills_layout.addWidget(button, 0, i + 1)
-            if i >= 4:
-                button.setDisabled(True)
-            self.key_buttons.append(button)
+            button.setText('Delete')
+            button.clicked.connect(lambda state, x=name: self.delete_profile(x))
+            skills_layout.addWidget(button, 0, 7)
 
-            spinbox = QSpinBox(skills)
-            spinbox.setMinimum(0)
-            spinbox.setMaximum(100000)
-            spinbox.setSingleStep(10)
-            spinbox.setValue(delay)
-            spinbox.valueChanged.connect(self.spinbox_changed)
-            skills_layout.addWidget(spinbox, 1, i + 1)
-            self.spinboxes.append(spinbox)
-            if i == 4:
-                spinbox.setDisabled(True)
+            self.profile_amt += 1
 
-    def spinbox_changed(self):
+        self.layout.addWidget(self.radiobuttons, 0, 1, self.profile_amt, 1)
+
+        button = QPushButton(self)
+        button.setText('Save')
+        button.clicked.connect(self.save)
+        self.layout.addWidget(button, 999, 0)
+
+        button = QPushButton(self)
+        button.setText('Add Profile')
+        button.clicked.connect(self.add_profile)
+        self.layout.addWidget(button, 999, 1)
+
+    def save(self):
         self.listener.stop()
-        print(self.sender().value())
-        for i, spinbox in enumerate(self.spinboxes):
-            if spinbox is self.sender():
-                self.settings.skill_macro['delays'][i] = self.sender().value()
-        print(self.settings.skill_macro['delays'])
+        self.settings.skill_macro['profiles'] = {}
+        for box in self.profile_boxes:
+            name = box.name
+            keys = [b.key_code for b in box.key_buttons]
+            delays = [s.value() for s in box.spinboxes]
+            self.settings.skill_macro['profiles'][name] = {
+                "name": name,
+                "hotkeys": keys,
+                "delays": delays,
+            }
+        for radiobutton in self.radiobuttons_x:
+            if radiobutton.isChecked():
+                self.settings.skill_macro['active'] = radiobutton.text()
+        print(self.settings.skill_macro['profiles'])
+
+        if not self.listener.paused:
+            self.listener.start()
+        elif self.settings.hotkeys['pause']:
+            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+
+    def delete_profile(self, name):
+        if not name == self.settings.skill_macro['active']:
+            for i, box in enumerate(self.profile_boxes):
+                if box.name == name:
+                    box.deleteLater()
+                    self.profile_boxes.pop(i)
+            for i, radiobutton in enumerate(self.radiobuttons_x):
+                if radiobutton.text() == name:
+                    radiobutton.deleteLater()
+                    self.radiobuttons_x.pop(i)
+        else:
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Cant delete active Profile!")
+            msg.setInformativeText(
+                "If this isn't your active Profile, save and try deleting it again."
+            )
+            msg.setWindowTitle("Active Profile deletion!")
+            msg.exec_()
+
+    def add_profile(self):
+        self.listener.stop()
+        text, ok = QInputDialog.getText(
+            self, 'Add new Profile', 'Profile Name:', QLineEdit.Normal, ""
+        )
+        if ok and text and text not in [box.name for box in self.profile_boxes]:
+            profile = {
+                'name': text,
+                "hotkeys": [None, None, None, None, 'LeftClick', 'RightClick'],
+                "delays": [0, 0, 0, 0, 0, 0],
+            }
+            self.settings.skill_macro['profiles'][text] = profile
+            self.profile_amt += 1
+            skills = QGroupBox(self)
+            skills.setTitle(profile['name'])
+            skills_layout = QGridLayout(skills)
+            self.layout.addWidget(skills, self.profile_amt, 0)
+            self.profile_boxes.append(skills)
+
+            label = QLabel(skills)
+            label.setText('Key')
+            skills_layout.addWidget(label, 0, 0)
+
+            label = QLabel(skills)
+            label.setText('Delay (in ms)')
+            skills_layout.addWidget(label, 1, 0)
+
+            skills.name = profile['name']
+            skills.key_buttons = []
+            skills.spinboxes = []
+
+            for i, (hotkey, delay) in enumerate(
+                zip(profile['hotkeys'], profile['delays'],)
+            ):
+                button = QPushButton(skills)
+                button.setText(hotkey)
+                button.key_code = hotkey
+                button.clicked.connect(self.set_key)
+                skills_layout.addWidget(button, 0, i + 1)
+                if i >= 4:
+                    button.setDisabled(True)
+                skills.key_buttons.append(button)
+
+                spinbox = QSpinBox(skills)
+                spinbox.setMinimum(0)
+                spinbox.setMaximum(100000)
+                spinbox.setSingleStep(10)
+                spinbox.setValue(delay)
+                skills_layout.addWidget(spinbox, 1, i + 1)
+                skills.spinboxes.append(spinbox)
+                if i == 4:
+                    spinbox.setDisabled(True)
+
+            radiobutton = QRadioButton(self.radiobuttons)
+            radiobutton.setText(profile['name'])
+            radiobutton.setChecked(
+                profile['name'] == self.settings.skill_macro['active']
+            )
+            self.radiobuttons_layout.addWidget(radiobutton)
+            self.radiobuttons_x.append(radiobutton)
+
+            button = QPushButton(skills)
+            button.setText('Delete')
+            button.clicked.connect(lambda state: self.delete_profile(text))
+            skills_layout.addWidget(button, 0, 7)
+
+        elif text in [box.name for box in self.profile_boxes]:
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("This Profile Name already exists!")
+            msg.setInformativeText('Pick a different Profile Name!')
+            msg.setWindowTitle("Profile Name exists!")
+            msg.exec_()
+
         if not self.listener.paused:
             self.listener.start()
         elif self.settings.hotkeys['pause']:
             keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
 
     def set_key(self):
-        self.listener.stop()
         sender = self.sender()
         input = keyboard.read_hotkey(suppress=False)
         if input != 'esc':
             if hotkey_delete_request(input):
-                for i, key in enumerate(self.key_buttons):
-                    if key is sender:
-                        self.settings.skill_macro['hotkeys'][i] = None
-                        sender.setText(None)
+                sender.key_code = None
+                sender.setText(None)
             else:
                 reply = QMessageBox.question(
                     self, 'Save Key?', f'New Key: {input}.\n Save Key?'
                 )
                 if reply == QMessageBox.Yes:
-                    for i, key in enumerate(self.settings.skill_macro['hotkeys']):
-                        if key == input:
-                            self.settings.skill_macro['hotkeys'][i] = None
-                            self.key_buttons[i].setText(None)
-                    for i, key in enumerate(self.key_buttons):
-                        if key is sender:
-                            self.settings.skill_macro['hotkeys'][i] = input
-                            sender.setText(input)
-
-        if not self.listener.paused:
-            self.listener.start()
-        # TODO: Wenn man seinen Pause key deleted
-        elif self.settings.hotkeys['pause']:
-            keyboard.add_hotkey(self.settings.hotkeys['pause'], self.listener.pause)
+                    sender.key_code = input
+                    sender.setText(input)
 
 
 class SettingsTab(QWidget):

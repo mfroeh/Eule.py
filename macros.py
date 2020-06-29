@@ -386,17 +386,14 @@ is_running = False
 timers = []
 
 
-def skill_macro(settings, stop_hotkey):
+def skill_macro(keys, delays):
     global is_running
     global timers
-    hotkeys = settings['hotkeys']
-    delays = settings['delays']
-
     handle = win32gui.FindWindow('D3 Main Window Class', 'Diablo III')
     print(is_running)
     if handle and not is_running:
         is_running = True
-        for i, (hotkey, delay) in enumerate(zip(hotkeys, delays)):
+        for i, (hotkey, delay) in enumerate(zip(keys, delays)):
             if hotkey and delay:
                 if i < 4:
                     timers.append(

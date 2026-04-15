@@ -214,17 +214,17 @@ def upgrade_gem(empowered, choose_gem):
             sleep(0.1)
         try:
             if not empowered:
-                for i in range(4):
+                for i in range(5):
                     if i == 1:
                         send_key(handle, 't')
                     send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-                    macro_sleep(1.8)
+                    macro_sleep(1)
             else:
-                for i in range(5):
+                for i in range(6):
                     if i == 2:
                         send_key(handle, 't')
                     send_mouse(handle, 'LM', upgrade[0], upgrade[1])
-                    macro_sleep(1.8)
+                    macro_sleep(1)
         except StopMacro:
             pass
 
